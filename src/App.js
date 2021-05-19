@@ -1,11 +1,11 @@
-import Scheduler from "./Scheduler/Scheduler";
-import Footer from "./Footer/Footer";
+import Appbar from "./components/Appbar";
+import Main from "./layouts/Main";
 
 function App() {
   return (
     <div>
-      <Scheduler />
-      <Footer />
+      <Appbar />
+      <Main />
     </div>
   );
 }
