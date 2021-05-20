@@ -3,14 +3,17 @@ import { useState } from "react";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import { Typography } from "@material-ui/core";
 
-const BasicSelect = () => {
+const BasicSelect = (props) => {
   const [value, setValue] = useState("");
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
+
+  let termList = props.terms.map((term)=>{
+    return <MenuItem value={term.termTitle}>{term.termTitle}</MenuItem>
+  })
 
   return (
     <FormControl fullWidth>
@@ -22,9 +25,7 @@ const BasicSelect = () => {
         label="Age"
         onChange={handleChange}
       >
-        <MenuItem value={10}>option1</MenuItem>
-        <MenuItem value={20}>option2</MenuItem>
-        <MenuItem value={30}>option3</MenuItem>
+        {termList}
       </Select>
     </FormControl>
   );

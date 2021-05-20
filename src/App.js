@@ -5,7 +5,7 @@ import Main from "./layouts/Main";
 function App() {
   const [terms, setTerms] = useState([]);
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/api/v1/terms")
+    fetch("http://heywilson2-env.eba-dj7ejeyb.us-east-2.elasticbeanstalk.com/api/v1/terms")
       .then((response) => {
         return response.json();
       })

@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Button } from "@material-ui/core";
 import AutocompleteInput from "../components/AutoComplete";
 import Slider from "../components/Slider";
@@ -17,7 +18,8 @@ const FormGrid = ({ children, sx }) => (
   </Grid>
 );
 
-const Main = () => {
+const Main = (props) => {
+  const [courses, setCourses] = useState(testOptions);
   return (
     <Box sx={{ mx: 4, my: 8 }}>
       <Grid
@@ -28,12 +30,14 @@ const Main = () => {
       >
         <FormGrid>
           <InputLabel label="Select a term" />
-          <Dropdown />
+          <Dropdown terms={props.terms} />
         </FormGrid>
+
         <FormGrid>
           <InputLabel label="Add courses" />
-          <AutocompleteInput label="Courses" options={testOptions} />
+          <AutocompleteInput label="Courses" options={courses} />
         </FormGrid>
+
         <FormGrid>
           <InputLabel label="Morning class preference" />
           <Slider />
