@@ -1,21 +1,23 @@
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, Button } from "@material-ui/core";
 import AutocompleteInput from "../components/AutoComplete";
 import Slider from "../components/Slider";
+import Dropdown from "../components/Dropdown";
+import InputLabel from "../components/InputLabel";
 
-const FormGrid = ({ children }) => (
-  <Grid item xs={12} md={5} sx={{ my: 2 }}>
-    {children}
-  </Grid>
-);
-
-const top100Films = [
+const testOptions = [
   { title: "The Shawshank Redemption", year: 1994 },
   { title: "The Godfather", year: 1972 },
   { title: "The Godfather: Part II", year: 1974 },
   { title: "The Dark Knight", year: 2008 },
 ];
 
-const Main = (props) => {
+const FormGrid = ({ children, sx }) => (
+  <Grid item xs={12} md={5} sx={{ my: 2, ...sx }}>
+    {children}
+  </Grid>
+);
+
+const Main = () => {
   return (
     <Box sx={{ mx: 4, my: 8 }}>
       <Grid
@@ -25,14 +27,23 @@ const Main = (props) => {
         justifyContent="center"
       >
         <FormGrid>
-          <AutocompleteInput
-            label={"Select academic term"}
-            options={props.terms}
-          />
-          <AutocompleteInput label={"Add a course"} options={top100Films} />
+          <InputLabel label="Select a term" />
+          <Dropdown />
         </FormGrid>
         <FormGrid>
+          <InputLabel label="Add courses" />
+          <AutocompleteInput label="Courses" options={testOptions} />
+        </FormGrid>
+        <FormGrid>
+          <InputLabel label="Morning class preference" />
           <Slider />
+        </FormGrid>
+        <FormGrid>
+          <InputLabel label="Marathon preference" />
+          <Slider />
+        </FormGrid>
+        <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
+          <Button variant="contained">Find Schedules</Button>
         </FormGrid>
       </Grid>
     </Box>

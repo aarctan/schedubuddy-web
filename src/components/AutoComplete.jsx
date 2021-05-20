@@ -1,16 +1,19 @@
-import { Autocomplete, TextField } from "@material-ui/core";
+import {
+  Autocomplete,
+  TextField,
+  Typography,
+  FormLabel,
+} from "@material-ui/core";
 
 const AutocompleteInput = (props) => {
   return (
     <Autocomplete
       sx={{ width: "100%" }}
       multiple
-      id="tags-standard"
+      id="courses-outlined"
       options={props.options}
-      getOptionLabel={(option) => option.termTitle}
-      renderInput={(params) => (
-        <TextField {...params} variant="standard" label={props.label} />
-      )}
+      getOptionLabel={(option) => option.title}
+      renderInput={(params) => <TextField {...params} label={props.label} />}
     />
   );
 };
