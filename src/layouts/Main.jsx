@@ -8,7 +8,14 @@ const FormGrid = ({ children }) => (
   </Grid>
 );
 
-const Main = () => {
+const top100Films = [
+  { title: "The Shawshank Redemption", year: 1994 },
+  { title: "The Godfather", year: 1972 },
+  { title: "The Godfather: Part II", year: 1974 },
+  { title: "The Dark Knight", year: 2008 },
+];
+
+const Main = (props) => {
   return (
     <Box sx={{ mx: 4, my: 8 }}>
       <Grid
@@ -18,7 +25,11 @@ const Main = () => {
         justifyContent="center"
       >
         <FormGrid>
-          <AutocompleteInput />
+          <AutocompleteInput
+            label={"Select academic term"}
+            options={props.terms}
+          />
+          <AutocompleteInput label={"Add a course"} options={top100Films} />
         </FormGrid>
         <FormGrid>
           <Slider />
