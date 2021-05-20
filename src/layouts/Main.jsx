@@ -19,20 +19,37 @@ const FormGrid = ({ children, sx }) => (
   </Grid>
 );
 
-const url = "http://heywilson2-env.eba-dj7ejeyb.us-east-2.elasticbeanstalk.com"
+const url = "http://heywilson2-env.eba-dj7ejeyb.us-east-2.elasticbeanstalk.com";
+
 const Main = (props) => {
   const [term, setTerm] = useState("1770");
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [schedules, setSchedules] = useState([]);
 
   const termChangedHandler = (term) => {
     setTerm(term);
-    fetch(url + "/api/v1/courses/?term=" + term.term)
+    fetch(`${url}/api/v1/courses/?term=${term.term}`)
       .then((response) => {
         return response.json();
       })
       .then((data) => {
         setCoursesAvailable(data.objects);
+      });
+  };
+
+  const setCoursesHandler = (event, values) => {
+    setCourses(values);
+  };
+
+  const getSchedulesHandler = () => {
+    const course_ids = courses.map((course) => course.course).join(",");
+    fetch(`${url}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        setSchedules(data.objects);
       });
   };
 
@@ -51,19 +68,27 @@ const Main = (props) => {
 
         <FormGrid>
           <InputLabel label="Add courses" />
-          <AutocompleteInput label="Courses" coursesAvail={coursesAvailable} />
+          <AutocompleteInput
+            setCourses={setCoursesHandler}
+            label="Courses"
+            coursesAvail={coursesAvailable}
+          />
         </FormGrid>
 
         <FormGrid>
           <InputLabel label="Morning class preference" />
           <Slider />
         </FormGrid>
+
         <FormGrid>
           <InputLabel label="Marathon preference" />
           <Slider />
         </FormGrid>
+
         <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
-          <Button variant="contained">Find Schedules</Button>
+          <Button onClick={getSchedulesHandler} variant="contained">
+            Get Schedules
+          </Button>
         </FormGrid>
       </Grid>
     </Box>
