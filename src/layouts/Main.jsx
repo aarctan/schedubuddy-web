@@ -27,7 +27,7 @@ const Main = (props) => {
   const [courses, setCourses] = useState([]);
   const [schedules, setSchedules] = useState([]);
 
-  const termChangedHandler = (term) => {
+  const handleTermChange = (term) => {
     setTerm(term);
     fetch(`${url}/api/v1/courses/?term=${term.term}`)
       .then((response) => {
@@ -38,13 +38,15 @@ const Main = (props) => {
       });
   };
 
-  const setCoursesHandler = (event, values) => {
+  const handleCoursesChange = (event, values) => {
     setCourses(values);
   };
 
-  const getSchedulesHandler = () => {
+  const handleFormSubmit = () => {
     const course_ids = courses.map((course) => course.course).join(",");
-    fetch(`${url}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]`)
+    fetch(
+      `${url}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]`
+    )
       .then((response) => {
         return response.json();
       })
@@ -63,13 +65,13 @@ const Main = (props) => {
       >
         <FormGrid>
           <InputLabel label="Select a term" />
-          <Dropdown changedHandler={termChangedHandler} terms={props.terms} />
+          <Dropdown changedHandler={handleTermChange} terms={props.terms} />
         </FormGrid>
 
         <FormGrid>
           <InputLabel label="Add courses" />
           <AutocompleteInput
-            setCourses={setCoursesHandler}
+            setCourses={handleCoursesChange}
             label="Courses"
             coursesAvail={coursesAvailable}
           />
@@ -86,7 +88,7 @@ const Main = (props) => {
         </FormGrid>
 
         <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
-          <Button onClick={getSchedulesHandler} variant="contained">
+          <Button onClick={handleFormSubmit} variant="contained">
             Get Schedules
           </Button>
         </FormGrid>
