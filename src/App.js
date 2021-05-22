@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from "react";
-import Appbar from "./components/Appbar";
+import React from "react";
+import { Grid } from "@material-ui/core";
+
 import Main from "./layouts/Main";
 
 function App() {
-  const [terms, setTerms] = useState([]);
-  useEffect(() => {
-    fetch("http://heywilson2-env.eba-dj7ejeyb.us-east-2.elasticbeanstalk.com/api/v1/terms")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setTerms(data.objects);
-      });
-  }, []);
-
   return (
-    <div>
-      <Appbar />
-      <Main terms={terms} />
-    </div>
+    <Grid container direction="column">
+      <Grid item container>
+        <Grid item xs={false} sm={1} />
+        <Grid item xs={12} sm={10}>
+          <Main />
+        </Grid>
+        <Grid item xs={false} sm={1} />
+      </Grid>
+    </Grid>
   );
 }
 

@@ -5,13 +5,13 @@ const DiscreteSlider = () => {
     <>
       <Grid container spacing={2}>
         <Grid item>
-          <Typography>0</Typography>
+          <Typography>No</Typography>
         </Grid>
         <Grid item xs>
-          <Slider defaultValue={0} step={10} min={0} max={100} />
+          <Slider defaultValue={1} step={1} min={0} max={2} />
         </Grid>
         <Grid item>
-          <Typography>10</Typography>
+          <Typography>Yes</Typography>
         </Grid>
       </Grid>
     </>

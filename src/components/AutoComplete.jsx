@@ -1,10 +1,6 @@
-import {
-  Autocomplete,
-  TextField,
-} from "@material-ui/core";
+import { Autocomplete, TextField } from "@material-ui/core";
 
 const AutocompleteInput = (props) => {
-
   return (
     <Autocomplete
       sx={{ width: "100%" }}
