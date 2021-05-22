@@ -65,7 +65,11 @@ const Main = (props) => {
       >
         <FormGrid>
           <InputLabel label="Select a term" />
-          <Dropdown changedHandler={handleTermChange} terms={props.terms} />
+          <Dropdown
+            onChange={handleTermChange}
+            options={props.terms}
+            optionKey="termTitle"
+          />
         </FormGrid>
 
         <FormGrid>

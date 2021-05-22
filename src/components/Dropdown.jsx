@@ -3,23 +3,25 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-const BasicSelect = (props) => {
+const BasicSelect = ({ onChange, options, optionKey }) => {
   const handleChange = (event) => {
-    props.changedHandler(props.terms[event.target.value]);
+    onChange(options[event.target.value]);
   };
 
-  let termList = props.terms.map((term, index) => {
+  const optionList = options.map((option, index) => {
     return (
       <MenuItem key={index} value={index}>
-        {term.termTitle}
+        {optionKey ? option[optionKey] : option}
       </MenuItem>
     );
   });
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="demo-simple-select-label">Term</InputLabel>
-      <Select onChange={handleChange} defaultValue="">{termList}</Select>
+      <InputLabel id="select-label">Terms</InputLabel>
+      <Select onChange={handleChange} defaultValue="">
+        {optionList}
+      </Select>
     </FormControl>
   );
 };
