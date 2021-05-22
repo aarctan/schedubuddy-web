@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Box, Button, Card, CardContent, Grid, makeStyles } from "@material-ui/core";
+import { Button, Card, CardContent, Grid, makeStyles } from "@material-ui/core";
 
 import InputLabel from "../components/InputLabel";
 import Dropdown from "../components/Dropdown";
@@ -25,7 +25,7 @@ export default function ControlContainer(props) {
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
   // const [schedules, setSchedules] = useState([]);
-  const [getBtnDisdabled, setGetBtnDisabled] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const handleTermChange = async (term) => {
     setTerm(term);
@@ -41,10 +41,10 @@ export default function ControlContainer(props) {
 
   const handleCoursesChange = (_e, values) => {
     setCourses(values);
-    setGetBtnDisabled(values.length === 0);
   };
 
   const handleFormSubmit = async () => {
+    setLoading(true);
     try {
       const course_ids = courses.map((course) => course.course).join(",");
       const data = await fetch(
@@ -55,6 +55,8 @@ export default function ControlContainer(props) {
       props.setB64images(data.objects.images);
     } catch (error) {
       console.log("handleFormSubmit", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,51 +64,49 @@ export default function ControlContainer(props) {
 
   return (
     <Card className={classes.root}>
-      <CardContent>
-        <Box sx={{ mx: 2, my: 2 }}>
-          <Grid container justifyContent="center">
-            <FormGrid>
-              <Dropdown
-                onChange={handleTermChange}
-                options={props.terms}
-                optionKey="termTitle"
-              />
-            </FormGrid>
+      <CardContent sx={{ mx: 2, my: 2 }}>
+        <Grid container justifyContent="center">
+          <FormGrid>
+            <Dropdown
+              onChange={handleTermChange}
+              options={props.terms}
+              optionKey="termTitle"
+            />
+          </FormGrid>
 
-            <FormGrid>
-              <AutocompleteInput
-                setCourses={handleCoursesChange}
-                label="Add a course"
-                coursesAvail={coursesAvailable}
-              />
-            </FormGrid>
+          <FormGrid>
+            <AutocompleteInput
+              setCourses={handleCoursesChange}
+              label="Add a course"
+              coursesAvail={coursesAvailable}
+            />
+          </FormGrid>
 
-            <FormGrid>
-              <InputLabel label="Early mornings?" />
-              <Slider />
-            </FormGrid>
+          <FormGrid>
+            <InputLabel label="Early mornings?" />
+            <Slider />
+          </FormGrid>
 
-            <FormGrid>
-              <InputLabel label="Evening classes?" />
-              <Slider />
-            </FormGrid>
+          <FormGrid>
+            <InputLabel label="Evening classes?" />
+            <Slider />
+          </FormGrid>
 
-            <FormGrid>
-              <InputLabel label="Marathons?" />
-              <Slider />
-            </FormGrid>
+          <FormGrid>
+            <InputLabel label="Marathons?" />
+            <Slider />
+          </FormGrid>
 
-            <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
-              <Button
-                onClick={handleFormSubmit}
-                variant="contained"
-                disabled={getBtnDisdabled}
-              >
-                Get Schedules
-              </Button>
-            </FormGrid>
-          </Grid>
-        </Box>
+          <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              onClick={handleFormSubmit}
+              variant="contained"
+              disabled={loading || !Boolean(term && courses.length)}
+            >
+              Get Schedules
+            </Button>
+          </FormGrid>
+        </Grid>
       </CardContent>
     </Card>
   );
