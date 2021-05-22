@@ -4,14 +4,13 @@ import { Box, Grid } from "@material-ui/core";
 import ControlContainer from "./ControlContainer";
 import ScheduleContainer from "./ScheduleContainer";
 
-let root_url =
-  "http://heywilson2-env.eba-dj7ejeyb.us-east-2.elasticbeanstalk.com";
+let API_URL = process.env.REACT_APP_API_URL;
 
 const Main = () => {
   const [terms, setTerms] = useState([]);
   const [b64images, setB64images] = useState([]);
   useEffect(() => {
-    fetch(`${root_url}/api/v1/terms`)
+    fetch(`${API_URL}/api/v1/terms`)
       .then((response) => {
         return response.json();
       })
@@ -26,16 +25,12 @@ const Main = () => {
         <Grid item xs={12} md={4}>
           <ControlContainer
             setB64images={setB64images}
-            root_url={root_url}
+            root_url={API_URL}
             terms={terms}
           />
         </Grid>
         <Grid item xs={12} md={8}>
-          <ScheduleContainer
-            b64images={b64images}
-            root_url={root_url}
-            terms={terms}
-          />
+          <ScheduleContainer b64images={b64images} root_url={API_URL} terms={terms} />
         </Grid>
         <Grid item xs={12} md={8}></Grid>
       </Grid>

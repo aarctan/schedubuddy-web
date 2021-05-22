@@ -16,6 +16,8 @@ import Dropdown from "../components/Dropdown";
 import AutocompleteInput from "../components/AutoComplete";
 import Slider from "../components/Slider";
 
+let API_URL = process.env.REACT_APP_API_URL;
+
 const useStyles = makeStyles({
   root: {
     backgroundColor: "#EDECEC",
@@ -37,7 +39,7 @@ export default function ControlContainer(props) {
 
   const handleTermChange = (term) => {
     setTerm(term);
-    fetch(`${props.root_url}/api/v1/courses/?term=${term.term}`)
+    fetch(`${API_URL}/api/v1/courses/?term=${term.term}`)
       .then((response) => {
         return response.json();
       })
@@ -53,9 +55,7 @@ export default function ControlContainer(props) {
 
   const handleFormSubmit = () => {
     const course_ids = courses.map((course) => course.course).join(",");
-    fetch(
-      `${props.root_url}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]`
-    )
+    fetch(`${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]`)
       .then((response) => {
         return response.json();
       })
