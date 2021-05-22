@@ -1,7 +1,6 @@
-import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import { Box, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 
@@ -29,10 +28,7 @@ export default function ScheduleContainer({ b64images }) {
     <Card className={classes.root}>
       <CardContent>
         <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
-          <img
-            className={classes.Media}
-            src={`data:image/png;base64,${b64images[0]}`}
-          />
+          {/* <img className={classes.Media} src={`data:image/png;base64,${b64images[0]}`} /> */}
         </FormGrid>
       </CardContent>
 

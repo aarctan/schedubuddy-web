@@ -16,21 +16,18 @@ const Main = () => {
       })
       .then((data) => {
         setTerms(data.objects);
-      });
+      })
+      .catch((error) => console.log("Main useEffect", error));
   }, []);
 
   return (
-    <Box mt={(5, 5)}>
+    <Box mt={5}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
-          <ControlContainer
-            setB64images={setB64images}
-            root_url={API_URL}
-            terms={terms}
-          />
+          <ControlContainer setB64images={setB64images} terms={terms} />
         </Grid>
         <Grid item xs={12} md={8}>
-          <ScheduleContainer b64images={b64images} root_url={API_URL} terms={terms} />
+          <ScheduleContainer b64images={b64images} terms={terms} />
         </Grid>
         <Grid item xs={12} md={8}></Grid>
       </Grid>

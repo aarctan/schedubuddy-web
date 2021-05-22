@@ -1,22 +1,12 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import { Box, Grid } from "@material-ui/core";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import { useState } from "react";
+import { Box, Button, Card, CardContent, Grid, makeStyles } from "@material-ui/core";
 
 import InputLabel from "../components/InputLabel";
 import Dropdown from "../components/Dropdown";
 import AutocompleteInput from "../components/AutoComplete";
 import Slider from "../components/Slider";
 
-let API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = makeStyles({
   root: {
@@ -34,35 +24,38 @@ export default function ControlContainer(props) {
   const [term, setTerm] = useState("");
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [schedules, setSchedules] = useState([]);
+  // const [schedules, setSchedules] = useState([]);
   const [getBtnDisdabled, setGetBtnDisabled] = useState(true);
 
-  const handleTermChange = (term) => {
+  const handleTermChange = async (term) => {
     setTerm(term);
-    fetch(`${API_URL}/api/v1/courses/?term=${term.term}`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setCoursesAvailable(data.objects);
-      });
+    try {
+      const data = await fetch(`${API_URL}/api/v1/courses/?term=${term.term}`).then(
+        (res) => res.json()
+      );
+      setCoursesAvailable(data.objects);
+    } catch (error) {
+      console.log("handleTermChange", error);
+    }
   };
 
-  const handleCoursesChange = (event, values) => {
+  const handleCoursesChange = (_e, values) => {
     setCourses(values);
-    setGetBtnDisabled(values.length == 0 ? true : false);
+    setGetBtnDisabled(values.length === 0);
   };
 
-  const handleFormSubmit = () => {
-    const course_ids = courses.map((course) => course.course).join(",");
-    fetch(`${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]`)
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setSchedules(data.objects);
-        props.setB64images(data.objects.images);
-      });
+  const handleFormSubmit = async () => {
+    try {
+      const course_ids = courses.map((course) => course.course).join(",");
+      const data = await fetch(
+        `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]`
+      ).then((res) => res.json());
+
+      // setSchedules(data.objects);
+      props.setB64images(data.objects.images);
+    } catch (error) {
+      console.log("handleFormSubmit", error);
+    }
   };
 
   const classes = useStyles();
@@ -115,8 +108,6 @@ export default function ControlContainer(props) {
           </Grid>
         </Box>
       </CardContent>
-
-      <CardActions></CardActions>
     </Card>
   );
 }

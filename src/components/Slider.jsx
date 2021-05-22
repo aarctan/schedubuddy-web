@@ -1,4 +1,4 @@
-import { Box, Grid, Slider, Typography } from "@material-ui/core";
+import { Grid, Slider, Typography } from "@material-ui/core";
 
 const DiscreteSlider = () => {
   return (
