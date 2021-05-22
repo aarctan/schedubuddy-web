@@ -19,7 +19,7 @@ const BasicSelect = ({ onChange, options, optionKey }) => {
   return (
     <FormControl fullWidth>
       <InputLabel id="select-label">Terms</InputLabel>
-      <Select onChange={handleChange} defaultValue="">
+      <Select onChange={handleChange} defaultValue="" label="Terms">
         {optionList}
       </Select>
     </FormControl>
