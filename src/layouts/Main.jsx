@@ -5,7 +5,7 @@ import ControlContainer from "./ControlContainer";
 import ScheduleContainer from "./ScheduleContainer";
 
 let root_url =
-  "http://127.0.0.1:5000";
+  "http://heywilson2-env.eba-dj7ejeyb.us-east-2.elasticbeanstalk.com";
 
 const Main = () => {
   const [terms, setTerms] = useState([]);
