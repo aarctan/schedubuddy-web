@@ -64,7 +64,7 @@ export default function ControlContainer(props) {
     <Card className={classes.root}>
       <CardContent>
         <Box sx={{ mx: 2, my: 2 }}>
-          <Grid justifyContent="center">
+          <Grid container justifyContent="center">
             <FormGrid>
               <Dropdown
                 onChange={handleTermChange}
