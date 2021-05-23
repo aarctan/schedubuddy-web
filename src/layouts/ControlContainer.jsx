@@ -30,6 +30,7 @@ const ControlContainer = (props) => {
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
   const [showLimit, setShowLimit] = useState(30);
+  const [onlinePref, setOnlinePref] = useState(true);
   // const [schedules, setSchedules] = useState([]);
 
   const handleTermChange = async (term) => {
