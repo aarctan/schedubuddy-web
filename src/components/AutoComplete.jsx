@@ -15,7 +15,7 @@ const colorOrder = [
 
 const AutocompleteInput = (props) => (
   <Autocomplete
-    sx={({ width: "100%" }, { marginTop: "-5%" })}
+    sx={{ width: "100%", marginTop: "-5%" }}
     disableClearable={true}
     multiple
     id="courses-outlined"
@@ -36,7 +36,7 @@ const AutocompleteInput = (props) => (
       <TextField
         {...params}
         variant="standard"
-        placeholder="Enter a course"
+        placeholder={props.label}
         margin="normal"
       />
     )}

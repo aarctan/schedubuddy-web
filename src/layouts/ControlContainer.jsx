@@ -77,6 +77,7 @@ const ControlContainer = (props) => {
         <Grid container justifyContent="center">
           <FormGrid>
             <Dropdown
+              label="Select a term"
               onChange={handleTermChange}
               options={props.terms}
               optionKey="termTitle"

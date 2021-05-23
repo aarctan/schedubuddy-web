@@ -1,6 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
 
-const BasicSelect = ({ onChange, options, optionKey }) => {
+const BasicSelect = ({ label, onChange, options, optionKey }) => {
   const handleChange = (event) => {
     onChange(options[event.target.value]);
   };
@@ -15,8 +15,8 @@ const BasicSelect = ({ onChange, options, optionKey }) => {
 
   return (
     <FormControl fullWidth>
-      <InputLabel id="Courses">Select a term</InputLabel>
-      <Select onChange={handleChange} defaultValue="" label="select-label">
+      <InputLabel id="Courses">{label}</InputLabel>
+      <Select onChange={handleChange} defaultValue="" label={label}>
         {optionList}
       </Select>
     </FormControl>
