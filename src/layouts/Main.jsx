@@ -30,6 +30,7 @@ const Main = () => {
           <ControlContainer
             setB64images={setB64images}
             setLoading={setLoading}
+            loading={loading}
             terms={terms}
           />
         </Grid>
