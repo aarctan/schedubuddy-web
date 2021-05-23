@@ -8,7 +8,6 @@ const useStyles = makeStyles({
     alignItems: "center",
     backgroundColor: "#EDECEC",
     display: "flex",
-    height: "100%",
     justifyContent: "center",
   },
   content: {
