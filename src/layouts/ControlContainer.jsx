@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Card, CardContent, Grid, makeStyles, Divider } from "@material-ui/core";
+import { Button, Card, CardContent, Grid, makeStyles } from "@material-ui/core";
 
 import InputLabel from "../components/InputLabel";
 import Dropdown from "../components/Dropdown";
@@ -86,9 +86,10 @@ const ControlContainer = (props) => {
 
           <FormGrid>
             <AutocompleteInput
-              setCourses={handleCoursesChange}
-              label="Add a course"
+              courses={courses}
               coursesAvail={coursesAvailable}
+              label="Enter courses"
+              setCourses={handleCoursesChange}
             />
           </FormGrid>
 
