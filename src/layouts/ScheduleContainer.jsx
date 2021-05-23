@@ -1,4 +1,4 @@
-import { Card, CardContent, makeStyles } from "@material-ui/core";
+import { Card, CardContent, makeStyles, Typography } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
@@ -26,11 +26,15 @@ const ScheduleContainer = ({ b64images }) => {
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
-        <img
-          className={classes.Media}
-          src={`data:image/png;base64,${b64images[0]}`}
-          alt="Schedule"
-        />
+        {b64images.length ? (
+          <img
+            className={classes.Media}
+            src={`data:image/png;base64,${b64images[0]}`}
+            alt="Schedule"
+          />
+        ) : (
+          <Typography variant="caption">No schedules to display</Typography>
+        )}
       </CardContent>
     </Card>
   );
