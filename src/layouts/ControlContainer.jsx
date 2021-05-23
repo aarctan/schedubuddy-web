@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Button, Card, CardContent, Grid, makeStyles } from "@material-ui/core";
+import {
+  Button,
+  Card,
+  CardContent,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  makeStyles,
+} from "@material-ui/core";
 
 import InputLabel from "../components/InputLabel";
 import Dropdown from "../components/Dropdown";
@@ -30,7 +40,8 @@ const ControlContainer = (props) => {
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
   const [showLimit, setShowLimit] = useState(30);
-  const [onlinePref, setOnlinePref] = useState(true);
+  const [onlinePref, setOnlinePref] = useState(false);
+  const [eveningPref, setEveningPref] = useState(false);
   // const [schedules, setSchedules] = useState([]);
 
   const handleTermChange = async (term) => {
@@ -74,7 +85,7 @@ const ControlContainer = (props) => {
 
   return (
     <Card className={classes.root}>
-      <CardContent sx={{ mx: 1, my: 0 }}>
+      <CardContent sx={{ mx: 1 }}>
         <Grid container justifyContent="center">
           <FormGrid>
             <Dropdown
@@ -100,11 +111,6 @@ const ControlContainer = (props) => {
           </FormGrid>
 
           <FormGrid>
-            <InputLabel label="Evening classes?" />
-            <Slider default={1} step={1} min={0} max={1} />
-          </FormGrid>
-
-          <FormGrid>
             <InputLabel label="Marathons?" />
             <Slider default={1} step={1} min={0} max={2} />
           </FormGrid>
@@ -118,6 +124,38 @@ const ControlContainer = (props) => {
               min={10}
               max={100}
             />
+          </FormGrid>
+
+          <FormGrid>
+            <FormControl component="fieldset" variant="standard">
+              <InputLabel label="Prioritize:" />
+              <FormGroup>
+                <FormControlLabel
+                  label="Online classes"
+                  control={
+                    <Checkbox
+                      name="online"
+                      checked={onlinePref}
+                      onChange={(e) => {
+                        setOnlinePref(e.target.checked);
+                      }}
+                    />
+                  }
+                />
+                <FormControlLabel
+                  label="Evening classes"
+                  control={
+                    <Checkbox
+                      name="evening"
+                      checked={eveningPref}
+                      onChange={(e) => {
+                        setEveningPref(e.target.checked);
+                      }}
+                    />
+                  }
+                />
+              </FormGroup>
+            </FormControl>
           </FormGrid>
 
           <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
