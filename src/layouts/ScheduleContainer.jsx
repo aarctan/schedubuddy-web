@@ -36,7 +36,7 @@ const ScheduleContainer = ({ b64images }) => {
     <Card className={classes.root}>
       <CardContent className={classes.content}>
         <Grid container direction="column" className={classes.content}>
-          {b64images.length && (
+          {b64images.length > 0 && (
             <Paging onChange={handlePageChange} pages={b64images.length} />
           )}
           {b64images.length ? (
@@ -46,7 +46,7 @@ const ScheduleContainer = ({ b64images }) => {
               alt="Schedule"
             />
           ) : (
-            <Typography variant="caption">No schedules to display</Typography>
+            <Typography variant="caption"><h2>No schedules to display</h2></Typography>
           )}
         </Grid>
       </CardContent>

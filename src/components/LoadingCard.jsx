@@ -8,6 +8,7 @@ const LoadingCardContent = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        backgroundColor: "#EDECEC",
       }}
     >
       <CardContent>
