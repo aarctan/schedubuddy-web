@@ -1,12 +1,17 @@
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import { Grid } from "@material-ui/core";
-import CardContent from "@material-ui/core/CardContent";
+import { Card, CardContent, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles({
   root: {
+    alignItems: "center",
     backgroundColor: "#EDECEC",
+    display: "flex",
     height: "100%",
+    justifyContent: "center",
+  },
+  content: {
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "center",
   },
   Media: {
     height: "auto",
@@ -16,25 +21,19 @@ const useStyles = makeStyles({
   },
 });
 
-const FormGrid = ({ children, sx }) => (
-  <Grid item xs={12} sx={{ my: 2, ...sx }}>
-    {children}
-  </Grid>
-);
-
-export default function ScheduleContainer({ b64images }) {
+const ScheduleContainer = ({ b64images }) => {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
-      <CardContent>
-        <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
-          <img
-            className={classes.Media}
-            src={`data:image/png;base64,${b64images[0]}`}
-            alt="Schedule"
-          />
-        </FormGrid>
+      <CardContent className={classes.content}>
+        <img
+          className={classes.Media}
+          src={`data:image/png;base64,${b64images[0]}`}
+          alt="Schedule"
+        />
       </CardContent>
     </Card>
   );
-}
+};
+
+export default ScheduleContainer;

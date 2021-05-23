@@ -20,12 +20,11 @@ const FormGrid = ({ children, sx }) => (
   </Grid>
 );
 
-export default function ControlContainer(props) {
+const ControlContainer = (props) => {
   const [term, setTerm] = useState("");
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
   // const [schedules, setSchedules] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   const handleTermChange = async (term) => {
     setTerm(term);
@@ -44,7 +43,7 @@ export default function ControlContainer(props) {
   };
 
   const handleFormSubmit = async () => {
-    setLoading(true);
+    props.setLoading(true);
     try {
       const course_ids = courses.map((course) => course.course).join(",");
       const data = await fetch(
@@ -56,7 +55,7 @@ export default function ControlContainer(props) {
     } catch (error) {
       console.log("handleFormSubmit", error);
     } finally {
-      setLoading(false);
+      props.setLoading(false);
     }
   };
 
@@ -101,7 +100,7 @@ export default function ControlContainer(props) {
             <Button
               onClick={handleFormSubmit}
               variant="contained"
-              disabled={loading || !Boolean(term && courses.length)}
+              disabled={props.loading || !Boolean(term && courses.length)}
             >
               Get Schedules
             </Button>
@@ -110,4 +109,6 @@ export default function ControlContainer(props) {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default ControlContainer;
