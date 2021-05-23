@@ -51,7 +51,6 @@ const ControlContainer = (props) => {
   const handleFormSubmit = async () => {
     props.setLoading(true);
     try {
-      console.log(showLimit);
       const course_ids = courses.map((course) => course.course).join(",");
       const data = await fetch(
         `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&limit=${showLimit}`
@@ -122,6 +121,7 @@ const ControlContainer = (props) => {
             <Button
               onClick={handleFormSubmit}
               variant="contained"
+              color="secondary"
               disabled={props.loading || !Boolean(term && courses.length)}
             >
               Get Schedules
