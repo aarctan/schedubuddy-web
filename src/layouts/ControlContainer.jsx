@@ -41,7 +41,7 @@ const ControlContainer = (props) => {
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
   const [eveningPref, setEveningPref] = useState(true);
-  const [onlinePref, setOnlinePref] = useState(true);
+  const [onlinePref, setOnlinePref] = useState(false);
   const [startPref, setStartPref] = useState(new Date("2020-01-01 10:00"));
   const [consecPref, setConsecPref] = useState(2);
   const [showLimit, setShowLimit] = useState(30);
@@ -63,10 +63,14 @@ const ControlContainer = (props) => {
     props.setLoading(true);
     try {
       const course_ids = courses.map((course) => course.course).join(",");
-      const data = await fetch(
-        `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&limit=${showLimit}`
-      ).then((res) => res.json());
-
+      const eveningClassesBit = eveningPref === true ? "1" : "0";
+      const onlineClassesBit = onlinePref === true ? "1" : "0";
+      const startTimeStr = startPref.toLocaleTimeString().replace(/:\d+ /, " ");
+      const consecHoursStr = consecPref.toString();
+      const showLimitStr = showLimit.toString();
+      const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startTimeStr},${consecHoursStr},${showLimitStr}]`;
+      const req_url = `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&prefs=${prefsStr}`;
+      const data = await fetch(req_url).then((res) => res.json());
       // setSchedules(data.objects);
       props.setB64images(data.objects.images);
     } catch (error) {
@@ -106,7 +110,7 @@ const ControlContainer = (props) => {
             <FormControl component="fieldset" variant="standard">
               <FormGroup>
                 <FormControlLabel
-                  label="Include evening classes"
+                  label="Include 3-hour weekly lectures"
                   control={
                     <Checkbox
                       name="evening"
