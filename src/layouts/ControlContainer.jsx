@@ -14,7 +14,6 @@ import {
 import InputLabel from "../components/InputLabel";
 import Dropdown from "../components/Dropdown";
 import AutocompleteInput from "../components/AutoComplete";
-import Slider from "../components/Slider";
 import LabelSlider from "../components/LabelSlider";
 import TimePick from "../components/TimePick";
 import MarathonPref from "../components/MarathonPref";
@@ -41,9 +40,11 @@ const ControlContainer = (props) => {
   const [term, setTerm] = useState("");
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [showLimit, setShowLimit] = useState(30);
-  const [onlinePref, setOnlinePref] = useState(true);
   const [eveningPref, setEveningPref] = useState(true);
+  const [onlinePref, setOnlinePref] = useState(true);
+  const [startPref, setStartPref] = useState(new Date("2020-01-01 10:00"));
+  const [consecPref, setConsecPref] = useState(2);
+  const [showLimit, setShowLimit] = useState(30);
   // const [schedules, setSchedules] = useState([]);
 
   const handleTermChange = async (term) => {
@@ -58,17 +59,10 @@ const ControlContainer = (props) => {
     }
   };
 
-  const handleCoursesChange = (_e, values) => {
-    setCourses(values);
-  };
-
   const handleFormSubmit = async () => {
     props.setLoading(true);
     try {
       const course_ids = courses.map((course) => course.course).join(",");
-      console.log(
-        `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&limit=${showLimit}`
-      );
       const data = await fetch(
         `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&limit=${showLimit}`
       ).then((res) => res.json());
@@ -80,10 +74,6 @@ const ControlContainer = (props) => {
     } finally {
       props.setLoading(false);
     }
-  };
-
-  const handleShowLimitChange = (_e, value) => {
-    setShowLimit(value);
   };
 
   const classes = useStyles();
@@ -106,7 +96,9 @@ const ControlContainer = (props) => {
               courses={courses}
               coursesAvail={coursesAvailable}
               label="Enter courses"
-              setCourses={handleCoursesChange}
+              setCourses={(_e, value) => {
+                setCourses(value);
+              }}
             />
           </FormGrid>
 
@@ -142,17 +134,28 @@ const ControlContainer = (props) => {
           </FormGrid>
 
           <FormGrid>
-            <TimePick />
+            <TimePick
+              value={startPref}
+              onChange={(value) => {
+                setStartPref(value);
+              }}
+            />
           </FormGrid>
 
           <FormGrid>
-            <MarathonPref />
+            <MarathonPref
+              onChange={(_e, value) => {
+                setConsecPref(value["props"]["value"] + 1);
+              }}
+            />
           </FormGrid>
 
           <FormGrid>
             <InputLabel label="Max schedules to show:" />
             <LabelSlider
-              setShowLimit={handleShowLimitChange}
+              setShowLimit={(_e, value) => {
+                setShowLimit(value);
+              }}
               default={30}
               step={10}
               min={10}
