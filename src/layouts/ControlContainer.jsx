@@ -16,6 +16,8 @@ import Dropdown from "../components/Dropdown";
 import AutocompleteInput from "../components/AutoComplete";
 import Slider from "../components/Slider";
 import LabelSlider from "../components/LabelSlider";
+import TimePick from "../components/TimePick";
+import MarathonPref from "../components/MarathonPref";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -30,7 +32,7 @@ const useStyles = makeStyles({
 });
 
 const FormGrid = ({ children, sx }) => (
-  <Grid item xs={12} sx={{ my: 1, ...sx }}>
+  <Grid item xs={12} sx={{ my: 0.5, ...sx }}>
     {children}
   </Grid>
 );
@@ -40,8 +42,8 @@ const ControlContainer = (props) => {
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
   const [showLimit, setShowLimit] = useState(30);
-  const [onlinePref, setOnlinePref] = useState(false);
-  const [eveningPref, setEveningPref] = useState(false);
+  const [onlinePref, setOnlinePref] = useState(true);
+  const [eveningPref, setEveningPref] = useState(true);
   // const [schedules, setSchedules] = useState([]);
 
   const handleTermChange = async (term) => {
@@ -64,6 +66,9 @@ const ControlContainer = (props) => {
     props.setLoading(true);
     try {
       const course_ids = courses.map((course) => course.course).join(",");
+      console.log(
+        `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&limit=${showLimit}`
+      );
       const data = await fetch(
         `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&limit=${showLimit}`
       ).then((res) => res.json());
@@ -106,13 +111,42 @@ const ControlContainer = (props) => {
           </FormGrid>
 
           <FormGrid>
-            <InputLabel label="Early mornings?" />
-            <Slider default={1} step={1} min={0} max={2} />
+            <FormControl component="fieldset" variant="standard">
+              <FormGroup>
+                <FormControlLabel
+                  label="Include evening classes"
+                  control={
+                    <Checkbox
+                      name="evening"
+                      checked={eveningPref}
+                      onChange={(e) => {
+                        setEveningPref(e.target.checked);
+                      }}
+                    />
+                  }
+                />
+                <FormControlLabel
+                  label="Include online classes"
+                  control={
+                    <Checkbox
+                      name="online"
+                      checked={onlinePref}
+                      onChange={(e) => {
+                        setOnlinePref(e.target.checked);
+                      }}
+                    />
+                  }
+                />
+              </FormGroup>
+            </FormControl>
           </FormGrid>
 
           <FormGrid>
-            <InputLabel label="Marathons?" />
-            <Slider default={1} step={1} min={0} max={2} />
+            <TimePick />
+          </FormGrid>
+
+          <FormGrid>
+            <MarathonPref />
           </FormGrid>
 
           <FormGrid>
@@ -124,38 +158,6 @@ const ControlContainer = (props) => {
               min={10}
               max={100}
             />
-          </FormGrid>
-
-          <FormGrid>
-            <FormControl component="fieldset" variant="standard">
-              <InputLabel label="Prioritize:" />
-              <FormGroup>
-                <FormControlLabel
-                  label="Online classes"
-                  control={
-                    <Checkbox
-                      name="online"
-                      checked={onlinePref}
-                      onChange={(e) => {
-                        setOnlinePref(e.target.checked);
-                      }}
-                    />
-                  }
-                />
-                <FormControlLabel
-                  label="Evening classes"
-                  control={
-                    <Checkbox
-                      name="evening"
-                      checked={eveningPref}
-                      onChange={(e) => {
-                        setEveningPref(e.target.checked);
-                      }}
-                    />
-                  }
-                />
-              </FormGroup>
-            </FormControl>
           </FormGrid>
 
           <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
