@@ -10,7 +10,7 @@ let API_URL = process.env.REACT_APP_API_URL;
 
 const Main = () => {
   const [terms, setTerms] = useState([]);
-  const [b64images, setB64images] = useState([]);
+  const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Main = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <ControlContainer
-            setB64images={setB64images}
+            setSchedules={setSchedules}
             setLoading={setLoading}
             loading={loading}
             terms={terms}
@@ -40,7 +40,9 @@ const Main = () => {
           {loading ? (
             <LoadingCard />
           ) : (
-            <ScheduleContainer b64images={b64images} terms={terms} />
+            <ScheduleContainer
+              schedules={schedules}
+            />
           )}
         </Grid>
       </Grid>
