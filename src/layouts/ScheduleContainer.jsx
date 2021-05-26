@@ -24,6 +24,7 @@ const useStyles = makeStyles({
 });
 
 const Schedule = ({ jsonSched }) => {
+  const classes = useStyles();
   const [image, setImage] = useState(null);
   const canvas = useRef(null);
 
@@ -39,18 +40,11 @@ const Schedule = ({ jsonSched }) => {
       const ctx = canvas.current.getContext("2d");
       ctx.canvas.width = image.naturalWidth;
       ctx.canvas.height = image.naturalHeight;
-      const width = image.clientWidth;
-      const height = image.clientHeight;
-//      image.getBoundingClientRect();
-      ctx.drawImage(image, 0,0);
+      ctx.drawImage(image, 0, 0);
     }
   }, [image, canvas]);
 
-  return (
-    <div>
-      <canvas ref={canvas}></canvas>
-    </div>
-  );
+  return <canvas className={classes.Media} ref={canvas}></canvas>;
 };
 
 const ScheduleContainer = ({ schedules, b64images }) => {
@@ -61,7 +55,15 @@ const ScheduleContainer = ({ schedules, b64images }) => {
     setPage(value - 1);
   };
 
-  return <Schedule jsonSched={schedules[page]} />;
+  return (
+    <Card className={classes.root}>
+      <CardContent className={classes.content}>
+        <Grid container direction="column" className={classes.content}>
+          <Schedule jsonSched={schedules[page]} />
+        </Grid>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default ScheduleContainer;
