@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Grid, Card, CardContent, makeStyles, Typography } from "@material-ui/core";
 
 import Paging from "../components/Paging";
@@ -23,15 +23,51 @@ const useStyles = makeStyles({
   },
 });
 
-const ScheduleContainer = ({ b64images }) => {
+const Schedule = ({ jsonSched }) => {
+  const [image, setImage] = useState(null);
+  const canvas = useRef(null);
+
+  useEffect(() => {
+    const schedImg = new Image();
+    schedImg.src = "/boilerplate.png";
+    schedImg.onload = () => setImage(schedImg);
+    console.log(schedImg);
+  }, []);
+
+  useEffect(() => {
+    if (image && canvas) {
+      const ctx = canvas.current.getContext("2d");
+      ctx.canvas.width = image.naturalWidth;
+      ctx.canvas.height = image.naturalHeight;
+      const width = image.clientWidth;
+      const height = image.clientHeight;
+//      image.getBoundingClientRect();
+      ctx.drawImage(image, 0,0);
+    }
+  }, [image, canvas]);
+
+  return (
+    <div>
+      <canvas ref={canvas}></canvas>
+    </div>
+  );
+};
+
+const ScheduleContainer = ({ schedules, b64images }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
   const handlePageChange = (event, value) => {
-    setPage(value-1);
+    setPage(value - 1);
   };
 
-  return (
+  return <Schedule jsonSched={schedules[page]} />;
+};
+
+export default ScheduleContainer;
+
+/**
+ * return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
         <Grid container direction="column" className={classes.content}>
@@ -50,7 +86,15 @@ const ScheduleContainer = ({ b64images }) => {
         </Grid>
       </CardContent>
     </Card>
-  );
-};
+  ); */
 
-export default ScheduleContainer;
+/**
+   * 
+   * <Card className={classes.root}>
+      <CardContent className={classes.content}>
+        <Grid container direction="column" className={classes.content}>
+          <Schedule jsonSched={schedules[page]} />
+        </Grid>
+      </CardContent>
+    </Card>
+   */

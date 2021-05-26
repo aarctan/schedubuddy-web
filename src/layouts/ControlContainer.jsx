@@ -45,7 +45,6 @@ const ControlContainer = (props) => {
   const [startPref, setStartPref] = useState(new Date("2020-01-01 10:00"));
   const [consecPref, setConsecPref] = useState(2);
   const [showLimit, setShowLimit] = useState(30);
-  // const [schedules, setSchedules] = useState([]);
 
   const handleTermChange = async (term) => {
     setTerm(term);
@@ -71,8 +70,9 @@ const ControlContainer = (props) => {
       const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startTimeStr},${consecHoursStr},${showLimitStr}]`;
       const req_url = `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&prefs=${prefsStr}`;
       const data = await fetch(req_url).then((res) => res.json());
-      // setSchedules(data.objects);
       props.setB64images(data.objects.images);
+      props.setSchedules(data.objects.schedules);
+      console.log(data.objects.schedules);
     } catch (error) {
       console.log("handleFormSubmit", error);
     } finally {
