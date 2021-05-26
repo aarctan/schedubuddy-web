@@ -27,6 +27,7 @@ const leftMarginOffset = 148;
 const topMarginOffset = 90;
 const boxWidth = 200;
 const verticalLength50 = 101;
+const quarterLength = verticalLength50/4;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
 const fontSize = 20;
 const blackColor = "#000000";
@@ -42,7 +43,7 @@ const colorOrder = [
   "#9999FF",
   "#CCFFFF",
 ];
-const hourPadding = 0;
+const hourPadding = 1;
 
 const startToInt = (str_t) => {
   let h = parseInt(str_t.slice(0, 2));
@@ -93,15 +94,15 @@ const drawSchedule = (ctx, jsonSched, bp_width, bp_height) => {
       for (var day of ct.day) {
         if (day === "S" || day === "U") classOnWeekend = true;
         let r_x0 = leftMarginOffset + day_lookup[day] * boxWidth + day_lookup[day] * 2;
-        let r_x1 = r_x0 + boxWidth - 1;
+        let r_x1 = r_x0 + boxWidth;
         let quartersPast = Math.floor(start_t / 15);
         let quartersFill = Math.ceil((end_t - start_t) / 15);
-        let r_y0 = topMarginOffset + quartersPast * 25.25 + (quartersPast / 4) * 3;
-        let r_y1 = r_y0 + quartersFill * 25.25 + (quartersFill / 4 - 1) * 3;
+        let r_y0 = topMarginOffset + quartersPast * quarterLength + (quartersPast / 4) * 3;
+        let r_y1 = r_y0 + quartersFill * quarterLength+ (quartersFill / 4 - 1) * 3;
         ctx.fillStyle = blackColor;
-        ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 4);
+        ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 5);
         ctx.fillStyle = colorOrder[courseItr % colorOrder.length];
-        ctx.fillRect(r_x0, r_y0, r_x1 - r_x0 + 1, r_y1 - r_y0 + 1);
+        ctx.fillRect(r_x0, r_y0, r_x1 - r_x0, r_y1 - r_y0 + 1);
         drawText(r_x0, r_y0, ctx, classObj, ct.location);
       }
     }
