@@ -23,10 +23,10 @@ const useStyles = makeStyles({
   },
 });
 
-const left_margin_offset = 148;
-const top_margin_offset = 90;
-const box_width = 200;
-const vertical_length_50 = 101;
+const leftMarginOffset = 148;
+const topMarginOffset = 90;
+const boxWidth = 200;
+const verticalLength50 = 101;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
 const fontSize = 20;
 const blackColor = "#000000";
@@ -42,6 +42,7 @@ const colorOrder = [
   "#9999FF",
   "#CCFFFF",
 ];
+const hourPadding = 0;
 
 const startToInt = (str_t) => {
   let h = parseInt(str_t.slice(0, 2));
@@ -67,11 +68,11 @@ const drawText = (x0, y0, ctx, classObj, location) => {
   lines.push(location);
   ctx.fillStyle = blackColor;
   for (let i = 0; i < lines.length; i++) {
-    ctx.fillText(lines[i], x0 + 4, y0 + fontSize + i * fontSize + i * 4);
+    ctx.fillText(lines[i], x0 + 4, y0 + fontSize + i * fontSize + i * 2);
   }
 };
 
-const drawSchedule = (ctx, jsonSched) => {
+const drawSchedule = (ctx, jsonSched, bp_width, bp_height) => {
   let classOnWeekend = false;
   let courseItr = -1;
   let currCourse = null;
@@ -91,11 +92,11 @@ const drawSchedule = (ctx, jsonSched) => {
       max_y = Math.max(max_y, end_t);
       for (var day of ct.day) {
         if (day === "S" || day === "U") classOnWeekend = true;
-        let r_x0 = left_margin_offset + day_lookup[day] * box_width + day_lookup[day] * 2;
-        let r_x1 = r_x0 + box_width - 1;
+        let r_x0 = leftMarginOffset + day_lookup[day] * boxWidth + day_lookup[day] * 2;
+        let r_x1 = r_x0 + boxWidth - 1;
         let quartersPast = Math.floor(start_t / 15);
         let quartersFill = Math.ceil((end_t - start_t) / 15);
-        let r_y0 = top_margin_offset + quartersPast * 25.25 + (quartersPast / 4) * 3;
+        let r_y0 = topMarginOffset + quartersPast * 25.25 + (quartersPast / 4) * 3;
         let r_y1 = r_y0 + quartersFill * 25.25 + (quartersFill / 4 - 1) * 3;
         ctx.fillStyle = blackColor;
         ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 4);
@@ -105,6 +106,32 @@ const drawSchedule = (ctx, jsonSched) => {
       }
     }
   }
+  const topHours = Math.min(8, Math.floor(min_y / 60));
+  const yRegionTop = topMarginOffset + topHours * verticalLength50 + topHours * 3;
+  const bottomHours = (Math.ceil(max_y / 60) + hourPadding);
+  const yRegionBottom = topMarginOffset + bottomHours * verticalLength50 + bottomHours * 3;
+  const yRegionlength = yRegionBottom - yRegionTop;
+  ctx.drawImage(ctx.canvas,
+    0, yRegionTop, bp_width, yRegionlength,
+    0, topMarginOffset, bp_width, yRegionlength);
+
+  let xRegionLength = bp_width;
+  if (!classOnWeekend) {
+    const xRegionLeft = leftMarginOffset + boxWidth + 2;
+    const xRegionRight = bp_width - boxWidth - 2;
+    xRegionLength = xRegionRight - xRegionLeft;
+    ctx.drawImage(ctx.canvas,
+      xRegionLeft, 0, xRegionLength, bp_height,
+      leftMarginOffset, 0, xRegionLength, bp_height);
+  }
+  const imgData = ctx.getImageData(0, 0,
+    leftMarginOffset + xRegionLength, topMarginOffset + yRegionlength);
+  ctx.canvas.width = leftMarginOffset + xRegionLength;
+  ctx.canvas.height = topMarginOffset + yRegionlength;
+  ctx.putImageData(imgData, 0, 0);
+  ctx.fillStyle = blackColor;
+  ctx.fillRect(0, topMarginOffset + yRegionlength - 2,
+    leftMarginOffset + xRegionLength, 2);
 };
 
 const Schedule = ({ jsonSched }) => {
@@ -125,7 +152,7 @@ const Schedule = ({ jsonSched }) => {
       ctx.canvas.height = image.naturalHeight;
       ctx.drawImage(image, 0, 0);
       ctx.font = `${fontSize}px Helvetica`;
-      drawSchedule(ctx, jsonSched);
+      drawSchedule(ctx, jsonSched, image.naturalWidth, image.naturalHeight);
     }
   }, [jsonSched, image, canvas]);
 
