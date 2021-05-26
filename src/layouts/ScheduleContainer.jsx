@@ -27,9 +27,20 @@ const left_margin_offset = 148;
 const top_margin_offset = 90;
 const box_width = 200;
 const vertical_length_50 = 101;
-
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
-const blackColor = "#000000"
+const blackColor = "#000000";
+const colorOrder = [
+  "#FF9999",
+  "#FFFF99",
+  "#99FF99",
+  "#99CCFF",
+  "#CC99FF",
+  "#FF99CC",
+  "#99FFCC",
+  "#FFCC99",
+  "#9999FF",
+  "#CCFFFF",
+];
 
 const startToInt = (str_t) => {
   let h = parseInt(str_t.slice(0, 2));
@@ -42,18 +53,21 @@ const startToInt = (str_t) => {
   }
 };
 
+/**
+                location = location if location else course_obj[2]
+                draw.text((r_x0+4, r_y0+2), get_draw_text(course_obj, ct["location"]), (0,0,0), font=font)
+ */
+
 const drawSchedule = (ctx, jsonSched) => {
   let classOnWeekend = false;
-  let courseItr = 0;
+  let courseItr = -1;
   let currCourse = null;
   let min_y = 2147483647;
   let max_y = -2147483648;
   for (var courseObj of jsonSched) {
     courseObj = courseObj.objects;
     let courseId = courseObj.course;
-    let color = null;
     if (courseId != currCourse) {
-      color = "#FF9999";
       currCourse = courseId;
       courseItr++;
     }
@@ -72,8 +86,8 @@ const drawSchedule = (ctx, jsonSched) => {
         let r_y1 = r_y0 + quartersFill * 25.25 + (quartersFill / 4 - 1) * 3;
         ctx.fillStyle = blackColor;
         ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 4);
-        ctx.fillStyle = color;
-        ctx.fillRect(r_x0, r_y0, r_x1 - r_x0, r_y1 - r_y0 +1);
+        ctx.fillStyle = colorOrder[courseItr % colorOrder.length];
+        ctx.fillRect(r_x0, r_y0, r_x1 - r_x0 + 1, r_y1 - r_y0 + 1);
       }
     }
   }
