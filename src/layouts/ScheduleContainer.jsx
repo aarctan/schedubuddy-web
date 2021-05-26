@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, createRef } from "react";
 import { Grid, Card, CardContent, makeStyles, Typography } from "@material-ui/core";
 
 import Paging from "../components/Paging";
@@ -29,7 +29,7 @@ const box_width = 200;
 const vertical_length_50 = 101;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
 const fontSize = 20;
-const blackColor = "#000000"
+const blackColor = "#000000";
 const colorOrder = [
   "#FF9999",
   "#FFFF99",
@@ -67,9 +67,9 @@ const drawText = (x0, y0, ctx, classObj, location) => {
   lines.push(location);
   ctx.fillStyle = blackColor;
   for (let i = 0; i < lines.length; i++) {
-    ctx.fillText(lines[i], x0 + 4, y0 + fontSize + i * fontSize + i*4);
+    ctx.fillText(lines[i], x0 + 4, y0 + fontSize + i * fontSize + i * 4);
   }
-}
+};
 
 const drawSchedule = (ctx, jsonSched) => {
   let classOnWeekend = false;
@@ -109,7 +109,7 @@ const drawSchedule = (ctx, jsonSched) => {
 
 const Schedule = ({ jsonSched }) => {
   const classes = useStyles();
-  const canvas = useRef(null);
+  const canvas = createRef(null);
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -127,12 +127,12 @@ const Schedule = ({ jsonSched }) => {
       ctx.font = `${fontSize}px Helvetica`;
       drawSchedule(ctx, jsonSched);
     }
-  }, [image, canvas]);
+  }, [jsonSched, image, canvas]);
 
   return <canvas className={classes.Media} ref={canvas}></canvas>;
 };
 
-const ScheduleContainer = ({ schedules, b64images }) => {
+const ScheduleContainer = ({ schedules }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
@@ -144,8 +144,11 @@ const ScheduleContainer = ({ schedules, b64images }) => {
     <Card className={classes.root}>
       <CardContent className={classes.content}>
         <Grid container direction="column" className={classes.content}>
-          {b64images.length ? (
-            <Schedule jsonSched={schedules[0]} />
+          {schedules.length > 0 && (
+            <Paging onChange={handlePageChange} pages={schedules.length} />
+          )}
+          {schedules.length ? (
+            <Schedule jsonSched={schedules[page]} />
           ) : (
             <Typography variant="caption">
               <h2>No schedules to display</h2>
@@ -158,25 +161,3 @@ const ScheduleContainer = ({ schedules, b64images }) => {
 };
 
 export default ScheduleContainer;
-
-/**
- * return (
-    <Card className={classes.root}>
-      <CardContent className={classes.content}>
-        <Grid container direction="column" className={classes.content}>
-          {b64images.length > 0 && (
-            <Paging onChange={handlePageChange} pages={b64images.length} />
-          )}
-          {b64images.length ? (
-            <img
-              className={classes.Media}
-              src={`data:image/png;base64,${b64images[page]}`}
-              alt="Schedule"
-            />
-          ) : (
-            <Typography variant="caption"><h2>No schedules to display</h2></Typography>
-          )}
-        </Grid>
-      </CardContent>
-    </Card>
-  ); */
