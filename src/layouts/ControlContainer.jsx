@@ -72,7 +72,6 @@ const ControlContainer = (props) => {
       const data = await fetch(req_url).then((res) => res.json());
       props.setB64images(data.objects.images);
       props.setSchedules(data.objects.schedules);
-      console.log(data.objects.schedules);
     } catch (error) {
       console.log("handleFormSubmit", error);
     } finally {
