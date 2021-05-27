@@ -4,7 +4,7 @@ import { Box, Grid } from "@material-ui/core";
 import ControlContainer from "./ControlContainer";
 import ScheduleContainer from "./ScheduleContainer";
 import LoadingCard from "../components/LoadingCard";
-import UnderConstruction from "./UnderConstruction";
+//import UnderConstruction from "./UnderConstruction";
 
 let API_URL = process.env.REACT_APP_API_URL;
 
@@ -26,8 +26,7 @@ const Main = () => {
   }, []);
 
   return (
-    <Box mt={10}>
-      <UnderConstruction />
+    <Box mt={3}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <ControlContainer
