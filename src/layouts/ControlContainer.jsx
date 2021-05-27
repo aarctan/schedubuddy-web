@@ -71,6 +71,7 @@ const ControlContainer = (props) => {
       const req_url = `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&prefs=${prefsStr}`;
       const data = await fetch(req_url).then((res) => res.json());
       props.setSchedules(data.objects.schedules);
+      props.setErrmsg(data.objects.errmsg);
     } catch (error) {
       console.log("handleFormSubmit", error);
     } finally {

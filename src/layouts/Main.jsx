@@ -11,6 +11,7 @@ let API_URL = process.env.REACT_APP_API_URL;
 const Main = () => {
   const [terms, setTerms] = useState([]);
   const [schedules, setSchedules] = useState([]);
+  const [errmsg, setErrmsg] = useState("No schedules to display");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -32,6 +33,7 @@ const Main = () => {
           <ControlContainer
             setSchedules={setSchedules}
             setLoading={setLoading}
+            setErrmsg={setErrmsg}
             loading={loading}
             terms={terms}
           />
@@ -42,6 +44,7 @@ const Main = () => {
           ) : (
             <ScheduleContainer
               schedules={schedules}
+              errmsg={errmsg}
             />
           )}
         </Grid>

@@ -160,7 +160,7 @@ const Schedule = ({ jsonSched }) => {
   return <canvas className={classes.Media} ref={canvas}></canvas>;
 };
 
-const ScheduleContainer = ({ schedules }) => {
+const ScheduleContainer = ({ schedules, errmsg }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
@@ -178,8 +178,8 @@ const ScheduleContainer = ({ schedules }) => {
           {schedules.length ? (
             <Schedule jsonSched={schedules[page]} />
           ) : (
-            <Typography variant="caption">
-              <h2>No schedules to display</h2>
+            <Typography variant="h5">
+              <div align="center">{errmsg}</div>
             </Typography>
           )}
         </Grid>
