@@ -21,8 +21,8 @@ export default function Footer() {
     <div className={classes.root}>
       <AppBar color="secondary">
         <Toolbar>
-          <Typography color="inherit" variant="h5" className={classes.typography}>
-            Webapp under construction
+          <Typography color="inherit" variant="h6" className={classes.typography}>
+            This website is not fully complete: some features are not yet added
           </Typography>
         </Toolbar>
       </AppBar>
