@@ -41,7 +41,7 @@ const ControlContainer = (props) => {
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
   const [eveningPref, setEveningPref] = useState(true);
-  const [onlinePref, setOnlinePref] = useState(false);
+  const [onlinePref, setOnlinePref] = useState(true);
   const [startPref, setStartPref] = useState(new Date("2020-01-01 10:00"));
   const [consecPref, setConsecPref] = useState(2);
   const [showLimit, setShowLimit] = useState(30);
