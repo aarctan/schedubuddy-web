@@ -42,7 +42,7 @@ const ControlContainer = (props) => {
   const [courses, setCourses] = useState([]);
   const [eveningPref, setEveningPref] = useState(true);
   const [onlinePref, setOnlinePref] = useState(true);
-  const [startPref, setStartPref] = useState(new Date("2020-01-01 10:00"));
+  const [startPref, setStartPref] = useState(2);
   const [consecPref, setConsecPref] = useState(2);
   const [showLimit, setShowLimit] = useState(30);
 
@@ -58,13 +58,23 @@ const ControlContainer = (props) => {
     }
   };
 
+  const startTimeMap = [
+    "08:00 AM",
+    "09:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "12:00 PM",
+    "1:00 PM",
+    "2:00 PM",
+  ];
   const handleFormSubmit = async () => {
     props.setLoading(true);
     try {
       const course_ids = courses.map((course) => course.course).join(",");
       const eveningClassesBit = eveningPref === true ? "1" : "0";
       const onlineClassesBit = onlinePref === true ? "1" : "0";
-      const startTimeStr = startPref.toLocaleTimeString().replace(/:\d+ /, " ");
+      const startTimeStr = startTimeMap[startPref];
+      console.log(startTimeStr);
       const consecHoursStr = consecPref.toString();
       const showLimitStr = showLimit.toString();
       const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startTimeStr},${consecHoursStr},${showLimitStr}]`;
@@ -138,9 +148,8 @@ const ControlContainer = (props) => {
 
           <FormGrid>
             <TimePick
-              value={startPref}
-              onChange={(value) => {
-                setStartPref(value);
+              onChange={(_e, value) => {
+                setStartPref(value.props.value);
               }}
             />
           </FormGrid>

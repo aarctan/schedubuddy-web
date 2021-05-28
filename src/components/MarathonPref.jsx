@@ -27,11 +27,11 @@ const BasicSelect = ({ options, onChange }) => {
 export default function MarathonPref({ onChange }) {
   return (
     <Grid container alignItems="center" spacing={2}>
-      <Grid item xs={12} lg={4}>
-        <BasicSelect onChange={onChange} options={[1, 2, 3, 4, 5]} />
-      </Grid>
       <Grid item xs={12} lg={6}>
         <InputLabel label="Preferred hours of class before a break" />
+      </Grid>
+      <Grid item xs={12} lg={4}>
+        <BasicSelect onChange={onChange} options={[1, 2, 3, 4, 5]} />
       </Grid>
     </Grid>
   );
