@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import Main from "./layouts/Main";
+import Footer from "./components/Footer";
 
 const theme = createTheme({
   palette: {
@@ -15,10 +16,14 @@ const theme = createTheme({
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      {" "}
-      <Main />{" "}
-    </ThemeProvider>
+    <div className="page-container">
+      <div className="content-wrap">
+        <ThemeProvider theme={theme}>
+          <Main />
+        </ThemeProvider>
+      </div>
+      <Footer description="Description" title="Title" />
+    </div>
   );
 }
 
