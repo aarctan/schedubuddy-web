@@ -22,7 +22,7 @@ function App() {
           <Main />
         </ThemeProvider>
       </div>
-      <Footer description="Description" title="Title" />
+      <Footer />
     </div>
   );
 }
