@@ -23,15 +23,22 @@ const useStyles = makeStyles({
 const AliasDesc = ({ aliases, schedule }) => {
   const classes = useStyles();
 
-  const 
+  const checkAliasMap = (classObj) => {
+    const classId = classObj.class;
+    if (classId in aliases) {
+        return `${classObj.asString} has the same time(s) as: ...`;
+    }
+  };
 
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
         <Grid container direction="column" className={classes.content}>
-          <Typography variant="subtitle1">
-            Hello
-          </Typography>
+          {schedule.map((sched, index) => (
+            <Typography key={index} variant="subtitle1">
+              {checkAliasMap(sched.objects)}
+            </Typography>
+          ))}
         </Grid>
       </CardContent>
     </Card>
