@@ -1,29 +1,18 @@
-import { Grid, Card, CardContent, makeStyles, Typography } from "@material-ui/core";
+import { Box, makeStyles, Typography } from "@material-ui/core";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    alignItems: "center",
-    backgroundColor: "#EDECEC",
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "column",
+    marginTop: theme.spacing(1),
+    width: "90%",
   },
-  content: {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-  },
-  Media: {
-    height: "auto",
-    width: "auto",
-    maxHeight: "90%",
-    maxWidth: "90%",
-  },
-});
+}));
 
 const AliasDesc = ({ aliases, schedule }) => {
   const classes = useStyles();
 
-  const checkAliasMap = (classObj) => {
+  const aliasMap = (classObj) => {
     const classId = classObj.class;
     if (classId in aliases) {
       const alias_str = aliases[classId]
@@ -34,17 +23,16 @@ const AliasDesc = ({ aliases, schedule }) => {
   };
 
   return (
-    <Card className={classes.root}>
-      <CardContent className={classes.content}>
-        <Grid container direction="column" className={classes.content}>
-          {schedule.map((sched, index) => (
-            <Typography key={index} variant="subtitle1">
-              {checkAliasMap(sched.objects)}
-            </Typography>
-          ))}
-        </Grid>
-      </CardContent>
-    </Card>
+    <Box className={classes.root}>
+      <Typography key="Note" variant="caption">
+        Note:
+      </Typography>
+      {schedule.map((sched, index) => (
+        <Typography key={index} variant="caption">
+          {aliasMap(sched.objects)}
+        </Typography>
+      ))}
+    </Box>
   );
 };
 
