@@ -195,6 +195,15 @@ const ScheduleContainer = ({ schedules, aliases, errmsg }) => {
     setPage(value - 1);
   };
 
+  const scheduleHasAliases = (schedule) => {
+    console.log(schedule);
+    for (let i = 0; i < schedule.length; i++) {
+      const classObj = schedule[i];
+      if (classObj.objects.class in aliases) return true;
+    }
+    return false;
+  };
+
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
@@ -209,7 +218,7 @@ const ScheduleContainer = ({ schedules, aliases, errmsg }) => {
               <div align="center">{errmsg}</div>
             </Typography>
           )}
-          {Object.keys(aliases).length > 0 && (
+          {schedules.length && scheduleHasAliases(schedules[page]) && (
             <AliasDesc aliases={aliases} schedule={schedules[page]} />
           )}
         </Grid>
