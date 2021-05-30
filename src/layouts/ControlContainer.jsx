@@ -74,13 +74,13 @@ const ControlContainer = (props) => {
       const eveningClassesBit = eveningPref === true ? "1" : "0";
       const onlineClassesBit = onlinePref === true ? "1" : "0";
       const startTimeStr = startTimeMap[startPref];
-      console.log(startTimeStr);
       const consecHoursStr = consecPref.toString();
       const showLimitStr = showLimit.toString();
       const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startTimeStr},${consecHoursStr},${showLimitStr}]`;
       const req_url = `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&prefs=${prefsStr}`;
       const data = await fetch(req_url).then((res) => res.json());
       props.setSchedules(data.objects.schedules);
+      props.setAliases(data.objects.aliases);
       props.setErrmsg(data.objects.errmsg);
     } catch (error) {
       console.log("handleFormSubmit", error);

@@ -2,6 +2,7 @@ import { useState, useEffect, createRef } from "react";
 import { Grid, Card, CardContent, makeStyles, Typography } from "@material-ui/core";
 
 import Paging from "../components/Paging";
+import AliasDesc from "../components/AliasDesc";
 
 const useStyles = makeStyles({
   root: {
@@ -27,7 +28,7 @@ const leftMarginOffset = 148;
 const topMarginOffset = 90;
 const boxWidth = 200;
 const verticalLength50 = 101;
-const quarterLength = verticalLength50/4;
+const quarterLength = verticalLength50 / 4;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
 const fontSize = 20;
 const blackColor = "#000000";
@@ -97,8 +98,9 @@ const drawSchedule = (ctx, jsonSched, bp_width, bp_height) => {
         let r_x1 = r_x0 + boxWidth;
         let quartersPast = Math.floor(start_t / 15);
         let quartersFill = Math.ceil((end_t - start_t) / 15);
-        let r_y0 = topMarginOffset + quartersPast * quarterLength + (quartersPast / 4) * 3;
-        let r_y1 = r_y0 + quartersFill * quarterLength+ (quartersFill / 4 - 1) * 3;
+        let r_y0 =
+          topMarginOffset + quartersPast * quarterLength + (quartersPast / 4) * 3;
+        let r_y1 = r_y0 + quartersFill * quarterLength + (quartersFill / 4 - 1) * 3;
         ctx.fillStyle = blackColor;
         ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 5);
         ctx.fillStyle = colorOrder[courseItr % colorOrder.length];
@@ -109,30 +111,55 @@ const drawSchedule = (ctx, jsonSched, bp_width, bp_height) => {
   }
   const topHours = Math.min(8, Math.floor(min_y / 60));
   const yRegionTop = topMarginOffset + topHours * verticalLength50 + topHours * 3;
-  const bottomHours = (Math.ceil(max_y / 60) + hourPadding);
-  const yRegionBottom = topMarginOffset + bottomHours * verticalLength50 + bottomHours * 3;
+  const bottomHours = Math.ceil(max_y / 60) + hourPadding;
+  const yRegionBottom =
+    topMarginOffset + bottomHours * verticalLength50 + bottomHours * 3;
   const yRegionlength = yRegionBottom - yRegionTop;
-  ctx.drawImage(ctx.canvas,
-    0, yRegionTop, bp_width, yRegionlength,
-    0, topMarginOffset, bp_width, yRegionlength);
+  ctx.drawImage(
+    ctx.canvas,
+    0,
+    yRegionTop,
+    bp_width,
+    yRegionlength,
+    0,
+    topMarginOffset,
+    bp_width,
+    yRegionlength
+  );
 
   let xRegionLength = bp_width;
   if (!classOnWeekend) {
     const xRegionLeft = leftMarginOffset + boxWidth + 2;
     const xRegionRight = bp_width - boxWidth - 2;
     xRegionLength = xRegionRight - xRegionLeft;
-    ctx.drawImage(ctx.canvas,
-      xRegionLeft, 0, xRegionLength, bp_height,
-      leftMarginOffset, 0, xRegionLength, bp_height);
+    ctx.drawImage(
+      ctx.canvas,
+      xRegionLeft,
+      0,
+      xRegionLength,
+      bp_height,
+      leftMarginOffset,
+      0,
+      xRegionLength,
+      bp_height
+    );
   }
-  const imgData = ctx.getImageData(0, 0,
-    leftMarginOffset + xRegionLength, topMarginOffset + yRegionlength);
+  const imgData = ctx.getImageData(
+    0,
+    0,
+    leftMarginOffset + xRegionLength,
+    topMarginOffset + yRegionlength
+  );
   ctx.canvas.width = leftMarginOffset + xRegionLength;
   ctx.canvas.height = topMarginOffset + yRegionlength;
   ctx.putImageData(imgData, 0, 0);
   ctx.fillStyle = blackColor;
-  ctx.fillRect(0, topMarginOffset + yRegionlength - 2,
-    leftMarginOffset + xRegionLength, 2);
+  ctx.fillRect(
+    0,
+    topMarginOffset + yRegionlength - 2,
+    leftMarginOffset + xRegionLength,
+    2
+  );
 };
 
 const Schedule = ({ jsonSched }) => {
@@ -160,12 +187,21 @@ const Schedule = ({ jsonSched }) => {
   return <canvas className={classes.Media} ref={canvas}></canvas>;
 };
 
-const ScheduleContainer = ({ schedules, errmsg }) => {
+const ScheduleContainer = ({ schedules, aliases, errmsg }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
   const handlePageChange = (event, value) => {
     setPage(value - 1);
+  };
+
+  const scheduleHasAliases = (schedule) => {
+    console.log(schedule);
+    for (let i = 0; i < schedule.length; i++) {
+      const classObj = schedule[i];
+      if (classObj.objects.class in aliases) return true;
+    }
+    return false;
   };
 
   return (
@@ -181,6 +217,9 @@ const ScheduleContainer = ({ schedules, errmsg }) => {
             <Typography variant="h5">
               <div align="center">{errmsg}</div>
             </Typography>
+          )}
+          {Object.keys(aliases).length > 0 && scheduleHasAliases(schedules[page]) && (
+            <AliasDesc aliases={aliases} schedule={schedules[page]} />
           )}
         </Grid>
       </CardContent>

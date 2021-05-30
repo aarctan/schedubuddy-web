@@ -1,4 +1,3 @@
-import * as React from "react";
 import Pagination from "@material-ui/core/Pagination";
 import Stack from "@material-ui/core/Stack";
 
