@@ -82,7 +82,6 @@ const ControlContainer = (props) => {
       props.setSchedules(data.objects.schedules);
       props.setAliases(data.objects.aliases);
       props.setErrmsg(data.objects.errmsg);
-      console.log(data.objects.aliases);
     } catch (error) {
       console.log("handleFormSubmit", error);
     } finally {

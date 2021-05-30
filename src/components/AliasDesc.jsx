@@ -26,7 +26,10 @@ const AliasDesc = ({ aliases, schedule }) => {
   const checkAliasMap = (classObj) => {
     const classId = classObj.class;
     if (classId in aliases) {
-        return `${classObj.asString} has the same time(s) as: ...`;
+      const alias_str = aliases[classId]
+        .map((alias) => `${alias[1]} (${alias[0]})`)
+        .join(", ");
+      return `${classObj.asString} has the same times as: ${alias_str}.`;
     }
   };
 
