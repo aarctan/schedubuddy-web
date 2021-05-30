@@ -218,9 +218,11 @@ const ScheduleContainer = ({ schedules, aliases, errmsg }) => {
               <div align="center">{errmsg}</div>
             </Typography>
           )}
-          {schedules.length && scheduleHasAliases(schedules[page]) && (
-            <AliasDesc aliases={aliases} schedule={schedules[page]} />
-          )}
+          {Object.keys(aliases).length > 0 &&
+            schedules.length &&
+            scheduleHasAliases(schedules[page]) && (
+              <AliasDesc aliases={aliases} schedule={schedules[page]} />
+            )}
         </Grid>
       </CardContent>
     </Card>
