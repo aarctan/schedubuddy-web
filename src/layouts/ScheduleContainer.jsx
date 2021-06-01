@@ -27,6 +27,7 @@ const useStyles = makeStyles({
 const leftMarginOffset = 148;
 const topMarginOffset = 90;
 const boxWidth = 200;
+const boxRightMargin = 10;
 const verticalLength50 = 101;
 const quarterLength = verticalLength50 / 4;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
@@ -70,6 +71,12 @@ const drawText = (x0, y0, ctx, classObj, location) => {
   lines.push(location);
   ctx.fillStyle = blackColor;
   for (let i = 0; i < lines.length; i++) {
+    if (ctx.measureText(lines[i]).width > boxWidth - boxRightMargin) {
+      while (ctx.measureText(`${lines[i]}...`).width > boxWidth - boxRightMargin) {
+        lines[i] = lines[i].slice(0, lines[i].length - 1);
+      }
+      lines[i] = `${lines[i]}...`;
+    }
     ctx.fillText(lines[i], x0 + 4, y0 + fontSize + i * fontSize + i * 2);
   }
 };
