@@ -23,7 +23,7 @@ function App() {
           <Main />
         </ThemeProvider>
       </div>
-      {/* <Footer /> */}
+      {<Footer />}
     </div>
   );
 }
