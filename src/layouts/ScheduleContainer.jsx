@@ -198,8 +198,11 @@ const ScheduleContainer = ({ schedules, aliases, errmsg }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
-  const handlePageChange = (event, value) => {
-    setPage(value - 1);
+  const handlePageChange = (_e, value) => {
+    // onChange called with null value if elipses is clicked
+    if (value !== null) {
+      setPage(value - 1);
+    }
   };
 
   const scheduleHasAliases = (schedule) => {
@@ -225,7 +228,7 @@ const ScheduleContainer = ({ schedules, aliases, errmsg }) => {
               <div align="center">{errmsg}</div>
             </Typography>
           )}
-          {Object.keys(aliases).length > 0 && scheduleHasAliases(schedules[page]) && (
+          {Object.keys(aliases)?.length > 0 && scheduleHasAliases(schedules[page]) && (
             <AliasDesc aliases={aliases} schedule={schedules[page]} />
           )}
         </Grid>
