@@ -23,7 +23,7 @@ const Footer = () => {
         className={classes.iconButton}
         href="https://github.com/Exanut/schedubuddy-web"
       >
-        <GitHubIcon />
+        <GitHubIcon fontSize="large" />
       </IconButton>
     </footer>
   );
