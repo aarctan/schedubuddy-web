@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
-import { Container, Divider, Link, Typography } from "@material-ui/core";
+import { Divider, IconButton, Link, Typography } from "@material-ui/core";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
 // const Copyright = () => {
 //   const date = new Date();
@@ -29,6 +30,10 @@ const useStyles = makeStyles((theme) => ({
   footer: {
     backgroundColor: "#167742",
     padding: theme.spacing(1, 0),
+    textAlign: "center",
+  },
+  iconButton: {
+    padding: "4px",
   },
 }));
 
@@ -38,15 +43,20 @@ const Footer = () => {
   return (
     <footer className={classes.footer}>
       <Divider className={classes.divider} />
-      <Container maxWidth="lg">
-        {/* <Typography variant="h6" align="center" gutterBottom>
+      {/* <Typography variant="h6" align="center" gutterBottom>
           {title}
         </Typography> */}
-        <Typography variant="body2" align="center" color="textSecondary" component="p">
-          Created by {LinkMo} and {LinkMatt}
-        </Typography>
-        {/* <Copyright /> */}
-      </Container>
+      <Typography variant="body2" align="center" color="textSecondary" component="p">
+        Created by {LinkMo} and {LinkMatt}
+      </Typography>
+      <IconButton
+        aria-label="github-link"
+        className={classes.iconButton}
+        href="https://github.com/Exanut/schedubuddy-web"
+      >
+        <GitHubIcon />
+      </IconButton>
+      {/* <Copyright /> */}
     </footer>
   );
 };
