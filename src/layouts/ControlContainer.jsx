@@ -52,10 +52,10 @@ const ControlContainer = (props) => {
       const data = await fetch(`${API_URL}/api/v1/courses/?term=${term.term}`).then(
         (res) => res.json()
       );
-      const sorted = data.objects.sort((a, b) =>
+      const sortedCoursesAvailable = data.objects.sort((a, b) =>
         a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
       );
-      setCoursesAvailable(sorted);
+      setCoursesAvailable(sortedCoursesAvailable);
     } catch (error) {
       console.log("handleTermChange", error);
     }
