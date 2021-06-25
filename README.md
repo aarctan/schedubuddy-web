@@ -1,7 +1,7 @@
 # schedubuddy-web
 
 The webapp frontend developed for
-[schedubuddy](https://github.com/Exanut/schedubuddy)
+[schedubuddy](https://github.com/Exanut/schedubuddy-server)
 with
 [ReactJS](https://reactjs.org/)
 and
