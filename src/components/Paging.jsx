@@ -11,6 +11,7 @@ export default function Paging(props) {
         variant="outlined"
         color="primary"
         size={isSmallScreen ? "small" : "medium"}
+        siblingCount={isSmallScreen ? 0 : 1}
         count={props.pages}
         onChange={props.onChange}
         showFirstButton
