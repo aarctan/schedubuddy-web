@@ -1,12 +1,13 @@
 # schedubuddy-web
 
 The webapp frontend developed for
-[schedubuddy](https://github.com/Exanut/schedubuddy-server)
+[schedubuddy](https://schedubuddy.com/)
 with
 [ReactJS](https://reactjs.org/)
 and
 [Material-UI](https://next.material-ui.com/).
-This implementation receives university schedules tailored to the user and displays them in a familiar format.
+This webapp receives university schedules tailored to the user and displays them in a familiar format.
+**For the back-end, please refer to this [repository](https://github.com/Exanut/schedubuddy-server).**
 
 ### Usage
 This webapp was designed to be lightweight and intuitive yet also powerful.
