@@ -84,15 +84,20 @@ const drawText = (x0, y0, ctx, classObj, location) => {
 const drawSchedule = (ctx, jsonSched, bp_width, bp_height) => {
   let classOnWeekend = false;
   let courseItr = -1;
-  let currCourse = null;
   let min_y = 2147483647;
   let max_y = -2147483648;
+  let courseColorMap = {};
   for (var classObj of jsonSched) {
     classObj = classObj.objects;
-    let courseId = classObj.course;
-    if (courseId !== currCourse) {
-      currCourse = courseId;
+    const courseId = classObj.course;
+    let currColor = null;
+    if (courseId in courseColorMap) {
+      currColor = courseColorMap[courseId];
+    } else {
       courseItr++;
+      currColor = colorOrder[courseItr % colorOrder.length];
+      courseColorMap[courseId] = currColor;
+      console.log(currColor)
     }
     for (var ct of classObj.classtimes) {
       let start_t = startToInt(ct.startTime);
@@ -110,7 +115,7 @@ const drawSchedule = (ctx, jsonSched, bp_width, bp_height) => {
         let r_y1 = r_y0 + quartersFill * quarterLength + (quartersFill / 4 - 1) * 3;
         ctx.fillStyle = blackColor;
         ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 5);
-        ctx.fillStyle = colorOrder[courseItr % colorOrder.length];
+        ctx.fillStyle = currColor;
         ctx.fillRect(r_x0, r_y0, r_x1 - r_x0, r_y1 - r_y0 + 1);
         drawText(r_x0, r_y0, ctx, classObj, ct.location);
       }
