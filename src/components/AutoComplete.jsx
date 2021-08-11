@@ -1,19 +1,6 @@
 import { useState } from "react";
 import { Chip, Autocomplete, TextField } from "@material-ui/core";
 
-const colorOrder = [
-  "#FF9999",
-  "#FFFF99",
-  "#99FF99",
-  "#99CCFF",
-  "#CC99FF",
-  "#FF99CC",
-  "#99FFCC",
-  "#FFCC99",
-  "#9999FF",
-  "#CCFFFF",
-];
-
 const AutocompleteInput = (props) => {
   const [input, setInput] = useState("");
 
