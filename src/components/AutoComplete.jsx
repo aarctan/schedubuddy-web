@@ -1,6 +1,19 @@
 import { useState } from "react";
 import { Chip, Autocomplete, TextField } from "@material-ui/core";
 
+const colorOrder = [
+  "#FF9999",
+  "#FFFF99",
+  "#99FF99",
+  "#99CCFF",
+  "#CC99FF",
+  "#FF99CC",
+  "#99FFCC",
+  "#FFCC99",
+  "#9999FF",
+  "#CCFFFF",
+];
+
 const AutocompleteInput = (props) => {
   const [input, setInput] = useState("");
 
@@ -25,7 +38,7 @@ const AutocompleteInput = (props) => {
         value.map((option, index) => (
           <Chip
             variant="outlined"
-            style={{ backgroundColor: "#dbdbdb" }}
+            style={{ backgroundColor: colorOrder[index % colorOrder.length] }}
             label={`${option.asString}`}
             {...getTagProps({ index })}
           />
