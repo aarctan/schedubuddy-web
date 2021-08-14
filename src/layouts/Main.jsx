@@ -9,6 +9,7 @@ import LoadingCard from "../components/LoadingCard";
 let API_URL = process.env.REACT_APP_API_URL;
 
 const Main = () => {
+  const [courseOrder, setCourseOrder] = useState([]);
   const [terms, setTerms] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [aliases, setAliases] = useState([]);
@@ -31,6 +32,7 @@ const Main = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <ControlContainer
+            setCourseOrder={setCourseOrder}
             setSchedules={setSchedules}
             setAliases={setAliases}
             setLoading={setLoading}
@@ -44,6 +46,7 @@ const Main = () => {
             <LoadingCard />
           ) : (
             <ScheduleContainer
+              courseOrder={courseOrder}
               schedules={schedules}
               aliases={aliases}
               errmsg={errmsg}
