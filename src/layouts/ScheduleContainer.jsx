@@ -81,24 +81,22 @@ const drawText = (x0, y0, ctx, classObj, location) => {
   }
 };
 
-const drawSchedule = (ctx, jsonSched, bp_width, bp_height) => {
+const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height) => {
   let classOnWeekend = false;
-  let courseItr = -1;
   let min_y = 2147483647;
   let max_y = -2147483648;
-  let courseColorMap = {};
+
+  // Define a courseId to color mapping
+  let courseColorMap = courseOrder.reduce((colorMap, courseId, i) => {
+    colorMap[courseId] = colorOrder[i % colorOrder.length];
+    return colorMap;
+  }, {});
+
   for (var classObj of jsonSched) {
     classObj = classObj.objects;
     const courseId = classObj.course;
-    let currColor = null;
-    if (courseId in courseColorMap) {
-      currColor = courseColorMap[courseId];
-    } else {
-      courseItr++;
-      currColor = colorOrder[courseItr % colorOrder.length];
-      courseColorMap[courseId] = currColor;
-      console.log(currColor)
-    }
+    const currColor = courseColorMap[courseId];
+
     for (var ct of classObj.classtimes) {
       let start_t = startToInt(ct.startTime);
       let end_t = startToInt(ct.endTime);
@@ -174,7 +172,7 @@ const drawSchedule = (ctx, jsonSched, bp_width, bp_height) => {
   );
 };
 
-const Schedule = ({ jsonSched }) => {
+const Schedule = ({ courseOrder, jsonSched }) => {
   const classes = useStyles();
   const canvas = createRef(null);
   const [image, setImage] = useState(null);
@@ -192,14 +190,14 @@ const Schedule = ({ jsonSched }) => {
       ctx.canvas.height = image.naturalHeight;
       ctx.drawImage(image, 0, 0);
       ctx.font = `${fontSize}px Helvetica`;
-      drawSchedule(ctx, jsonSched, image.naturalWidth, image.naturalHeight);
+      drawSchedule(ctx, courseOrder, jsonSched, image.naturalWidth, image.naturalHeight);
     }
-  }, [jsonSched, image, canvas]);
+  }, [courseOrder, jsonSched, image, canvas]);
 
   return <canvas className={classes.Media} ref={canvas}></canvas>;
 };
 
-const ScheduleContainer = ({ schedules, aliases, errmsg }) => {
+const ScheduleContainer = ({ courseOrder, schedules, aliases, errmsg }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
@@ -227,7 +225,7 @@ const ScheduleContainer = ({ schedules, aliases, errmsg }) => {
             <Paging onChange={handlePageChange} pages={schedules.length} />
           )}
           {schedules.length ? (
-            <Schedule jsonSched={schedules[page]} />
+            <Schedule courseOrder={courseOrder} jsonSched={schedules[page]} />
           ) : (
             <Typography variant="h5">
               <div align="center">{errmsg}</div>

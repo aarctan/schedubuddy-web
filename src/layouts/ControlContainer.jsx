@@ -71,6 +71,9 @@ const ControlContainer = (props) => {
     "2:00 PM",
   ];
   const handleFormSubmit = async () => {
+    // Set the courseId order for color parity between autocomplete chips and schedule canvas
+    props.setCourseOrder(courses.map((course) => course.course));
+
     props.setLoading(true);
     try {
       const course_ids = courses.map((course) => course.course).join(",");
