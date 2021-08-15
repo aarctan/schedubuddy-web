@@ -161,11 +161,7 @@ const ControlContainer = (props) => {
           </FormGrid>
 
           <FormGrid>
-            <MarathonPref
-              onChange={(_e, value) => {
-                setConsecPref(value["props"]["value"] + 1);
-              }}
-            />
+            <MarathonPref onChange={(e) => setConsecPref(e.target.value)} />
           </FormGrid>
 
           <FormGrid>
