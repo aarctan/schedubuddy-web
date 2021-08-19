@@ -23,7 +23,7 @@ const AutocompleteInput = (props) => {
 
   return (
     <Autocomplete
-      freeSolo
+      autoHighlight
       sx={{ width: "100%", marginTop: "-2%" }}
       disableClearable={true}
       multiple
@@ -47,6 +47,7 @@ const AutocompleteInput = (props) => {
       renderInput={(params) => (
         <TextField {...params} margin="normal" label={props.label} />
       )}
+      noOptionsText={'No courses found'}
     />
   );
 };
