@@ -15,17 +15,15 @@ const theme = createTheme({
   },
 });
 
-function App() {
-  return (
-    <div className="page-container">
-      <div className="content-wrap">
-        <ThemeProvider theme={theme}>
-          <Main />
-        </ThemeProvider>
-      </div>
-      {<Footer />}
+const App = () => (
+  <div className="page-container">
+    <div className="content-wrap">
+      <ThemeProvider theme={theme}>
+        <Main />
+      </ThemeProvider>
     </div>
-  );
-}
+    <Footer />
+  </div>
+);
 
 export default App;
