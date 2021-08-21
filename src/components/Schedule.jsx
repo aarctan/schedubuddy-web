@@ -44,7 +44,7 @@ const startToInt = (str_t) => {
   }
 };
 
-const drawText = (x0, y0, ctx, classObj, location) => {
+const drawText = (x0, y0, ctx, classObj, location, drawInstructorText) => {
   let lines = [];
   const component = classObj.component;
   const section = classObj.section;
@@ -55,6 +55,17 @@ const drawText = (x0, y0, ctx, classObj, location) => {
   lines.push(`${component} ${section} (${classId})`);
   location = location ? location : classObj.location;
   lines.push(location);
+  if (drawInstructorText) {
+    const instructorName = classObj.instructorName;
+    const instructorNames = instructorName.split(" ");
+    const lastName = instructorNames[instructorNames.length - 1];
+    const instructorText =
+      instructorNames
+        .slice(0, -1)
+        .map((n) => n[0] + ". ")
+        .join("") + lastName;
+    lines.push(instructorText);
+  }
   ctx.fillStyle = blackColor;
   for (let i = 0; i < lines.length; i++) {
     if (ctx.measureText(lines[i]).width > boxWidth - boxRightMargin) {
@@ -67,7 +78,7 @@ const drawText = (x0, y0, ctx, classObj, location) => {
   }
 };
 
-const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height) => {
+const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height, aliases) => {
   let classOnWeekend = false;
   let min_y = 2147483647;
   let max_y = -2147483648;
@@ -82,7 +93,8 @@ const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height) => {
     classObj = classObj.objects;
     const courseId = classObj.course;
     const currColor = courseColorMap[courseId];
-
+    const drawInstructorText =
+      classObj.instructorName && !(classObj.class in aliases) ? true : false;
     for (var ct of classObj.classtimes) {
       let start_t = startToInt(ct.startTime);
       let end_t = startToInt(ct.endTime);
@@ -101,7 +113,7 @@ const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height) => {
         ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 5);
         ctx.fillStyle = currColor;
         ctx.fillRect(r_x0, r_y0, r_x1 - r_x0, r_y1 - r_y0 + 1);
-        drawText(r_x0, r_y0, ctx, classObj, ct.location);
+        drawText(r_x0, r_y0, ctx, classObj, ct.location, drawInstructorText);
       }
     }
   }
@@ -160,7 +172,7 @@ const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height) => {
   );
 };
 
-const Schedule = ({ courseOrder, jsonSched }) => {
+const Schedule = ({ courseOrder, jsonSched, aliases }) => {
   const classes = useStyles();
   const canvas = createRef(null);
   const [image, setImage] = useState(null);
@@ -178,9 +190,16 @@ const Schedule = ({ courseOrder, jsonSched }) => {
       ctx.canvas.height = image.naturalHeight;
       ctx.drawImage(image, 0, 0);
       ctx.font = `${fontSize}px Helvetica`;
-      drawSchedule(ctx, courseOrder, jsonSched, image.naturalWidth, image.naturalHeight);
+      drawSchedule(
+        ctx,
+        courseOrder,
+        jsonSched,
+        image.naturalWidth,
+        image.naturalHeight,
+        aliases
+      );
     }
-  }, [courseOrder, jsonSched, image, canvas]);
+  }, [courseOrder, jsonSched, image, canvas, aliases]);
 
   return <canvas className={classes.Media} ref={canvas}></canvas>;
 };

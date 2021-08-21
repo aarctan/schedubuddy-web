@@ -47,7 +47,11 @@ const ScheduleContainer = ({ courseOrder, schedules, aliases, errmsg }) => {
             <Paging onChange={handlePageChange} pages={schedules.length} />
           )}
           {schedules.length ? (
-            <Schedule courseOrder={courseOrder} jsonSched={schedules[page]} />
+            <Schedule
+              courseOrder={courseOrder}
+              jsonSched={schedules[page]}
+              aliases={aliases}
+            />
           ) : (
             <Typography variant="h5">
               <div align="center">{errmsg}</div>
