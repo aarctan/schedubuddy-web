@@ -154,14 +154,18 @@ const ControlContainer = (props) => {
 
           <FormGrid>
             <TimePick
-              onChange={(_e, value) => {
-                setStartPref(value.props.value);
+              onChange={(e) => {
+                setStartPref(e.target.value);
               }}
+              value={startPref}
             />
           </FormGrid>
 
           <FormGrid>
-            <MarathonPref onChange={(e) => setConsecPref(e.target.value)} />
+            <MarathonPref
+              onChange={(e) => setConsecPref(e.target.value)}
+              value={consecPref}
+            />
           </FormGrid>
 
           <FormGrid>
