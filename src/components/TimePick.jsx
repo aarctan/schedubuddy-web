@@ -1,46 +1,17 @@
-import { Grid } from "@material-ui/core";
+import MiniSelect from "./Input/MiniSelect";
 
-import { FormControl, MenuItem, Select } from "@material-ui/core";
+const options = [
+  { label: "8 AM", value: 0 },
+  { label: "9 AM", value: 1 },
+  { label: "10 AM", value: 2 },
+  { label: "11 AM", value: 3 },
+  { label: "12 PM", value: 4 },
+  { label: "1 PM", value: 5 },
+  { label: "2 PM", value: 6 },
+];
 
-import InputLabel from "./InputLabel";
+const TimePick = (props) => (
+  <MiniSelect isObj label="Preferred start time" options={options} {...props} />
+);
 
-const lengthOptions = {
-  0: "8 AM",
-  1: "9 AM",
-  2: "10 AM",
-  3: "11 AM",
-  4: "12 PM",
-  5: "1 PM",
-  6: "2 PM",
-};
-
-const BasicSelect = ({ options, onChange }) => {
-  const optionList = options.map((option, index) => {
-    return (
-      <MenuItem key={index} value={index}>
-        {lengthOptions[option]}
-      </MenuItem>
-    );
-  });
-
-  return (
-    <FormControl fullWidth>
-      <Select onChange={onChange} defaultValue={2}>
-        {optionList}
-      </Select>
-    </FormControl>
-  );
-};
-
-export default function TimePick({ onChange }) {
-  return (
-    <Grid container alignItems="center" spacing={2}>
-      <Grid item xs={12} lg={6}>
-        <InputLabel label="Preferred start time" />
-      </Grid>
-      <Grid item xs={12} lg={4}>
-        <BasicSelect onChange={onChange} options={[0, 1, 2, 3, 4, 5, 6]} />
-      </Grid>
-    </Grid>
-  );
-}
+export default TimePick;

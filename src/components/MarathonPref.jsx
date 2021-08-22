@@ -1,29 +1,20 @@
-import { FormControl, Grid, MenuItem, Select } from "@material-ui/core";
-import InputLabel from "./InputLabel";
+import MiniSelect from "./Input/MiniSelect";
 
-const lengthOptions = ["1 hr", "2 hrs", "3 hrs", "4 hrs", "5 hrs"];
+const options = [
+  { label: "1 hr", value: 0 },
+  { label: "2 hrs", value: 1 },
+  { label: "3 hrs", value: 2 },
+  { label: "4 hrs", value: 3 },
+  { label: "5 hrs", value: 4 },
+];
 
-const BasicSelect = ({ options, ...rest }) => (
-  <FormControl fullWidth>
-    <Select {...rest}>
-      {options.map((option, i) => (
-        <MenuItem key={option} value={i + 1}>
-          {option}
-        </MenuItem>
-      ))}
-    </Select>
-  </FormControl>
-);
-
-const MarathonPref = ({ onChange }) => (
-  <Grid container alignItems="center" spacing={2}>
-    <Grid item xs={12} lg={6}>
-      <InputLabel label="Preferred hours of class before a break" />
-    </Grid>
-    <Grid item xs={12} lg={4}>
-      <BasicSelect defaultValue={2} onChange={onChange} options={lengthOptions} />
-    </Grid>
-  </Grid>
+const MarathonPref = (props) => (
+  <MiniSelect
+    isObj
+    label="Preferred hours of class before a break"
+    options={options}
+    {...props}
+  />
 );
 
 export default MarathonPref;
