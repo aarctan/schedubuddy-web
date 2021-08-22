@@ -64,7 +64,7 @@ const drawText = (x0, y0, ctx, classObj, location, drawInstructorText) => {
         .slice(0, -1)
         .map((n) => n[0] + ". ")
         .join("") + lastName;
-    lines.push(instructorText);
+    lines.push(instructorText.toUpperCase());
   }
   ctx.fillStyle = blackColor;
   for (let i = 0; i < lines.length; i++) {
