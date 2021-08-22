@@ -12,11 +12,11 @@ import {
 } from "@material-ui/core";
 
 import InputLabel from "../components/InputLabel";
-import Dropdown from "../components/Dropdown";
 import AutocompleteInput from "../components/AutoComplete";
 import LabelSlider from "../components/LabelSlider";
 import TimePick from "../components/TimePick";
 import MarathonPref from "../components/MarathonPref";
+import BasicSelect from "../components/Input/BasicSelect";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -46,11 +46,12 @@ const ControlContainer = (props) => {
   const [consecPref, setConsecPref] = useState(2);
   const [showLimit, setShowLimit] = useState(30);
 
-  const handleTermChange = async (term) => {
-    setTerm(term);
+  const handleTermChange = async (e) => {
+    const value = e.target.value;
+    setTerm(value);
     try {
-      const data = await fetch(`${API_URL}/api/v1/courses/?term=${term.term}`).then(
-        (res) => res.json()
+      const data = await fetch(`${API_URL}/api/v1/courses/?term=${value}`).then((res) =>
+        res.json()
       );
       const sortedCoursesAvailable = data.objects.sort((a, b) =>
         a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
@@ -83,7 +84,7 @@ const ControlContainer = (props) => {
       const consecHoursStr = consecPref.toString();
       const showLimitStr = showLimit.toString();
       const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startTimeStr},${consecHoursStr},${showLimitStr}]`;
-      const req_url = `${API_URL}/api/v1/gen-schedules/?term=${term.term}&courses=[${course_ids}]&prefs=${prefsStr}`;
+      const req_url = `${API_URL}/api/v1/gen-schedules/?term=${term}&courses=[${course_ids}]&prefs=${prefsStr}`;
       const data = await fetch(req_url).then((res) => res.json());
       props.setSchedules(data.objects.schedules);
       props.setAliases(data.objects.aliases);
@@ -95,6 +96,11 @@ const ControlContainer = (props) => {
     }
   };
 
+  // Format the term data for the BasicSelect component
+  const termOptions = props.terms.map((term) => ({
+    label: term.termTitle,
+    value: term.term,
+  }));
   const classes = useStyles();
 
   return (
@@ -102,11 +108,12 @@ const ControlContainer = (props) => {
       <CardContent sx={{ mx: 1 }}>
         <Grid container justifyContent="center">
           <FormGrid>
-            <Dropdown
+            <BasicSelect
+              isObj
               label="Select a term"
               onChange={handleTermChange}
-              options={props.terms}
-              optionKey="termTitle"
+              options={termOptions}
+              value={term}
             />
           </FormGrid>
 
