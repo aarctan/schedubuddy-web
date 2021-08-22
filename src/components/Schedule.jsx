@@ -17,7 +17,7 @@ const boxRightMargin = 10;
 const verticalLength50 = 101;
 const quarterLength = verticalLength50 / 4;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
-const fontSize = 20;
+const fontSize = 22;
 const blackColor = "#000000";
 const colorOrder = [
   "#FF9999",
