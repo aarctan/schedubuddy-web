@@ -17,7 +17,7 @@ const boxRightMargin = 10;
 const verticalLength50 = 101;
 const quarterLength = verticalLength50 / 4;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
-const fontSize = 22;
+const fontSize = 20;
 const blackColor = "#000000";
 const colorOrder = [
   "#FF9999",
@@ -44,7 +44,7 @@ const startToInt = (str_t) => {
   }
 };
 
-const drawText = (x0, y0, ctx, classObj, location, drawInstructorText) => {
+const drawText = (x0, y0, ctx, classObj, location, boxWidth, drawInstructorText) => {
   let lines = [];
   const component = classObj.component;
   const section = classObj.section;
@@ -96,6 +96,8 @@ const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height, aliases)
     const drawInstructorText =
       classObj.instructorName && !(classObj.class in aliases) ? true : false;
     for (var ct of classObj.classtimes) {
+      const biweeklyFlag = ct.biweekly;
+      const classBoxWidth = biweeklyFlag === 0 ? boxWidth : boxWidth / 2;
       let start_t = startToInt(ct.startTime);
       let end_t = startToInt(ct.endTime);
       min_y = Math.min(min_y, start_t);
@@ -103,7 +105,10 @@ const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height, aliases)
       for (var day of ct.day) {
         if (day === "S" || day === "U") classOnWeekend = true;
         let r_x0 = leftMarginOffset + day_lookup[day] * boxWidth + day_lookup[day] * 2;
-        let r_x1 = r_x0 + boxWidth;
+        if (biweeklyFlag === 2) {
+          r_x0 += boxWidth / 2;
+        }
+        let r_x1 = r_x0 + classBoxWidth;
         let quartersPast = Math.floor(start_t / 15);
         let quartersFill = Math.ceil((end_t - start_t) / 15);
         let r_y0 =
@@ -113,7 +118,15 @@ const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height, aliases)
         ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 5);
         ctx.fillStyle = currColor;
         ctx.fillRect(r_x0, r_y0, r_x1 - r_x0, r_y1 - r_y0 + 1);
-        drawText(r_x0, r_y0, ctx, classObj, ct.location, drawInstructorText);
+        drawText(
+          r_x0,
+          r_y0,
+          ctx,
+          classObj,
+          ct.location,
+          classBoxWidth,
+          drawInstructorText
+        );
       }
     }
   }
