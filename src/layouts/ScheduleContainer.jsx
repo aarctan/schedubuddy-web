@@ -19,7 +19,13 @@ const useStyles = makeStyles({
   },
 });
 
-const ScheduleContainer = ({ courseOrder, schedules, aliases, errmsg }) => {
+const ScheduleContainer = ({
+  courseOrder,
+  schedules,
+  aliases,
+  errmsg,
+  showInstructorPref,
+}) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
@@ -51,6 +57,7 @@ const ScheduleContainer = ({ courseOrder, schedules, aliases, errmsg }) => {
               courseOrder={courseOrder}
               jsonSched={schedules[page]}
               aliases={aliases}
+              showInstructorPref={showInstructorPref}
             />
           ) : (
             <Typography variant="h5">

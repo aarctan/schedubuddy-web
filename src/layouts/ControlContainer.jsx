@@ -155,6 +155,18 @@ const ControlContainer = (props) => {
                     />
                   }
                 />
+                <FormControlLabel
+                  label="Show instructor names"
+                  control={
+                    <Checkbox
+                      name="instrucorNames"
+                      checked={props.showInstructorPref}
+                      onChange={(e) => {
+                        props.setShowInstructorPref(e.target.checked);
+                      }}
+                    />
+                  }
+                />
               </FormGroup>
             </FormControl>
           </FormGrid>

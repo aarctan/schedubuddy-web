@@ -78,7 +78,15 @@ const drawText = (x0, y0, ctx, classObj, location, boxWidth, drawInstructorText)
   }
 };
 
-const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height, aliases) => {
+const drawSchedule = (
+  ctx,
+  courseOrder,
+  jsonSched,
+  bp_width,
+  bp_height,
+  aliases,
+  showInstructorPref
+) => {
   let classOnWeekend = false;
   let min_y = 2147483647;
   let max_y = -2147483648;
@@ -93,8 +101,11 @@ const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height, aliases)
     classObj = classObj.objects;
     const courseId = classObj.course;
     const currColor = courseColorMap[courseId];
-    const drawInstructorText =
+    let drawInstructorText =
       classObj.instructorName && !(classObj.class in aliases) ? true : false;
+    if (!showInstructorPref) {
+      drawInstructorText = false;
+    }
     for (var ct of classObj.classtimes) {
       const biweeklyFlag = ct.biweekly;
       const classBoxWidth = biweeklyFlag === 0 ? boxWidth : boxWidth / 2;
@@ -185,7 +196,7 @@ const drawSchedule = (ctx, courseOrder, jsonSched, bp_width, bp_height, aliases)
   );
 };
 
-const Schedule = ({ courseOrder, jsonSched, aliases }) => {
+const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorPref }) => {
   const classes = useStyles();
   const canvas = createRef(null);
   const [image, setImage] = useState(null);
@@ -209,10 +220,11 @@ const Schedule = ({ courseOrder, jsonSched, aliases }) => {
         jsonSched,
         image.naturalWidth,
         image.naturalHeight,
-        aliases
+        aliases,
+        showInstructorPref
       );
     }
-  }, [courseOrder, jsonSched, image, canvas, aliases]);
+  }, [courseOrder, jsonSched, image, canvas, aliases, showInstructorPref]);
 
   return <canvas className={classes.Media} ref={canvas}></canvas>;
 };

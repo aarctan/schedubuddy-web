@@ -13,6 +13,7 @@ const Main = () => {
   const [terms, setTerms] = useState([]);
   const [schedules, setSchedules] = useState([]);
   const [aliases, setAliases] = useState([]);
+  const [showInstructorPref, setShowInstructorPref] = useState(false);
   const [errmsg, setErrmsg] = useState("No schedules to display");
   const [loading, setLoading] = useState(false);
 
@@ -35,6 +36,8 @@ const Main = () => {
             setCourseOrder={setCourseOrder}
             setSchedules={setSchedules}
             setAliases={setAliases}
+            showInstructorPref={showInstructorPref}
+            setShowInstructorPref={setShowInstructorPref}
             setLoading={setLoading}
             setErrmsg={setErrmsg}
             loading={loading}
@@ -49,6 +52,7 @@ const Main = () => {
               courseOrder={courseOrder}
               schedules={schedules}
               aliases={aliases}
+              showInstructorPref={showInstructorPref}
               errmsg={errmsg}
             />
           )}
