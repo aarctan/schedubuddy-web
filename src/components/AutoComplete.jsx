@@ -31,8 +31,8 @@ const AutocompleteInput = (props) => {
       id="courses-outlined"
       inputValue={input}
       onInputChange={handleInput}
-      onChange={props.setCourses}
-      options={props.coursesAvail}
+      onChange={props.onChange}
+      options={props.options}
       getOptionLabel={(o) => o.asString}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => (
@@ -47,7 +47,7 @@ const AutocompleteInput = (props) => {
       renderInput={(params) => (
         <TextField {...params} margin="normal" label={props.label} />
       )}
-      noOptionsText={'No courses found'}
+      noOptionsText={"No courses found"}
     />
   );
 };
