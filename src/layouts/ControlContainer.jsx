@@ -109,9 +109,14 @@ const ControlContainer = (props) => {
             <AutocompleteInput
               label="Enter courses"
               onChange={(_e, value) => {
-                setCourses(value);
+                setCourses(
+                  value.sort((a, b) =>
+                    a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
+                  )
+                );
               }}
               options={coursesAvailable}
+              value={courses}
             />
           </FormGrid>
 

@@ -48,6 +48,7 @@ const AutocompleteInput = (props) => {
         <TextField {...params} margin="normal" label={props.label} />
       )}
       noOptionsText={"No courses found"}
+      value={props.value}
     />
   );
 };
