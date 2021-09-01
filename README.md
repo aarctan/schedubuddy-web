@@ -23,9 +23,9 @@ Web API built with [Flask](https://flask.palletsprojects.com/) and hosted on [He
 
 ### Limitations
 
-- All half-blocks are displayed as full blocks.
-For this reason, it's impossible for a block to contain two half-block classes.
+- Some half-block classes are displayed as full blocks.
 Half-block classes are typically indicative of classes that occur biweekly.
+Currently, most biweekly classes do display as half-blocks.
 - For inputs where there are a very large number of possible schedules, not all of them are considered.
 For the majority of practical inputs, a sufficient number are still considered and net good results.
 
