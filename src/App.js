@@ -1,7 +1,6 @@
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import Main from "./layouts/Main";
-// eslint-disable-next-line
 import Footer from "./components/Footer";
 
 const theme = createTheme({
