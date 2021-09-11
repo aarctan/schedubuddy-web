@@ -1,9 +1,8 @@
+import { Card, CardContent, Grid, makeStyles, Typography } from "@material-ui/core";
+import AliasDesc from "components/AliasDesc";
+import Paging from "components/Paging";
+import Schedule from "components/Schedule";
 import { useState } from "react";
-import { Grid, Card, CardContent, makeStyles, Typography } from "@material-ui/core";
-
-import Paging from "../components/Paging";
-import AliasDesc from "../components/AliasDesc";
-import Schedule from "../components/Schedule";
 
 const useStyles = makeStyles({
   root: {

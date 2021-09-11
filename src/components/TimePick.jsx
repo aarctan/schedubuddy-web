@@ -1,4 +1,4 @@
-import MiniSelect from "./Input/MiniSelect";
+import MiniSelect from "components/Input/MiniSelect";
 
 const options = [
   { label: "8 AM", value: "8:00 AM" },

@@ -10,12 +10,12 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
+import AutocompleteInput from "components/AutoComplete";
+import BasicSelect from "components/Input/BasicSelect";
+import LabelSlider from "components/LabelSlider";
+import MarathonPref from "components/MarathonPref";
+import TimePick from "components/TimePick";
 import { useState } from "react";
-import AutocompleteInput from "../components/AutoComplete";
-import BasicSelect from "../components/Input/BasicSelect";
-import LabelSlider from "../components/LabelSlider";
-import MarathonPref from "../components/MarathonPref";
-import TimePick from "../components/TimePick";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
