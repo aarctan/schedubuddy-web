@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import AutocompleteInput from "components/AutoComplete";
-import BasicSelect from "components/Input/BasicSelect";
+import BasicSelect from "components/input/BasicSelect";
 import LabelSlider from "components/LabelSlider";
 import MarathonPref from "components/MarathonPref";
 import TimePick from "components/TimePick";
