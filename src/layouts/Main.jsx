@@ -1,10 +1,8 @@
-import { useEffect, useState } from "react";
 import { Box, Grid } from "@material-ui/core";
-
-import ControlContainer from "./ControlContainer";
-import ScheduleContainer from "./ScheduleContainer";
-import LoadingCard from "../components/LoadingCard";
-//import UnderConstruction from "./UnderConstruction";
+import LoadingCard from "components/LoadingCard";
+import ControlContainer from "layouts/ControlContainer";
+import ScheduleContainer from "layouts/ScheduleContainer";
+import { useEffect, useState } from "react";
 
 let API_URL = process.env.REACT_APP_API_URL;
 

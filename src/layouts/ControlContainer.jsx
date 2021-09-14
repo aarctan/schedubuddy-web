@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Button,
   Card,
@@ -9,14 +8,14 @@ import {
   FormGroup,
   Grid,
   makeStyles,
+  Typography,
 } from "@material-ui/core";
-
-import InputLabel from "../components/InputLabel";
-import AutocompleteInput from "../components/AutoComplete";
-import LabelSlider from "../components/LabelSlider";
-import TimePick from "../components/TimePick";
-import MarathonPref from "../components/MarathonPref";
-import BasicSelect from "../components/Input/BasicSelect";
+import AutocompleteInput from "components/AutoComplete";
+import BasicSelect from "components/FormInputs/BasicSelect";
+import LabelSlider from "components/LabelSlider";
+import MarathonPref from "components/MarathonPref";
+import TimePick from "components/TimePick";
+import { useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -180,7 +179,9 @@ const ControlContainer = (props) => {
           </FormGrid>
 
           <FormGrid>
-            <InputLabel label="Max schedules to show:" />
+            <Typography id="autocomplete" gutterBottom>
+              Max schedules to show
+            </Typography>
             <LabelSlider
               setShowLimit={(_e, value) => {
                 setShowLimit(value);

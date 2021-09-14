@@ -1,5 +1,5 @@
+import { Autocomplete, Chip, TextField } from "@material-ui/core";
 import { useState } from "react";
-import { Chip, Autocomplete, TextField } from "@material-ui/core";
 
 const colorOrder = [
   "#FF9999",
