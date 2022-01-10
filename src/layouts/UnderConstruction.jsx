@@ -22,8 +22,8 @@ export default function Footer() {
       <AppBar color="secondary">
         <Toolbar>
           <Typography color="inherit" variant="h6" className={classes.typography}>
-            This app is currently under construction and will be working again when
-            updated class information is available.
+            This app has underwent a major change and may have bugs. If you catch any,
+            please create an issue on github.
           </Typography>
         </Toolbar>
       </AppBar>

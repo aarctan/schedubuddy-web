@@ -85,10 +85,12 @@ const ControlContainer = (props) => {
   };
 
   // Format the term data for the BasicSelect component
-  const termOptions = props.terms.map((term) => ({
-    label: term.termTitle,
-    value: term.term,
-  }));
+  const termOptions = props.terms
+    .sort((a, b) => (a.term > b.term ? -1 : 1))
+    .map((term) => ({
+      label: term.termTitle,
+      value: term.term,
+    }));
   const classes = useStyles();
 
   return (
@@ -99,7 +101,7 @@ const ControlContainer = (props) => {
             isObj
             label="Select a term"
             onChange={handleTermChange}
-            options={termOptions}
+            options={termOptions.sort((a, b) => (a.term > b.term ? 1 : -1))}
             value={term}
           />
 
