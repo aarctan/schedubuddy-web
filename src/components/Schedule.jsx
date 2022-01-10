@@ -16,7 +16,7 @@ const boxWidth = 200;
 const boxRightMargin = 10;
 const verticalLength50 = 101;
 const quarterLength = verticalLength50 / 4;
-const day_lookup = { U: 0, M: 1, T: 2, W: 3, R: 4, F: 5, S: 6 };
+const day_lookup = { U: 0, M: 1, T: 2, W: 3, H: 4, F: 5, S: 6 };
 const fontSize = 20;
 const blackColor = "#000000";
 const colorOrder = [
@@ -54,9 +54,11 @@ const drawText = (x0, y0, ctx, classObj, location, boxWidth, drawInstructorText)
   lines.push(courseName.slice(0, slicePoint));
   lines.push(`${component} ${section} (${classId})`);
   location = location ? location : classObj.location;
+  location = location ? location : "TBD";
   lines.push(location);
   if (drawInstructorText) {
-    const instructorName = classObj.instructorName;
+    const instructorsArray = JSON.parse(classObj.instructorName.replace(/'/g, '"'));
+    const instructorName = instructorsArray[0];
     const instructorNames = instructorName.split(" ");
     const lastName = instructorNames[instructorNames.length - 1];
     const instructorText =
