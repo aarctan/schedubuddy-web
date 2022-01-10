@@ -6,24 +6,20 @@ const marks = [
   { value: 100, label: "100" },
 ];
 
-const DiscreteSlider = (props) => {
-  return (
-    <>
-      <Grid container spacing={2}>
-        <Grid item xs>
-          <Slider
-            onChange={props.setShowLimit}
-            valueLabelDisplay="auto"
-            defaultValue={props.default}
-            marks={marks}
-            step={props.step}
-            min={props.min}
-            max={props.max}
-          />
-        </Grid>
-      </Grid>
-    </>
-  );
-};
+const DiscreteSlider = (props) => (
+  <Grid container spacing={2}>
+    <Grid item xs>
+      <Slider
+        onChange={props.setShowLimit}
+        valueLabelDisplay="auto"
+        defaultValue={props.default}
+        marks={marks}
+        step={props.step}
+        min={props.min}
+        max={props.max}
+      />
+    </Grid>
+  </Grid>
+);
 
 export default DiscreteSlider;

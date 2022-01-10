@@ -1,5 +1,5 @@
-import { useState } from "react";
 import {
+  Box,
   Button,
   Card,
   CardContent,
@@ -7,34 +7,34 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
-  Grid,
   makeStyles,
+  Stack,
+  Typography,
 } from "@material-ui/core";
-
-import InputLabel from "../components/InputLabel";
-import AutocompleteInput from "../components/AutoComplete";
-import LabelSlider from "../components/LabelSlider";
-import TimePick from "../components/TimePick";
-import MarathonPref from "../components/MarathonPref";
-import BasicSelect from "../components/Input/BasicSelect";
+import AutocompleteInput from "components/AutoComplete";
+import BasicSelect from "components/FormInputs/BasicSelect";
+import LabelSlider from "components/LabelSlider";
+import MarathonPref from "components/MarathonPref";
+import TimePick from "components/TimePick";
+import { useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: "#EDECEC",
+  },
+  buttonContainer: {
+    textAlign: "center",
+  },
+  cardContent: {
+    padding: theme.spacing(3),
   },
   hr: {
     backgroundColor: "#000000",
     height: "1px",
   },
-});
-
-const FormGrid = ({ children, sx }) => (
-  <Grid item xs={12} sx={{ my: 0.5, ...sx }}>
-    {children}
-  </Grid>
-);
+}));
 
 const ControlContainer = (props) => {
   const [term, setTerm] = useState("");
@@ -93,94 +93,86 @@ const ControlContainer = (props) => {
 
   return (
     <Card className={classes.root}>
-      <CardContent sx={{ mx: 1 }}>
-        <Grid container justifyContent="center">
-          <FormGrid>
-            <BasicSelect
-              isObj
-              label="Select a term"
-              onChange={handleTermChange}
-              options={termOptions}
-              value={term}
-            />
-          </FormGrid>
+      <CardContent className={classes.cardContent}>
+        <Stack spacing={0.5}>
+          <BasicSelect
+            isObj
+            label="Select a term"
+            onChange={handleTermChange}
+            options={termOptions}
+            value={term}
+          />
 
-          <FormGrid>
-            <AutocompleteInput
-              label="Enter courses"
-              onChange={(_e, value) => {
-                setCourses(
-                  value.sort((a, b) =>
-                    a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
-                  )
-                );
-              }}
-              options={coursesAvailable}
-              value={courses}
-            />
-          </FormGrid>
+          <AutocompleteInput
+            label="Enter courses"
+            onChange={(_e, value) => {
+              setCourses(
+                value.sort((a, b) =>
+                  a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
+                )
+              );
+            }}
+            options={coursesAvailable}
+            value={courses}
+          />
 
-          <FormGrid>
-            <FormControl component="fieldset" variant="standard">
-              <FormGroup>
-                <FormControlLabel
-                  label="Include 3-hour weekly lectures"
-                  control={
-                    <Checkbox
-                      name="evening"
-                      checked={eveningPref}
-                      onChange={(e) => {
-                        setEveningPref(e.target.checked);
-                      }}
-                    />
-                  }
-                />
-                <FormControlLabel
-                  label="Include online classes"
-                  control={
-                    <Checkbox
-                      name="online"
-                      checked={onlinePref}
-                      onChange={(e) => {
-                        setOnlinePref(e.target.checked);
-                      }}
-                    />
-                  }
-                />
-                <FormControlLabel
-                  label="Show instructor names"
-                  control={
-                    <Checkbox
-                      name="instrucorNames"
-                      checked={props.showInstructorPref}
-                      onChange={(e) => {
-                        props.setShowInstructorPref(e.target.checked);
-                      }}
-                    />
-                  }
-                />
-              </FormGroup>
-            </FormControl>
-          </FormGrid>
+          <FormControl component="fieldset" variant="standard">
+            <FormGroup>
+              <FormControlLabel
+                label="Include 3-hour weekly lectures"
+                control={
+                  <Checkbox
+                    name="evening"
+                    checked={eveningPref}
+                    onChange={(e) => {
+                      setEveningPref(e.target.checked);
+                    }}
+                  />
+                }
+              />
+              <FormControlLabel
+                label="Include online classes"
+                control={
+                  <Checkbox
+                    name="online"
+                    checked={onlinePref}
+                    onChange={(e) => {
+                      setOnlinePref(e.target.checked);
+                    }}
+                  />
+                }
+              />
+              <FormControlLabel
+                label="Show instructor names"
+                control={
+                  <Checkbox
+                    name="instrucorNames"
+                    checked={props.showInstructorPref}
+                    onChange={(e) => {
+                      props.setShowInstructorPref(e.target.checked);
+                    }}
+                  />
+                }
+              />
+            </FormGroup>
+          </FormControl>
 
-          <FormGrid>
-            <TimePick
-              onChange={(e) => {
-                setStartPref(e.target.value);
-              }}
-              value={startPref}
-            />
-          </FormGrid>
+          <TimePick
+            onChange={(e) => {
+              setStartPref(e.target.value);
+            }}
+            value={startPref}
+          />
 
-          <FormGrid>
-            <MarathonPref
-              onChange={(e) => setConsecPref(e.target.value)}
-              value={consecPref}
-            />
-          </FormGrid>
+          <MarathonPref
+            onChange={(e) => setConsecPref(e.target.value)}
+            value={consecPref}
+          />
 
-          <FormGrid>
-            <InputLabel label="Max schedules to show:" />
+          <div>
+            <Typography id="autocomplete" gutterBottom>
+              Max schedules to show
+            </Typography>
             <LabelSlider
               setShowLimit={(_e, value) => {
                 setShowLimit(value);
@@ -190,9 +182,9 @@ const ControlContainer = (props) => {
               min={10}
               max={100}
             />
-          </FormGrid>
+          </div>
 
-          <FormGrid sx={{ display: "flex", justifyContent: "center" }}>
+          <Box className={classes.buttonContainer}>
             <Button
               onClick={handleFormSubmit}
               variant="contained"
@@ -201,8 +193,8 @@ const ControlContainer = (props) => {
             >
               Get Schedules
             </Button>
-          </FormGrid>
-        </Grid>
+          </Box>
+        </Stack>
       </CardContent>
     </Card>
   );
