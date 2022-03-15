@@ -36,7 +36,6 @@ const ScheduleContainer = ({
   };
 
   const scheduleHasAliases = (schedule) => {
-    console.log(schedule);
     for (let i = 0; i < schedule.length; i++) {
       const classObj = schedule[i];
       if (classObj.objects.class in aliases) return true;
