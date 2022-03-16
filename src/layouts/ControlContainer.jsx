@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -7,8 +8,10 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  IconButton,
   makeStyles,
   Stack,
+  TextField,
   Typography,
 } from "@material-ui/core";
 import AutocompleteInput from "components/AutoComplete";
@@ -17,6 +20,9 @@ import LabelSlider from "components/LabelSlider";
 import MarathonPref from "components/MarathonPref";
 import TimePick from "components/TimePick";
 import { useState } from "react";
+
+import EventNoteIcon from "@material-ui/icons/EventNote";
+import ApartmentIcon from "@material-ui/icons/Apartment";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -36,7 +42,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+class FeatureView {
+  static ScheduleView = new FeatureView("ScheduleView");
+  static RoomView = new FeatureView("RoomView");
+
+  constructor(name) {
+    this.name = name;
+  }
+}
+
 const ControlContainer = (props) => {
+  const [view, setView] = useState(FeatureView.ScheduleView.name);
   const [term, setTerm] = useState("");
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -46,42 +62,80 @@ const ControlContainer = (props) => {
   const [consecPref, setConsecPref] = useState(2);
   const [showLimit, setShowLimit] = useState(30);
 
+  const [roomsAvailable, setRoomsAvailable] = useState([]);
+  const [room, setRoom] = useState("");
+
   const handleTermChange = async (e) => {
     const value = e.target.value;
     setTerm(value);
     try {
-      const data = await fetch(`${API_URL}/api/v1/courses/?term=${value}`).then((res) =>
-        res.json()
-      );
-      const sortedCoursesAvailable = data.objects.sort((a, b) =>
-        a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
-      );
-      setCoursesAvailable(sortedCoursesAvailable);
+      if (view === FeatureView.ScheduleView.name) {
+        const data = await fetch(`${API_URL}/api/v1/courses/?term=${value}`).then((res) =>
+          res.json()
+        );
+        const sortedCoursesAvailable = data.objects.sort((a, b) =>
+          a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
+        );
+        setCoursesAvailable(sortedCoursesAvailable);
+      } else if (view === FeatureView.RoomView.name) {
+        const data = await fetch(`${API_URL}/api/v1/rooms/?term=${value}`).then((res) =>
+          res.json()
+        );
+        const sortedRoomsAvailable = data.objects.sort((a, b) =>
+          a.location > b.location ? 1 : b.location > a.location ? -1 : 0
+        );
+        setRoomsAvailable(sortedRoomsAvailable);
+      }
     } catch (error) {
       console.log("handleTermChange", error);
     }
   };
 
   const handleFormSubmit = async () => {
-    // Set the courseId order for color parity between autocomplete chips and schedule canvas
-    props.setCourseOrder(courses.map((course) => course.course));
-
     props.setLoading(true);
+
     try {
-      const course_ids = courses.map((course) => course.course).join(",");
-      const eveningClassesBit = eveningPref === true ? "1" : "0";
-      const onlineClassesBit = onlinePref === true ? "1" : "0";
-      const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startPref},${consecPref},${showLimit}]`;
-      const req_url = `${API_URL}/api/v1/gen-schedules/?term=${term}&courses=[${course_ids}]&prefs=${prefsStr}`;
-      const data = await fetch(req_url).then((res) => res.json());
-      props.setSchedules(data.objects.schedules);
-      props.setAliases(data.objects.aliases);
-      props.setErrmsg(data.objects.errmsg);
+      if (view === FeatureView.ScheduleView.name) {
+        // Set the courseId order for color parity between autocomplete chips and schedule canvas
+        props.setCourseOrder(courses.map((course) => course.course));
+        const course_ids = courses.map((course) => course.course).join(",");
+        const eveningClassesBit = eveningPref === true ? "1" : "0";
+        const onlineClassesBit = onlinePref === true ? "1" : "0";
+        const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startPref},${consecPref},${showLimit}]`;
+        const req_url = `${API_URL}/api/v1/gen-schedules/?term=${term}&courses=[${course_ids}]&prefs=${prefsStr}`;
+        const data = await fetch(req_url).then((res) => res.json());
+        props.setSchedules(data.objects.schedules);
+        props.setAliases(data.objects.aliases);
+        props.setErrmsg(data.objects.errmsg);
+      } else if (view === FeatureView.RoomView.name) {
+        console.log(`${API_URL}/api/v1/room-sched/?term=${term}&room=${room}`);
+        const req_url = `${API_URL}/api/v1/room-sched/?term=${term}&room=${room}`;
+        const data = await fetch(req_url).then((res) => res.json());
+        props.setSchedules(data.objects.schedules);
+        props.setCourseOrder(
+          data.objects.schedules[0].map((courseObj) => courseObj.objects.course)
+        );
+        console.log(
+          data.objects.schedules[0].map((courseObj) => courseObj.objects.course)
+        );
+        props.setAliases(data.objects.aliases);
+        console.log(data);
+      }
     } catch (error) {
       console.log("handleFormSubmit", error);
     } finally {
       props.setLoading(false);
     }
+  };
+
+  const handleViewChange = (newView) => {
+    if (view === newView) return;
+    setTerm("");
+    setCoursesAvailable([]);
+    setCourses([]);
+    setRoomsAvailable([]);
+    setRoom("");
+    setView(newView);
   };
 
   // Format the term data for the BasicSelect component
@@ -96,6 +150,34 @@ const ControlContainer = (props) => {
   return (
     <Card className={classes.root}>
       <CardContent className={classes.cardContent}>
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          direction="row"
+          spacing={1}
+          sx={{ mt: -2 }}
+        >
+          <IconButton
+            variant="contained"
+            onClick={() => handleViewChange(FeatureView.ScheduleView.name)}
+            size="large"
+            aria-label="show new mail"
+            color="primary"
+          >
+            <EventNoteIcon fontSize="large" />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              props.setShowInstructorPref(true);
+              handleViewChange(FeatureView.RoomView.name);
+            }}
+            size="large"
+            aria-label="show new mail"
+            color="primary"
+          >
+            <ApartmentIcon fontSize="large" />
+          </IconButton>
+        </Stack>
         <Stack spacing={0.5}>
           <BasicSelect
             isObj
@@ -105,97 +187,134 @@ const ControlContainer = (props) => {
             value={term}
           />
 
-          <AutocompleteInput
-            label="Enter courses"
-            onChange={(_e, value) => {
-              setCourses(
-                value.sort((a, b) =>
-                  a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
-                )
-              );
-            }}
-            options={coursesAvailable}
-            value={courses}
-          />
-
-          <FormControl component="fieldset" variant="standard">
-            <FormGroup>
-              <FormControlLabel
-                label="Include 3-hour weekly lectures"
-                control={
-                  <Checkbox
-                    name="evening"
-                    checked={eveningPref}
-                    onChange={(e) => {
-                      setEveningPref(e.target.checked);
-                    }}
-                  />
-                }
+          {view === FeatureView.ScheduleView.name && (
+            <>
+              <AutocompleteInput
+                label="Enter courses"
+                onChange={(_e, value) => {
+                  setCourses(
+                    value.sort((a, b) =>
+                      a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
+                    )
+                  );
+                }}
+                options={coursesAvailable}
+                value={courses}
               />
-              <FormControlLabel
-                label="Include online classes"
-                control={
-                  <Checkbox
-                    name="online"
-                    checked={onlinePref}
-                    onChange={(e) => {
-                      setOnlinePref(e.target.checked);
-                    }}
+
+              <FormControl component="fieldset" variant="standard">
+                <FormGroup>
+                  <FormControlLabel
+                    label="Include 3-hour weekly lectures"
+                    control={
+                      <Checkbox
+                        name="evening"
+                        checked={eveningPref}
+                        onChange={(e) => {
+                          setEveningPref(e.target.checked);
+                        }}
+                      />
+                    }
                   />
-                }
-              />
-              <FormControlLabel
-                label="Show instructor names"
-                control={
-                  <Checkbox
-                    name="instrucorNames"
-                    checked={props.showInstructorPref}
-                    onChange={(e) => {
-                      props.setShowInstructorPref(e.target.checked);
-                    }}
+                  <FormControlLabel
+                    label="Include online classes"
+                    control={
+                      <Checkbox
+                        name="online"
+                        checked={onlinePref}
+                        onChange={(e) => {
+                          setOnlinePref(e.target.checked);
+                        }}
+                      />
+                    }
                   />
-                }
+                  <FormControlLabel
+                    label="Show instructor names"
+                    control={
+                      <Checkbox
+                        name="instrucorNames"
+                        checked={props.showInstructorPref}
+                        onChange={(e) => {
+                          props.setShowInstructorPref(e.target.checked);
+                        }}
+                      />
+                    }
+                  />
+                </FormGroup>
+              </FormControl>
+
+              <TimePick
+                onChange={(e) => {
+                  setStartPref(e.target.value);
+                }}
+                value={startPref}
               />
-            </FormGroup>
-          </FormControl>
 
-          <TimePick
-            onChange={(e) => {
-              setStartPref(e.target.value);
-            }}
-            value={startPref}
-          />
+              <MarathonPref
+                onChange={(e) => setConsecPref(e.target.value)}
+                value={consecPref}
+              />
 
-          <MarathonPref
-            onChange={(e) => setConsecPref(e.target.value)}
-            value={consecPref}
-          />
+              <div>
+                <Typography id="autocomplete" gutterBottom>
+                  Max schedules to show
+                </Typography>
+                <LabelSlider
+                  setShowLimit={(_e, value) => {
+                    setShowLimit(value);
+                  }}
+                  default={30}
+                  step={10}
+                  min={10}
+                  max={100}
+                />
+              </div>
 
-          <div>
-            <Typography id="autocomplete" gutterBottom>
-              Max schedules to show
-            </Typography>
-            <LabelSlider
-              setShowLimit={(_e, value) => {
-                setShowLimit(value);
-              }}
-              default={30}
-              step={10}
-              min={10}
-              max={100}
-            />
-          </div>
+              <Box className={classes.buttonContainer}>
+                <Button
+                  onClick={handleFormSubmit}
+                  variant="contained"
+                  color="secondary"
+                  disabled={props.loading || !Boolean(term && courses.length)}
+                >
+                  Get Schedules
+                </Button>
+              </Box>
+            </>
+          )}
+          {view === FeatureView.RoomView.name && (
+            <>
+              <Autocomplete
+                autoHighlight
+                sx={{ width: "100%", marginTop: "-2%" }}
+                onChange={(_e, value) => {
+                  if (value) setRoom(value.location);
+                }}
+                options={roomsAvailable}
+                getOptionLabel={(o) => o.location}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    margin="normal"
+                    label={"Select a room (e.g. CCIS 1-140)"}
+                  />
+                )}
+                noOptionsText="Select a term to see locations"
+              />
 
-          <Box className={classes.buttonContainer}>
-            <Button
-              onClick={handleFormSubmit}
-              variant="contained"
-              color="secondary"
-              disabled={props.loading || !Boolean(term && courses.length)}
-            >
-              Get Schedules
-            </Button>
-          </Box>
+              <Box className={classes.buttonContainer}>
+                <Button
+                  onClick={handleFormSubmit}
+                  variant="contained"
+                  color="secondary"
+                  sx={{ mt: 1 }}
+                  disabled={props.loading || !Boolean(term && room)}
+                >
+                  Show Timetable
+                </Button>
+              </Box>
+            </>
+          )}
         </Stack>
       </CardContent>
     </Card>
