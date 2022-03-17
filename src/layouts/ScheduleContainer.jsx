@@ -24,6 +24,7 @@ const ScheduleContainer = ({
   aliases,
   errmsg,
   showInstructorPref,
+  roomView=false
 }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
@@ -56,6 +57,7 @@ const ScheduleContainer = ({
               jsonSched={schedules[page]}
               aliases={aliases}
               showInstructorPref={showInstructorPref}
+              grayOut={roomView ? true : false}
             />
           ) : (
             <Typography variant="h5">

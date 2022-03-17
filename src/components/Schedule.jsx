@@ -19,6 +19,7 @@ const quarterLength = verticalLength50 / 4;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, H: 4, F: 5, S: 6 };
 const fontSize = 20;
 const blackColor = "#000000";
+const grayColor = "#E7E7E7";
 const colorOrder = [
   "#FF9999",
   "#FFFF99",
@@ -87,7 +88,8 @@ const drawSchedule = (
   bp_width,
   bp_height,
   aliases,
-  showInstructorPref
+  showInstructorPref,
+  allGrayedOut = false
 ) => {
   let classOnWeekend = false;
   let min_y = 2147483647;
@@ -102,7 +104,7 @@ const drawSchedule = (
   for (var classObj of jsonSched) {
     classObj = classObj.objects;
     const courseId = classObj.course;
-    const currColor = courseColorMap[courseId];
+    const currColor = allGrayedOut ? grayColor : courseColorMap[courseId];
     let drawInstructorText =
       classObj.instructorName && !(classObj.class in aliases) ? true : false;
     if (!showInstructorPref) {
@@ -118,7 +120,7 @@ const drawSchedule = (
       for (var day of ct.day) {
         if (day === "S" || day === "U") classOnWeekend = true;
         let r_x0 = leftMarginOffset + day_lookup[day] * boxWidth + day_lookup[day] * 2;
-        if (biweeklyFlag === 2) {
+        if (parseInt(biweeklyFlag) === 2) {
           r_x0 += boxWidth / 2;
         }
         let r_x1 = r_x0 + classBoxWidth;
@@ -198,7 +200,13 @@ const drawSchedule = (
   );
 };
 
-const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorPref }) => {
+const Schedule = ({
+  courseOrder,
+  jsonSched,
+  aliases,
+  showInstructorPref,
+  grayOut = false,
+}) => {
   const classes = useStyles();
   const canvas = createRef(null);
   const [image, setImage] = useState(null);
@@ -223,10 +231,11 @@ const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorPref }) => {
         image.naturalWidth,
         image.naturalHeight,
         aliases,
-        showInstructorPref
+        showInstructorPref,
+        grayOut
       );
     }
-  }, [courseOrder, jsonSched, image, canvas, aliases, showInstructorPref]);
+  }, [courseOrder, jsonSched, image, canvas, aliases, showInstructorPref, grayOut]);
 
   return <canvas className={classes.Media} ref={canvas}></canvas>;
 };
