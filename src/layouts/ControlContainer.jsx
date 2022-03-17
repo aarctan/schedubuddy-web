@@ -12,6 +12,7 @@ import {
   makeStyles,
   Stack,
   TextField,
+  Tooltip,
   Typography,
 } from "@material-ui/core";
 import { Apartment, EventNote } from "@material-ui/icons";
@@ -29,9 +30,8 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
   },
   tabButtonContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    mt: -2,
+    display: "flex",
+    justifyContent: "space-evenly",
   },
   cardContent: {
     padding: theme.spacing(3),
@@ -148,23 +148,28 @@ const ControlContainer = (props) => {
   return (
     <Card className={classes.root}>
       <CardContent className={classes.cardContent}>
-        <Stack className={classes.tabButtonContainer} direction="row" spacing={1}>
-          <IconButton
-            color="primary"
-            onClick={() => handleTabButtonClick("schedule")}
-            size="large"
-          >
-            <EventNote fontSize="large" />
-          </IconButton>
-          <IconButton
-            color="primary"
-            name="room"
-            onClick={() => handleTabButtonClick("room")}
-            size="large"
-          >
-            <Apartment fontSize="large" />
-          </IconButton>
-        </Stack>
+        <Box className={classes.tabButtonContainer}>
+          <Tooltip placement="top" title="Schedule Builder">
+            <IconButton
+              color={view === "schedule" ? "primary" : "default"}
+              onClick={() => handleTabButtonClick("schedule")}
+              size="large"
+              sx={{ paddingTop: 0 }}
+            >
+              <EventNote fontSize="large" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip placement="top" title="Room Schedule">
+            <IconButton
+              color={view === "room" ? "primary" : "default"}
+              onClick={() => handleTabButtonClick("room")}
+              size="large"
+              sx={{ paddingTop: 0 }}
+            >
+              <Apartment fontSize="large" />
+            </IconButton>
+          </Tooltip>
+        </Box>
         <Stack spacing={0.5}>
           <BasicSelect
             isObj
