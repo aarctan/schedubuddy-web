@@ -109,6 +109,7 @@ const ControlContainer = (props) => {
           data.objects.schedules[0].map((courseObj) => courseObj.objects.course)
         );
         props.setAliases(data.objects.aliases);
+        console.log(data);
       }
     } catch (error) {
       console.log("handleFormSubmit", error);
@@ -123,14 +124,8 @@ const ControlContainer = (props) => {
       return;
     }
 
-    props.setSchedules([]);
-    props.setErrmsg("No schedules to display");
-
     if (newView === "room") {
       props.setShowInstructorPref(true);
-      props.setRoomView(true);
-    } else {
-      props.setRoomView(false);
     }
 
     setTerm("");

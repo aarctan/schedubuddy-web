@@ -14,7 +14,6 @@ const Main = () => {
   const [showInstructorPref, setShowInstructorPref] = useState(false);
   const [errmsg, setErrmsg] = useState("No schedules to display");
   const [loading, setLoading] = useState(false);
-  const [roomView, setRoomView] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/api/v1/terms`)
@@ -41,7 +40,6 @@ const Main = () => {
             setErrmsg={setErrmsg}
             loading={loading}
             terms={terms}
-            setRoomView={setRoomView}
           />
         </Grid>
         <Grid item xs={12} md={8}>
@@ -54,7 +52,6 @@ const Main = () => {
               aliases={aliases}
               showInstructorPref={showInstructorPref}
               errmsg={errmsg}
-              roomView={roomView}
             />
           )}
         </Grid>
