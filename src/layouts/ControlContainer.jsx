@@ -14,24 +14,24 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import AutocompleteInput from "components/AutoComplete";
+import { Apartment, EventNote } from "@material-ui/icons";
+import ChipAutoComplete from "components/ChipAutoComplete";
 import BasicSelect from "components/FormInputs/BasicSelect";
 import LabelSlider from "components/LabelSlider";
 import MarathonPref from "components/MarathonPref";
 import TimePick from "components/TimePick";
 import { useState } from "react";
 
-import EventNoteIcon from "@material-ui/icons/EventNote";
-import ApartmentIcon from "@material-ui/icons/Apartment";
-
 const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: "#EDECEC",
-  },
   buttonContainer: {
     textAlign: "center",
+  },
+  tabButtonContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    mt: -2,
   },
   cardContent: {
     padding: theme.spacing(3),
@@ -40,19 +40,13 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#000000",
     height: "1px",
   },
+  root: {
+    backgroundColor: "#EDECEC",
+  },
 }));
 
-class FeatureView {
-  static ScheduleView = new FeatureView("ScheduleView");
-  static RoomView = new FeatureView("RoomView");
-
-  constructor(name) {
-    this.name = name;
-  }
-}
-
 const ControlContainer = (props) => {
-  const [view, setView] = useState(FeatureView.ScheduleView.name);
+  const [view, setView] = useState("schedule");
   const [term, setTerm] = useState("");
   const [coursesAvailable, setCoursesAvailable] = useState([]);
   const [courses, setCourses] = useState([]);
@@ -63,13 +57,13 @@ const ControlContainer = (props) => {
   const [showLimit, setShowLimit] = useState(30);
 
   const [roomsAvailable, setRoomsAvailable] = useState([]);
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState(null);
 
   const handleTermChange = async (e) => {
     const value = e.target.value;
     setTerm(value);
     try {
-      if (view === FeatureView.ScheduleView.name) {
+      if (view === "schedule") {
         const data = await fetch(`${API_URL}/api/v1/courses/?term=${value}`).then((res) =>
           res.json()
         );
@@ -77,7 +71,7 @@ const ControlContainer = (props) => {
           a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
         );
         setCoursesAvailable(sortedCoursesAvailable);
-      } else if (view === FeatureView.RoomView.name) {
+      } else if (view === "room") {
         const data = await fetch(`${API_URL}/api/v1/rooms/?term=${value}`).then((res) =>
           res.json()
         );
@@ -95,7 +89,7 @@ const ControlContainer = (props) => {
     props.setLoading(true);
 
     try {
-      if (view === FeatureView.ScheduleView.name) {
+      if (view === "schedule") {
         // Set the courseId order for color parity between autocomplete chips and schedule canvas
         props.setCourseOrder(courses.map((course) => course.course));
         const course_ids = courses.map((course) => course.course).join(",");
@@ -107,15 +101,11 @@ const ControlContainer = (props) => {
         props.setSchedules(data.objects.schedules);
         props.setAliases(data.objects.aliases);
         props.setErrmsg(data.objects.errmsg);
-      } else if (view === FeatureView.RoomView.name) {
-        console.log(`${API_URL}/api/v1/room-sched/?term=${term}&room=${room}`);
+      } else if (view === "room") {
         const req_url = `${API_URL}/api/v1/room-sched/?term=${term}&room=${room}`;
         const data = await fetch(req_url).then((res) => res.json());
         props.setSchedules(data.objects.schedules);
         props.setCourseOrder(
-          data.objects.schedules[0].map((courseObj) => courseObj.objects.course)
-        );
-        console.log(
           data.objects.schedules[0].map((courseObj) => courseObj.objects.course)
         );
         props.setAliases(data.objects.aliases);
@@ -128,13 +118,21 @@ const ControlContainer = (props) => {
     }
   };
 
-  const handleViewChange = (newView) => {
-    if (view === newView) return;
+  const handleTabButtonClick = (newView) => {
+    // Ignore active view button clicks
+    if (newView === view) {
+      return;
+    }
+
+    if (newView === "room") {
+      props.setShowInstructorPref(true);
+    }
+
     setTerm("");
     setCoursesAvailable([]);
     setCourses([]);
     setRoomsAvailable([]);
-    setRoom("");
+    setRoom(null);
     setView(newView);
   };
 
@@ -150,32 +148,21 @@ const ControlContainer = (props) => {
   return (
     <Card className={classes.root}>
       <CardContent className={classes.cardContent}>
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          direction="row"
-          spacing={1}
-          sx={{ mt: -2 }}
-        >
+        <Stack className={classes.tabButtonContainer} direction="row" spacing={1}>
           <IconButton
-            variant="contained"
-            onClick={() => handleViewChange(FeatureView.ScheduleView.name)}
-            size="large"
-            aria-label="show new mail"
             color="primary"
+            onClick={() => handleTabButtonClick("schedule")}
+            size="large"
           >
-            <EventNoteIcon fontSize="large" />
+            <EventNote fontSize="large" />
           </IconButton>
           <IconButton
-            onClick={() => {
-              props.setShowInstructorPref(true);
-              handleViewChange(FeatureView.RoomView.name);
-            }}
-            size="large"
-            aria-label="show new mail"
             color="primary"
+            name="room"
+            onClick={() => handleTabButtonClick("room")}
+            size="large"
           >
-            <ApartmentIcon fontSize="large" />
+            <Apartment fontSize="large" />
           </IconButton>
         </Stack>
         <Stack spacing={0.5}>
@@ -187,9 +174,9 @@ const ControlContainer = (props) => {
             value={term}
           />
 
-          {view === FeatureView.ScheduleView.name && (
+          {view === "schedule" && (
             <>
-              <AutocompleteInput
+              <ChipAutoComplete
                 label="Enter courses"
                 onChange={(_e, value) => {
                   setCourses(
@@ -208,8 +195,8 @@ const ControlContainer = (props) => {
                     label="Include 3-hour weekly lectures"
                     control={
                       <Checkbox
-                        name="evening"
                         checked={eveningPref}
+                        name="evening"
                         onChange={(e) => {
                           setEveningPref(e.target.checked);
                         }}
@@ -220,8 +207,8 @@ const ControlContainer = (props) => {
                     label="Include online classes"
                     control={
                       <Checkbox
-                        name="online"
                         checked={onlinePref}
+                        name="online"
                         onChange={(e) => {
                           setOnlinePref(e.target.checked);
                         }}
@@ -232,8 +219,8 @@ const ControlContainer = (props) => {
                     label="Show instructor names"
                     control={
                       <Checkbox
-                        name="instrucorNames"
                         checked={props.showInstructorPref}
+                        name="instrucorNames"
                         onChange={(e) => {
                           props.setShowInstructorPref(e.target.checked);
                         }}
@@ -256,9 +243,7 @@ const ControlContainer = (props) => {
               />
 
               <div>
-                <Typography id="autocomplete" gutterBottom>
-                  Max schedules to show
-                </Typography>
+                <Typography gutterBottom>Max schedules to show</Typography>
                 <LabelSlider
                   setShowLimit={(_e, value) => {
                     setShowLimit(value);
@@ -272,17 +257,17 @@ const ControlContainer = (props) => {
 
               <Box className={classes.buttonContainer}>
                 <Button
-                  onClick={handleFormSubmit}
-                  variant="contained"
                   color="secondary"
                   disabled={props.loading || !Boolean(term && courses.length)}
+                  onClick={handleFormSubmit}
+                  variant="contained"
                 >
                   Get Schedules
                 </Button>
               </Box>
             </>
           )}
-          {view === FeatureView.RoomView.name && (
+          {view === "room" && (
             <>
               <Autocomplete
                 autoHighlight
@@ -304,11 +289,11 @@ const ControlContainer = (props) => {
 
               <Box className={classes.buttonContainer}>
                 <Button
-                  onClick={handleFormSubmit}
-                  variant="contained"
                   color="secondary"
-                  sx={{ mt: 1 }}
                   disabled={props.loading || !Boolean(term && room)}
+                  onClick={handleFormSubmit}
+                  sx={{ mt: 1 }}
+                  variant="contained"
                 >
                   Show Timetable
                 </Button>
