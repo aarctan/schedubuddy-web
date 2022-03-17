@@ -14,7 +14,7 @@ const colorOrder = [
   "#CCFFFF",
 ];
 
-const AutocompleteInput = (props) => {
+const ChipAutoComplete = (props) => {
   const [input, setInput] = useState("");
 
   const handleInput = (_e, newInputValue) => {
@@ -53,4 +53,4 @@ const AutocompleteInput = (props) => {
   );
 };
 
-export default AutocompleteInput;
+export default ChipAutoComplete;
