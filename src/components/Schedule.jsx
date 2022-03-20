@@ -118,7 +118,7 @@ const drawSchedule = (
       for (var day of ct.day) {
         if (day === "S" || day === "U") classOnWeekend = true;
         let r_x0 = leftMarginOffset + day_lookup[day] * boxWidth + day_lookup[day] * 2;
-        if (biweeklyFlag === 2) {
+        if (parseInt(biweeklyFlag) === 2) {
           r_x0 += boxWidth / 2;
         }
         let r_x1 = r_x0 + classBoxWidth;
