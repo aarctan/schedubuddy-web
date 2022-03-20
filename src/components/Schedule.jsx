@@ -44,18 +44,52 @@ const startToInt = (str_t) => {
   }
 };
 
-const drawText = (x0, y0, ctx, classObj, location, boxWidth, drawInstructorText) => {
+const splitLineText = (ctx, text, maxWidth) => {
   let lines = [];
+  const textArray = text.split(" ");
+  for (let i = textArray.length; i >= 0; i--) {
+    const joinedStr = textArray.slice(0, i).join(" ");
+    if (ctx.measureText(joinedStr).width < maxWidth) {
+      lines.push(joinedStr);
+      if (i !== textArray.length)
+        lines.push(textArray.slice(i, textArray.length).join(" "));
+      return lines;
+    }
+  }
+};
+
+const drawText = (
+  x0,
+  y0,
+  ctx,
+  classObj,
+  location,
+  boxWidth,
+  drawInstructorText,
+  halfBlock = false
+) => {
+  let lines = [];
+  const maxWidth = boxWidth - boxRightMargin;
   const component = classObj.component;
   const section = classObj.section;
   const classId = classObj.class;
   let courseName = classObj.asString;
   const slicePoint = courseName.length - `${component} ${section}`.length - 1;
-  lines.push(courseName.slice(0, slicePoint));
-  lines.push(`${component} ${section} (${classId})`);
   location = location ? location : classObj.location;
   location = location ? location : "TBD";
-  lines.push(location);
+  if (!halfBlock) {
+    lines.push(courseName.slice(0, slicePoint));
+    lines.push(`${component} ${section} (${classId})`);
+  } else {
+    const textLines = [
+      courseName.slice(0, slicePoint),
+      `${component} ${section}`,
+      location,
+    ];
+    for (const textLine of textLines)
+      for (const line of splitLineText(ctx, textLine, maxWidth)) lines.push(line);
+  }
+  if (!halfBlock) lines.push(location);
   if (drawInstructorText) {
     const instructorsArray = JSON.parse(classObj.instructorName.replace(/'/g, '"'));
     const instructorName = instructorsArray[0];
@@ -70,8 +104,8 @@ const drawText = (x0, y0, ctx, classObj, location, boxWidth, drawInstructorText)
   }
   ctx.fillStyle = blackColor;
   for (let i = 0; i < lines.length; i++) {
-    if (ctx.measureText(lines[i]).width > boxWidth - boxRightMargin) {
-      while (ctx.measureText(`${lines[i]}...`).width > boxWidth - boxRightMargin) {
+    if (ctx.measureText(lines[i]).width > maxWidth) {
+      while (ctx.measureText(`${lines[i]}...`).width > maxWidth) {
         lines[i] = lines[i].slice(0, lines[i].length - 1);
       }
       lines[i] = `${lines[i]}...`;
@@ -138,7 +172,8 @@ const drawSchedule = (
           classObj,
           ct.location,
           classBoxWidth,
-          drawInstructorText
+          drawInstructorText,
+          parseInt(biweeklyFlag) !== 0
         );
       }
     }
