@@ -15,7 +15,7 @@ To try it out, simply select an academic term, enter courses from the autocomple
 After a few seconds of searching, the top schedules will be displayed in the order given by the ranking algorithm.
 Every schedule will be unique-looking, so that a variety of schedules can be given.
 
-![schedubuddy.com example usage](https://imgur.com/f6uLePd.png)
+![schedubuddy.com example usage](https://i.imgur.com/tw9GYEn.png)
 
 ### Tech
 Website built with [ReactJS](https://reactjs.org/) and [Material-UI](https://next.material-ui.com/), and hosted on [Netlify](https://www.netlify.com/).
