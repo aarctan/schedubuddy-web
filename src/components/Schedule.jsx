@@ -178,10 +178,13 @@ const drawSchedule = (
       }
     }
   }
-
-  const topHours = Math.min(8, Math.floor(min_y / 60));
+  let topHours = Math.min(8, Math.floor(min_y / 60));
+  let bottomHours = Math.ceil(max_y / 60) + hourPadding;
+  if (min_y === 2147483647 && max_y === -2147483648) {
+    topHours = 8;
+    bottomHours = 15;
+  }
   const yRegionTop = topMarginOffset + topHours * verticalLength50 + topHours * 3;
-  const bottomHours = Math.ceil(max_y / 60) + hourPadding;
   const yRegionBottom =
     topMarginOffset + bottomHours * verticalLength50 + bottomHours * 3;
   const yRegionlength = yRegionBottom - yRegionTop;
