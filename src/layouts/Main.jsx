@@ -2,6 +2,7 @@ import { Box, Grid } from "@material-ui/core";
 import ControlContainer from "./ControlContainer";
 import ScheduleContainer from "./ScheduleContainer";
 import LoadingCard from "../components/LoadingCard";
+import UnderConstruction from "./UnderConstruction";
 import { useEffect, useState } from "react";
 
 let API_URL = process.env.REACT_APP_API_URL;
@@ -27,7 +28,11 @@ const Main = () => {
   }, []);
 
   return (
-    <Box mt={3}>
+    <>
+    <div>
+      <UnderConstruction/>
+    </div>
+    <Box mt={10}>
       <Grid container spacing={2}>
         <Grid item xs={12} md={4}>
           <ControlContainer
@@ -40,23 +45,24 @@ const Main = () => {
             setErrmsg={setErrmsg}
             loading={loading}
             terms={terms}
-          />
+            />
         </Grid>
         <Grid item xs={12} md={8}>
           {loading ? (
             <LoadingCard />
-          ) : (
-            <ScheduleContainer
+            ) : (
+              <ScheduleContainer
               courseOrder={courseOrder}
               schedules={schedules}
               aliases={aliases}
               showInstructorPref={showInstructorPref}
               errmsg={errmsg}
-            />
-          )}
+              />
+              )}
         </Grid>
       </Grid>
     </Box>
+              </>
   );
 };
 

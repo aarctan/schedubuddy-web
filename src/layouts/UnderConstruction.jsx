@@ -22,8 +22,7 @@ export default function Footer() {
       <AppBar color="secondary">
         <Toolbar>
           <Typography color="inherit" variant="h6" className={classes.typography}>
-            This app has underwent a major change and may have bugs. If you catch any,
-            please create an issue on github.
+            Thank you for using schedubuddy. This website will go down on May 25, 2022.
           </Typography>
         </Toolbar>
       </AppBar>
