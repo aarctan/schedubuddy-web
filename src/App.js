@@ -1,4 +1,5 @@
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import Footer from "components/Footer";
 import Main from "layouts/Main";
 
 const theme = createTheme({
@@ -19,6 +20,7 @@ const App = () => (
         <Main />
       </ThemeProvider>
     </div>
+    <Footer />
   </div>
 );
 

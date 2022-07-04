@@ -21,8 +21,8 @@ export default function Footer() {
     <div className={classes.root}>
       <AppBar color="secondary">
         <Toolbar>
-          <Typography color="inherit" variant="h5" className={classes.typography}>
-            Thank you for using schedubuddy. This website is down indefinitely.
+          <Typography color="inherit" variant="h6" className={classes.typography}>
+            Thank you for using schedubuddy. This website will go down on May 25, 2022.
           </Typography>
         </Toolbar>
       </AppBar>
