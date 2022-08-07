@@ -1,5 +1,6 @@
-import { Grid, IconButton, makeStyles, Typography } from "@material-ui/core";
+import { IconButton, makeStyles } from "@material-ui/core";
 import GitHubIcon from "@material-ui/icons/GitHub";
+import InstagramIcon from "@material-ui/icons/Instagram";
 
 const useStyles = makeStyles((theme) => ({
   footer: {
@@ -30,27 +31,13 @@ const Footer = () => {
         <GitHubIcon fontSize="large" />
       </IconButton>
 
-      <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        align="center"
+      <IconButton
+        aria-label="github-link"
+        className={classes.iconButton}
+        href="https://www.instagram.com/aaarctan/"
       >
-        <Grid item>
-          <img
-            src="/discord-logo.png"
-            alt="logo"
-            className={classes.logo}
-            align="center"
-          />
-        </Grid>
-        <Grid item>
-          <Typography variant="body2" align="center" color="textSecondary" component="p">
-            Arctan#0001 for inquiries
-          </Typography>
-        </Grid>
-      </Grid>
+        <InstagramIcon fontSize="large" />
+      </IconButton>
     </footer>
   );
 };
