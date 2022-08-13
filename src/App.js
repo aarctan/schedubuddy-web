@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Footer from "components/Footer";
 import Main from "layouts/Main";
 
@@ -10,17 +10,20 @@ const theme = createTheme({
     secondary: {
       main: "#FEDB04",
     },
+    background: {
+      paper: "#EDECEC",
+    },
   },
 });
 
 const App = () => (
   <div className="page-container">
-    <div className="content-wrap">
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <div className="content-wrap">
         <Main />
-      </ThemeProvider>
-    </div>
-    <Footer />
+      </div>
+      <Footer />
+    </ThemeProvider>
   </div>
 );
 

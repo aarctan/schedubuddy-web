@@ -1,4 +1,5 @@
-import { Grid, InputLabel, makeStyles } from "@material-ui/core";
+import { Grid, InputLabel } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import BasicSelect from "./BasicSelect";
 
 const useStyles = makeStyles((theme) => ({

@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 const BasicSelect = ({ className, isObj = false, options = [], ...rest }) => {
   const optionList = options.map((option) => {

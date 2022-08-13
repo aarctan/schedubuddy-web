@@ -1,16 +1,11 @@
-import { Card, CardContent, Grid, makeStyles, Typography } from "@material-ui/core";
+import { CardContent, Grid, Typography } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import AliasDesc from "components/AliasDesc";
 import Paging from "components/Paging";
 import Schedule from "components/Schedule";
 import { useState } from "react";
 
 const useStyles = makeStyles({
-  root: {
-    alignItems: "center",
-    backgroundColor: "#EDECEC",
-    display: "flex",
-    justifyContent: "center",
-  },
   content: {
     alignItems: "center",
     display: "flex",
@@ -18,13 +13,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ScheduleContainer = ({
-  courseOrder,
-  schedules,
-  aliases,
-  errmsg,
-  showInstructorPref,
-}) => {
+const ScheduleContainer = ({ courseOrder, schedules, aliases, errorMessage }) => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
 
@@ -44,30 +33,27 @@ const ScheduleContainer = ({
   };
 
   return (
-    <Card className={classes.root}>
-      <CardContent className={classes.content}>
-        <Grid container direction="column" className={classes.content}>
-          {schedules.length > 0 && (
-            <Paging onChange={handlePageChange} pages={schedules.length} />
-          )}
-          {schedules.length ? (
-            <Schedule
-              courseOrder={courseOrder}
-              jsonSched={schedules[page]}
-              aliases={aliases}
-              showInstructorPref={showInstructorPref}
-            />
-          ) : (
-            <Typography variant="h5">
-              <div align="center">{errmsg}</div>
-            </Typography>
-          )}
-          {Object.keys(aliases)?.length > 0 && scheduleHasAliases(schedules[page]) && (
-            <AliasDesc aliases={aliases} schedule={schedules[page]} />
-          )}
-        </Grid>
-      </CardContent>
-    </Card>
+    <CardContent className={classes.content}>
+      <Grid container direction="column" className={classes.content}>
+        {schedules.length > 0 && (
+          <Paging onChange={handlePageChange} pages={schedules.length} />
+        )}
+        {schedules.length ? (
+          <Schedule
+            courseOrder={courseOrder}
+            jsonSched={schedules[page]}
+            aliases={aliases}
+          />
+        ) : (
+          <Typography variant="h5">
+            <div align="center">{errorMessage}</div>
+          </Typography>
+        )}
+        {Object.keys(aliases)?.length > 0 && scheduleHasAliases(schedules[page]) && (
+          <AliasDesc aliases={aliases} schedule={schedules[page]} />
+        )}
+      </Grid>
+    </CardContent>
   );
 };
 

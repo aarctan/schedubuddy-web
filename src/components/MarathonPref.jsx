@@ -1,11 +1,11 @@
 import MiniSelect from "components/FormInputs/MiniSelect";
 
 const options = [
-  { label: "1 hr", value: 0 },
-  { label: "2 hrs", value: 1 },
-  { label: "3 hrs", value: 2 },
-  { label: "4 hrs", value: 3 },
-  { label: "5 hrs", value: 4 },
+  { label: "1 Hour", value: 0 },
+  { label: "2 Hours", value: 1 },
+  { label: "3 Hours", value: 2 },
+  { label: "4 Hours", value: 3 },
+  { label: "5 Hours", value: 4 },
 ];
 
 const MarathonPref = (props) => (
