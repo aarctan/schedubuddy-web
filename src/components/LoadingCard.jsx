@@ -1,4 +1,4 @@
-import { Card, CardContent, CircularProgress } from "@material-ui/core";
+import { Card, CardContent, CircularProgress } from "@mui/material";
 
 const LoadingCardContent = () => (
   <Card

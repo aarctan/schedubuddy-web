@@ -1,4 +1,4 @@
-import { Grid, Slider } from "@material-ui/core";
+import { Grid, Slider } from "@mui/material";
 
 const marks = [
   { value: 10, label: "10" },

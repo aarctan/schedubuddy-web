@@ -1,4 +1,4 @@
-import { Grid, Slider, Typography } from "@material-ui/core";
+import { Grid, Slider, Typography } from "@mui/material";
 
 const DiscreteSlider = (props) => (
   <Grid container spacing={2}>

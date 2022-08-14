@@ -1,4 +1,5 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/styles";
+import { useFormContext } from "context/Form";
 import { createRef, useEffect, useState } from "react";
 
 const useStyles = makeStyles({
@@ -236,10 +237,13 @@ const drawSchedule = (
   );
 };
 
-const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorPref }) => {
+const Schedule = ({ courseOrder, jsonSched, aliases }) => {
   const classes = useStyles();
   const canvas = createRef(null);
   const [image, setImage] = useState(null);
+
+  const { values } = useFormContext();
+  const { showInstructorPref } = values;
 
   useEffect(() => {
     const schedImg = new Image();
