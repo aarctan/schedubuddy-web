@@ -237,10 +237,16 @@ const drawSchedule = (
   );
 };
 
+const convertCanvasToImage = () => {
+  let canvas = document.getElementById("canvas");
+  return canvas.toDataURL();
+};
+
 const Schedule = ({ courseOrder, jsonSched, aliases }) => {
   const classes = useStyles();
   const canvas = createRef(null);
   const [image, setImage] = useState(null);
+  const [dataURL, setDataURL] = useState("");
 
   const { values } = useFormContext();
   const { showInstructorPref } = values;
@@ -267,10 +273,21 @@ const Schedule = ({ courseOrder, jsonSched, aliases }) => {
         aliases,
         showInstructorPref
       );
+      setDataURL(convertCanvasToImage());
     }
   }, [courseOrder, jsonSched, image, canvas, aliases, showInstructorPref]);
 
-  return <canvas className={classes.Media} ref={canvas}></canvas>;
+  return (
+    <>
+      <img
+        src={dataURL}
+        className={classes.Media}
+        style={{ visibility: dataURL ? "visible" : "hidden" }}
+        alt="schedule"
+      ></img>
+      <canvas hidden id="canvas" ref={canvas}></canvas>
+    </>
+  );
 };
 
 export default Schedule;
