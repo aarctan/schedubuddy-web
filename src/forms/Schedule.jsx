@@ -87,16 +87,6 @@ export const Form = (props) => {
             <Checkbox checked={values.evening} name="evening" onChange={handleChange} />
           }
         />
-        <FormControlLabel
-          label="Show instructor names"
-          control={
-            <Checkbox
-              checked={values.showNames}
-              name="showNames"
-              onChange={handleChange}
-            />
-          }
-        />
       </FormGroup>
       <TimePick name="startPref" onChange={handleChange} value={values.startPref} />
       <MarathonPref name="consecPref" onChange={handleChange} value={values.consecPref} />

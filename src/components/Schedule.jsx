@@ -1,5 +1,4 @@
 import { makeStyles } from "@mui/styles";
-import { useFormContext } from "context/Form";
 import { createRef, useEffect, useState } from "react";
 
 const useStyles = makeStyles({
@@ -243,14 +242,11 @@ const convertCanvasToImage = () => {
   return canvas.toDataURL();
 };
 
-const Schedule = ({ courseOrder, jsonSched, aliases }) => {
+const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
   const classes = useStyles();
   const canvas = createRef(null);
   const [image, setImage] = useState(null);
   const [dataURL, setDataURL] = useState("");
-
-  const { values } = useFormContext();
-  const { showInstructorPref } = values;
 
   useEffect(() => {
     const schedImg = new Image();
@@ -272,11 +268,11 @@ const Schedule = ({ courseOrder, jsonSched, aliases }) => {
         image.naturalWidth,
         image.naturalHeight,
         aliases,
-        showInstructorPref
+        showInstructorNames
       );
       setDataURL(convertCanvasToImage());
     }
-  }, [courseOrder, jsonSched, image, canvas, aliases, showInstructorPref]);
+  }, [courseOrder, jsonSched, image, canvas, aliases, showInstructorNames]);
 
   return (
     <>
