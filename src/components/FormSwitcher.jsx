@@ -1,38 +1,49 @@
 import { Apartment, EventNote } from "@mui/icons-material";
-import { Box, IconButton, styled, Tooltip } from "@mui/material";
+import { Box, styled, Tab, Tabs } from "@mui/material";
 
 function UnstyledFormSwitcher({ className, onClick, view }) {
   return (
     <Box className={className}>
-      <Tooltip placement="top" title="Schedule Builder">
-        <IconButton
-          color={view === "schedule" ? "primary" : "default"}
-          name="schedule"
-          onClick={onClick}
-          size="large"
-          className="TabButton"
-        >
-          <EventNote fontSize="large" />
-        </IconButton>
-      </Tooltip>
-      <Tooltip placement="top" title="Room Schedule">
-        <IconButton
+      <Tabs>
+        <Tab
           color={view === "room" ? "primary" : "default"}
-          name="room"
-          onClick={onClick}
-          size="large"
           className="TabButton"
-        >
-          <Apartment fontSize="large" />
-        </IconButton>
-      </Tooltip>
+          name="schedule"
+          label="Scheduler Builder"
+          icon={
+            <EventNote
+              fontSize="large"
+              color={view === "schedule" ? "secondary" : "default"}
+            />
+          }
+          onClick={onClick}
+          disableRipple
+        />
+        <Tab
+          className="TabButton"
+          name="room"
+          label="Occupancy Viewer"
+          color="primary"
+          backgroundColor="primary"
+          textColor="secondary"
+          icon={
+            <Apartment
+              fontSize="large"
+              color={view === "room" ? "secondary" : "default"}
+            />
+          }
+          onClick={onClick}
+          disableRipple
+          
+        />
+      </Tabs>
     </Box>
   );
 }
 
 const FormSwitcher = styled(UnstyledFormSwitcher)({
   display: "flex",
-  justifyContent: "space-evenly",
+  justifyContent: "center",
 
   ".TabButton": {
     paddingTop: 0,

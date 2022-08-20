@@ -110,39 +110,41 @@ const Main = () => {
   };
 
   return (
-    <Box mt={3}>
-      <Grid container spacing={2}>
-        <FormProvider initialValues={initialValues}>
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardContent>
-                <FormSwitcher onClick={handleTabClick} view={view} />
-                {view === "schedule" && (
-                  <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
+    <>
+      <Box mt={3}>
+        <FormSwitcher onClick={handleTabClick} view={view} />
+        <Grid container spacing={2}>
+          <FormProvider initialValues={initialValues}>
+            <Grid item xs={12} md={4}>
+              <Card>
+                <CardContent>
+                  {view === "schedule" && (
+                    <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
+                  )}
+                  {view === "room" && (
+                    <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Card>
+                {loading ? (
+                  <LoadingCardContent />
+                ) : (
+                  <ScheduleContainer
+                    aliases={response.objects.aliases}
+                    courseOrder={courseOrder}
+                    schedules={response.objects.schedules}
+                    errorMessage={response.objects.errorMessage}
+                  />
                 )}
-                {view === "room" && (
-                  <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Card>
-              {loading ? (
-                <LoadingCardContent />
-              ) : (
-                <ScheduleContainer
-                  aliases={response.objects.aliases}
-                  courseOrder={courseOrder}
-                  schedules={response.objects.schedules}
-                  errorMessage={response.objects.errorMessage}
-                />
-              )}
-            </Card>
-          </Grid>
-        </FormProvider>
-      </Grid>
-    </Box>
+              </Card>
+            </Grid>
+          </FormProvider>
+        </Grid>
+      </Box>
+    </>
   );
 };
 
