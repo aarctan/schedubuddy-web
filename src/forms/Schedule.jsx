@@ -88,12 +88,6 @@ export const Form = (props) => {
           }
         />
         <FormControlLabel
-          label="Include online classes"
-          control={
-            <Checkbox checked={values.online} name="online" onChange={handleChange} />
-          }
-        />
-        <FormControlLabel
           label="Show instructor names"
           control={
             <Checkbox

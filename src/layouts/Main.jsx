@@ -77,7 +77,7 @@ const Main = () => {
       setCourseOrder(courses.map((course) => course.course)); // Set the courseId order for color parity between autocomplete chips and schedule canvas
       const course_ids = courses.map((course) => course.course).join(",");
       const eveningClassesBit = evening === true ? "1" : "0";
-      const onlineClassesBit = online === true ? "1" : "0";
+      const onlineClassesBit = online === true ? "1" : "1";
       //const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startPref},${consecPref},${resultSize}]`;
       //const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]&prefs=${prefsStr}`;
       const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}`;
