@@ -78,6 +78,7 @@ const drawText = (
   const slicePoint = courseName.length - `${component} ${section}`.length - 1;
   location = location ? location : classObj.location;
   location = location ? location : "TBD";
+  location = location === "Location TBD" ? "TBD" : location;
   if (!halfBlock) {
     lines.push(courseName.slice(0, slicePoint));
     lines.push(`${component} ${section} (${classId})`);
