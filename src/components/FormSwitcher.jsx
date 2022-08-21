@@ -1,53 +1,36 @@
 import { Apartment, EventNote } from "@mui/icons-material";
-import { Box, styled, Tab, Tabs } from "@mui/material";
+import { TabList } from "@mui/lab";
+import { styled } from "@mui/material";
+import Tab from "@mui/material/Tab";
 
-function UnstyledFormSwitcher({ className, onClick, view }) {
+function UnstyledFormSwitcher({ className, onChange }) {
   return (
-    <Box className={className}>
-      <Tabs>
-        <Tab
-          color={view === "room" ? "primary" : "default"}
-          className="TabButton"
-          name="schedule"
-          label="Scheduler Builder"
-          icon={
-            <EventNote
-              fontSize="large"
-              color={view === "schedule" ? "secondary" : "default"}
-            />
-          }
-          onClick={onClick}
-          disableRipple
-        />
-        <Tab
-          className="TabButton"
-          name="room"
-          label="Occupancy Viewer"
-          color="primary"
-          backgroundColor="primary"
-          textColor="secondary"
-          icon={
-            <Apartment
-              fontSize="large"
-              color={view === "room" ? "secondary" : "default"}
-            />
-          }
-          onClick={onClick}
-          disableRipple
-          
-        />
-      </Tabs>
-    </Box>
+    <TabList
+      aria-label="Schedule tools"
+      centered
+      className={className}
+      indicatorColor="secondary"
+      onChange={onChange}
+      textColor="secondary"
+    >
+      <Tab
+        disableRipple
+        icon={<EventNote fontSize="large" />}
+        label="Scheduler Builder"
+        value="schedule"
+      />
+      <Tab
+        disableRipple
+        icon={<Apartment fontSize="large" />}
+        label="Occupancy Viewer"
+        value="room"
+      />
+    </TabList>
   );
 }
 
-const FormSwitcher = styled(UnstyledFormSwitcher)({
-  display: "flex",
-  justifyContent: "center",
-
-  ".TabButton": {
-    paddingTop: 0,
-  },
-});
+const FormSwitcher = styled(UnstyledFormSwitcher)(({ theme }) => ({
+  marginBottom: theme.spacing(1),
+}));
 
 export default FormSwitcher;
