@@ -1,4 +1,5 @@
-import { Box, Card, CardContent, Grid } from "@mui/material";
+import { TabContext, TabPanel } from "@mui/lab";
+import { Card, CardContent, Grid } from "@mui/material";
 import FormSwitcher from "components/FormSwitcher";
 import LoadingCardContent from "components/LoadingCard";
 import { FormProvider } from "context/Form";
@@ -64,8 +65,8 @@ const Main = () => {
       .catch((err) => console.log(`Error fetching terms: ${err}`));
   }, []);
 
-  const handleTabClick = (e) => {
-    setView(e.currentTarget.name);
+  const handleTabClick = (_e, value) => {
+    setView(value);
   };
 
   const handleScheduleSubmit = async (values) => {
@@ -78,8 +79,6 @@ const Main = () => {
       const course_ids = courses.map((course) => course.course).join(",");
       const eveningClassesBit = evening === true ? "1" : "0";
       const onlineClassesBit = online === true ? "1" : "1";
-      //const prefsStr = `[${eveningClassesBit},${onlineClassesBit},${startPref},${consecPref},${resultSize}]`;
-      //const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]&prefs=${prefsStr}`;
       const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}`;
       const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
       const data = await fetch(req_url).then((res) => res.json());
@@ -110,41 +109,39 @@ const Main = () => {
   };
 
   return (
-    <>
-      <Box mt={3}>
-        <FormSwitcher onClick={handleTabClick} view={view} />
-        <Grid container spacing={2}>
-          <FormProvider initialValues={initialValues}>
-            <Grid item xs={12} md={4}>
-              <Card>
-                <CardContent>
-                  {view === "schedule" && (
-                    <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
-                  )}
-                  {view === "room" && (
-                    <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
-                  )}
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Card>
-                {loading ? (
-                  <LoadingCardContent />
-                ) : (
-                  <ScheduleContainer
-                    aliases={response.objects.aliases}
-                    courseOrder={courseOrder}
-                    schedules={response.objects.schedules}
-                    errorMessage={response.objects.errorMessage}
-                  />
-                )}
-              </Card>
-            </Grid>
-          </FormProvider>
-        </Grid>
-      </Box>
-    </>
+    <TabContext value={view}>
+      <FormSwitcher onChange={handleTabClick} view={view} />
+      <Grid container spacing={2}>
+        <FormProvider initialValues={initialValues}>
+          <Grid item xs={12} md={4}>
+            <Card>
+              <CardContent>
+                <TabPanel value="schedule">
+                  <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
+                </TabPanel>
+                <TabPanel value="room">
+                  <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
+                </TabPanel>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Card>
+              {loading ? (
+                <LoadingCardContent />
+              ) : (
+                <ScheduleContainer
+                  aliases={response.objects.aliases}
+                  courseOrder={courseOrder}
+                  schedules={response.objects.schedules}
+                  errorMessage={response.objects.errorMessage}
+                />
+              )}
+            </Card>
+          </Grid>
+        </FormProvider>
+      </Grid>
+    </TabContext>
   );
 };
 
