@@ -1,6 +1,6 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
 import InstagramIcon from "@mui/icons-material/Instagram";
-import { IconButton } from "@mui/material";
+import { IconButton, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +39,9 @@ const Footer = () => {
       >
         <InstagramIcon fontSize="large" />
       </IconButton>
+      <Typography variant="body2">
+        <div>Please report issues on GitHub or DM on Instagram</div>
+      </Typography>
     </footer>
   );
 };
