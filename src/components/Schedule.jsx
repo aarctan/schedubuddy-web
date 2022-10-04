@@ -92,15 +92,21 @@ const drawText = (
   }
   if (!halfBlock) lines.push(location);
   if (drawInstructorText) {
-    const instructorsArray = JSON.parse(classObj.instructorName.replace(/'/g, '"'));
-    const instructorName = instructorsArray[0];
-    const instructorNames = instructorName.split(" ");
-    const lastName = instructorNames[instructorNames.length - 1];
-    const instructorText =
-      instructorNames
-        .slice(0, -1)
-        .map((n) => n[0] + ". ")
-        .join("") + lastName;
+    // JSON parsing can error out, temporary fix until API response adjusted
+    let instructorText = "";
+    try {
+      const instructorsArray = JSON.parse(classObj.instructorName.replace(/'/g, '"'));
+      const instructorName = instructorsArray[0];
+      const instructorNames = instructorName.split(" ");
+      const lastName = instructorNames[instructorNames.length - 1];
+      instructorText =
+        instructorNames
+          .slice(0, -1)
+          .map((n) => n[0] + ". ")
+          .join("") + lastName;
+    } catch (error) {
+      console.log(`error parsing ${classObj.instructorName}`);
+    }
     lines.push(instructorText.toUpperCase());
   }
   ctx.fillStyle = blackColor;
