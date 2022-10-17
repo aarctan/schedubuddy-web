@@ -138,10 +138,9 @@ const drawSchedule = (
   const uniqueCourseOrder = [...new Set(courseOrder)]
   let courseColorMap = uniqueCourseOrder.reduce((colorMap, courseId, i) => {
     colorMap[courseId] = colorOrder[i % colorOrder.length];
-    console.log(courseId, colorMap[courseId])
     return colorMap;
   }, {});
-  
+
   for (var classObj of jsonSched) {
     classObj = classObj.objects;
     const courseId = classObj.course;
