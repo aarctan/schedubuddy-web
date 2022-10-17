@@ -135,11 +135,13 @@ const drawSchedule = (
   let max_y = -2147483648;
 
   // Define a courseId to color mapping
-  let courseColorMap = courseOrder.reduce((colorMap, courseId, i) => {
+  const uniqueCourseOrder = [...new Set(courseOrder)]
+  let courseColorMap = uniqueCourseOrder.reduce((colorMap, courseId, i) => {
     colorMap[courseId] = colorOrder[i % colorOrder.length];
+    console.log(courseId, colorMap[courseId])
     return colorMap;
   }, {});
-
+  
   for (var classObj of jsonSched) {
     classObj = classObj.objects;
     const courseId = classObj.course;
