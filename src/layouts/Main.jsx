@@ -108,8 +108,6 @@ const Main = () => {
         }
         return -1;
       })
-      console.log(data.objects.schedules[0])
-      console.log(roomSchedule)
       setCourseOrder(
         roomSchedule.map((courseObj) => courseObj.objects.course)
       );
