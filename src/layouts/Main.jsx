@@ -98,8 +98,18 @@ const Main = () => {
       const req_url = `${API_URL}/api/v1/room-sched/?term=${roomTerm}&room=${room.location}`;
       const data = await fetch(req_url).then((res) => res.json());
       setResponse(data);
+      const roomSchedule = data.objects.schedules[0].slice().sort((a, b) => {
+        a = a.objects.course.split(" ");
+        b = b.objects.course.split(" ");
+        if (a[0] > b[0]) {
+          return 1;
+        } else if (a[0] === b[0]) {
+          return a[1] > b[1];
+        }
+        return -1;
+      })
       setCourseOrder(
-        data.objects.schedules[0].map((courseObj) => courseObj.objects.course)
+        roomSchedule.map((courseObj) => courseObj.objects.course)
       );
     } catch (err) {
       console.log(`Error fetching room schedules: ${err}`);
