@@ -14,7 +14,7 @@ const initialValues = {
   // Schedule builder
   scheduleTerm: "",
   courses: [],
-  evening: false,
+  evening: true,
   online: false,
   showNames: false,
   startPref: "10:00 AM",

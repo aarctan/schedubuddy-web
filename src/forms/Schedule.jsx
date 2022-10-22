@@ -118,7 +118,7 @@ export const Form = (props) => {
           type="submit"
           variant="contained"
         >
-          Show Timetable
+          Get Schedules
         </Button>
       </div>
     </Stack>
