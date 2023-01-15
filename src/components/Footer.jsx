@@ -1,6 +1,5 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import { IconButton, Typography } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -36,12 +35,7 @@ const Footer = () => {
         aria-label="github-link"
         className={classes.iconButton}
         href="https://www.instagram.com/aaarctan/"
-      >
-        <InstagramIcon fontSize="large" />
-      </IconButton>
-      <Typography variant="body2">
-        <div>Please report issues on GitHub or DM on Instagram</div>
-      </Typography>
+      ></IconButton>
     </footer>
   );
 };
