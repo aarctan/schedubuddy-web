@@ -1,6 +1,7 @@
-# schedubuddy-web
-
-The webapp frontend developed for
+# Schedubuddy
+Thank you for using Schedubuddy. This project is still actively maintained, so please report any issues in this repository.
+#
+This is the webapp frontend developed for
 [schedubuddy](https://schedubuddy.com/)
 with
 [ReactJS](https://reactjs.org/)
