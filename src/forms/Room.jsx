@@ -1,5 +1,4 @@
 import { Autocomplete, Button, TextField } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import { Stack } from "@mui/system";
 import BasicSelect from "components/FormInputs/BasicSelect";
 import { useFormContext } from "context/Form";
@@ -7,15 +6,7 @@ import { useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const useStyles = makeStyles((theme) => ({
-  buttonContainer: {
-    textAlign: "center",
-  },
-}));
-
 export const Form = (props) => {
-  const classes = useStyles();
-
   const { values, handleChange, setValues } = useFormContext();
   const [roomOptions, setRoomOptions] = useState([]);
 
@@ -71,7 +62,7 @@ export const Form = (props) => {
         value={values.room}
         noOptionsText="Select a term to see locations"
       />
-      <div className={classes.buttonContainer}>
+      <div style={{ textAlign: "center" }}>
         <Button
           color="secondary"
           disabled={values.room === null}

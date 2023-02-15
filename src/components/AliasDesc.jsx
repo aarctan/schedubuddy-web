@@ -1,18 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    marginTop: theme.spacing(1),
-    width: "90%",
-  },
-}));
-
-const AliasDesc = ({ aliases, schedule }) => {
-  const classes = useStyles();
-
+const UnstyledAliasDesc = ({ className, aliases, schedule }) => {
   const aliasMap = (classObj) => {
     const classId = classObj.class;
     if (classId in aliases) {
@@ -24,7 +13,7 @@ const AliasDesc = ({ aliases, schedule }) => {
   };
 
   return (
-    <Box className={classes.root}>
+    <Box className={className}>
       <Typography key="Note" variant="caption">
         Note:
       </Typography>
@@ -36,5 +25,12 @@ const AliasDesc = ({ aliases, schedule }) => {
     </Box>
   );
 };
+
+const AliasDesc = styled(UnstyledAliasDesc)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  marginTop: theme.spacing(1),
+  width: "90%",
+}));
 
 export default AliasDesc;
