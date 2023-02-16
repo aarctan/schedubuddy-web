@@ -11,12 +11,18 @@ This webapp receives university schedules tailored to the user and displays them
 **For the back-end, please refer to this [repository](https://github.com/Exanut/schedubuddy-server).**
 
 ### Usage
-This webapp was designed to be lightweight and intuitive yet also powerful.
+This webapp was designed to be lightweight and intuitive yet also powerful. You can build schedules and view room occupancy.
+
 To try it out, simply select an academic term, enter courses from the autocomplete, tune your preferences, and press "Get Schedules".
 After a few seconds of searching, the top schedules will be displayed in the order given by the ranking algorithm.
 Every schedule will be unique-looking, so that a variety of schedules can be given.
 
+#### Schedule Builder
 ![schedubuddy.com example usage](https://i.imgur.com/tw9GYEn.png)
+
+#### Room Viewer
+
+![schedubuddy_room_viewer](https://user-images.githubusercontent.com/69830467/219287065-db1c59ca-2c31-402d-a7d6-4e8196db3913.PNG)
 
 ### Tech
 Website built with [ReactJS](https://reactjs.org/) and [Material-UI](https://next.material-ui.com/), and hosted on [Netlify](https://www.netlify.com/).
