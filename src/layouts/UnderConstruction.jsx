@@ -1,27 +1,15 @@
-import { AppBar, makeStyles, Toolbar, Typography } from "@mui/material";
-
-const useStyles = makeStyles({
-  root: {
-    flexGrow: 1,
-  },
-  appbar: {
-    position: "absolute",
-    color: "secondary",
-    alignItems: "center",
-  },
-  typography: {
-    flexGrow: 1,
-    textAlign: "center",
-  },
-});
+import { AppBar, Toolbar, Typography } from "@mui/material";
 
 export default function Footer() {
-  const classes = useStyles();
   return (
-    <div className={classes.root}>
+    <div style={{ flexGrow: 1 }}>
       <AppBar color="secondary">
         <Toolbar>
-          <Typography color="inherit" variant="h6" className={classes.typography}>
+          <Typography
+            color="inherit"
+            variant="h6"
+            sx={{ flexGrow: 1, textAlign: "center" }}
+          >
             Thank you for using schedubuddy. This website will go down on May 25, 2022.
           </Typography>
         </Toolbar>

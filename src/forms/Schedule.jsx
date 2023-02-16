@@ -6,7 +6,6 @@ import {
   Slider,
   Typography,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import { Stack } from "@mui/system";
 import ChipAutoComplete from "components/ChipAutoComplete";
 import BasicSelect from "components/FormInputs/BasicSelect";
@@ -22,15 +21,7 @@ const sortObj = (objects) =>
     a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
   );
 
-const useStyles = makeStyles(() => ({
-  buttonContainer: {
-    textAlign: "center",
-  },
-}));
-
 export const Form = (props) => {
-  const classes = useStyles();
-
   const { values, handleChange, setValues } = useFormContext();
   const [courseOptions, setCourseOptions] = useState([]);
 
@@ -110,7 +101,7 @@ export const Form = (props) => {
           value={values.resultSize}
         />
       </div>
-      <div className={classes.buttonContainer}>
+      <div style={{ textAlign: "center" }}>
         <Button
           color="secondary"
           disabled={values.courses.length === 0}

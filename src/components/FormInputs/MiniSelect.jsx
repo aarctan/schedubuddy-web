@@ -1,21 +1,12 @@
 import { Grid, InputLabel } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { styled } from "@mui/material";
 import BasicSelect from "./BasicSelect";
 
-const useStyles = makeStyles((theme) => ({
-  label: {
-    color: theme.palette.text.primary,
-    whiteSpace: "normal",
-  },
-}));
-
-const MiniSelect = ({ label, ...rest }) => {
-  const classes = useStyles();
-
+const UnstyledMiniSelect = ({ className, label, ...rest }) => {
   return (
     <Grid container direction="row" justifyContent="space-between" alignItems="center">
       <Grid item xs={12} lg={6}>
-        <InputLabel className={classes.label}>{label}</InputLabel>
+        <InputLabel className={className}>{label}</InputLabel>
       </Grid>
       <Grid item xs={12} lg={4}>
         <BasicSelect {...rest} />
@@ -23,5 +14,10 @@ const MiniSelect = ({ label, ...rest }) => {
     </Grid>
   );
 };
+
+const MiniSelect = styled(UnstyledMiniSelect)(({ theme }) => ({
+  color: theme.palette.text.primary,
+  whiteSpace: "normal",
+}));
 
 export default MiniSelect;

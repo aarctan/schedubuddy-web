@@ -3,7 +3,7 @@ import { TabList } from "@mui/lab";
 import { styled } from "@mui/material";
 import Tab from "@mui/material/Tab";
 
-function UnstyledFormSwitcher({ className, onChange }) {
+const UnstyledFormSwitcher = ({ className, onChange }) => {
   return (
     <TabList
       aria-label="Schedule tools"
@@ -27,7 +27,7 @@ function UnstyledFormSwitcher({ className, onChange }) {
       />
     </TabList>
   );
-}
+};
 
 const FormSwitcher = styled(UnstyledFormSwitcher)(({ theme }) => ({
   marginBottom: theme.spacing(1),

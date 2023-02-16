@@ -1,20 +1,17 @@
 import { CardContent, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import AliasDesc from "components/AliasDesc";
 import Paging from "components/Paging";
 import Schedule from "components/Schedule";
 import { useState } from "react";
+import { styled } from "@mui/material";
 
-const useStyles = makeStyles({
-  content: {
-    alignItems: "center",
-    display: "flex",
-    justifyContent: "center",
-  },
-});
-
-const ScheduleContainer = ({ courseOrder, schedules, aliases, errorMessage }) => {
-  const classes = useStyles();
+const UnstyledScheduleContainer = ({
+  className,
+  courseOrder,
+  schedules,
+  aliases,
+  errorMessage,
+}) => {
   const [showInstructorNames, setShowInstructorNames] = useState(true);
   const [page, setPage] = useState(0);
 
@@ -34,8 +31,8 @@ const ScheduleContainer = ({ courseOrder, schedules, aliases, errorMessage }) =>
   };
 
   return (
-    <CardContent className={classes.content}>
-      <Grid container direction="column" className={classes.content}>
+    <CardContent className={className}>
+      <Grid container direction="column" className={className}>
         {schedules.length > 0 && (
           <Paging onChange={handlePageChange} pages={schedules.length} />
         )}
@@ -69,5 +66,11 @@ const ScheduleContainer = ({ courseOrder, schedules, aliases, errorMessage }) =>
     </CardContent>
   );
 };
+
+const ScheduleContainer = styled(UnstyledScheduleContainer)(() => ({
+  alignItems: "center",
+  display: "flex",
+  justifyContent: "center",
+}));
 
 export default ScheduleContainer;

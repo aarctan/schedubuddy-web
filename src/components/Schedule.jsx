@@ -1,14 +1,4 @@
-import { makeStyles } from "@mui/styles";
 import { createRef, useEffect, useState } from "react";
-
-const useStyles = makeStyles({
-  Media: {
-    height: "auto",
-    width: "auto",
-    maxHeight: "90%",
-    maxWidth: "90%",
-  },
-});
 
 const leftMarginOffset = 148;
 const topMarginOffset = 90;
@@ -135,7 +125,7 @@ const drawSchedule = (
   let max_y = -2147483648;
 
   // Define a courseId to color mapping
-  const uniqueCourseOrder = [...new Set(courseOrder)]
+  const uniqueCourseOrder = [...new Set(courseOrder)];
   let courseColorMap = uniqueCourseOrder.reduce((colorMap, courseId, i) => {
     colorMap[courseId] = colorOrder[i % colorOrder.length];
     return colorMap;
@@ -250,7 +240,6 @@ const convertCanvasToImage = () => {
 };
 
 const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
-  const classes = useStyles();
   const canvas = createRef(null);
   const [image, setImage] = useState(null);
   const [dataURL, setDataURL] = useState("");
@@ -285,8 +274,13 @@ const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
     <>
       <img
         src={dataURL}
-        className={classes.Media}
-        style={{ visibility: dataURL ? "visible" : "hidden" }}
+        style={{
+          height: "auto",
+          width: "auto",
+          maxHeight: "90%",
+          maxWidth: "90%",
+          visibility: dataURL ? "visible" : "hidden",
+        }}
         alt="schedule"
       ></img>
       <canvas hidden id="canvas" ref={canvas}></canvas>
