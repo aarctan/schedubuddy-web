@@ -1,4 +1,4 @@
-import { Autocomplete, Button, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import BasicSelect from "components/FormInputs/BasicSelect";
 import { useFormContext } from "context/Form";
@@ -62,7 +62,7 @@ export const Form = (props) => {
         value={values.room}
         noOptionsText="Select a term to see locations"
       />
-      <div style={{ textAlign: "center" }}>
+      <Box sx={{ textAlign: "center" }}>
         <Button
           color="secondary"
           disabled={values.room === null}
@@ -72,7 +72,7 @@ export const Form = (props) => {
         >
           Show Timetable
         </Button>
-      </div>
+      </Box>
     </Stack>
   );
 };

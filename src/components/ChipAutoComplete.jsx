@@ -38,7 +38,7 @@ const ChipAutoComplete = (props) => {
         value.map((option, index) => (
           <Chip
             variant="outlined"
-            style={{ backgroundColor: colorOrder[index % colorOrder.length] }}
+            sx={{ backgroundColor: colorOrder[index % colorOrder.length] }}
             label={`${option.asString}`}
             {...getTagProps({ index })}
           />

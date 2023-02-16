@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Checkbox,
   FormControlLabel,
@@ -101,7 +102,7 @@ export const Form = (props) => {
           value={values.resultSize}
         />
       </div>
-      <div style={{ textAlign: "center" }}>
+      <Box sx={{ textAlign: "center" }}>
         <Button
           color="secondary"
           disabled={values.courses.length === 0}
@@ -111,7 +112,7 @@ export const Form = (props) => {
         >
           Get Schedules
         </Button>
-      </div>
+      </Box>
     </Stack>
   );
 };

@@ -6,7 +6,7 @@ export default function Paging(props) {
   return (
     <Stack spacing={2}>
       <Pagination
-        style={{ marginBottom: "2%" }}
+        sx={{ marginBottom: "2%" }}
         variant="outlined"
         color="primary"
         size={isSmallScreen ? "small" : "medium"}

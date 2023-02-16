@@ -1,8 +1,8 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Toolbar, Typography } from "@mui/material";
 
 export default function Footer() {
   return (
-    <div style={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar color="secondary">
         <Toolbar>
           <Typography
@@ -14,6 +14,6 @@ export default function Footer() {
           </Typography>
         </Toolbar>
       </AppBar>
-    </div>
+    </Box>
   );
 }
