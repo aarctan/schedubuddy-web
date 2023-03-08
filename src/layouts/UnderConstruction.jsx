@@ -10,7 +10,7 @@ export default function Footer() {
             variant="h6"
             sx={{ flexGrow: 1, textAlign: "center" }}
           >
-            Thank you for using schedubuddy. This website will go down on May 25, 2022.
+            The catalog recently updated - some classes may currently be missing here
           </Typography>
         </Toolbar>
       </AppBar>

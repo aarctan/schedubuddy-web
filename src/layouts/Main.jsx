@@ -1,11 +1,12 @@
 import { TabContext, TabPanel } from "@mui/lab";
-import { Card, CardContent, Grid } from "@mui/material";
+import { Box, Card, CardContent, Grid } from "@mui/material";
 import FormSwitcher from "components/FormSwitcher";
 import LoadingCardContent from "components/LoadingCard";
 import { FormProvider } from "context/Form";
 import { Form as RoomForm } from "forms/Room";
 import { Form as ScheduleForm } from "forms/Schedule";
 import ScheduleContainer from "layouts/ScheduleContainer";
+import UnderConstruction from "./UnderConstruction";
 import { useEffect, useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -119,6 +120,11 @@ const Main = () => {
   };
 
   return (
+    <>
+    <div>
+      <UnderConstruction/>
+    </div>
+    <Box mt={10}>
     <TabContext value={view}>
       <FormSwitcher onChange={handleTabClick} view={view} />
       <Grid container spacing={2}>
@@ -152,6 +158,8 @@ const Main = () => {
         </FormProvider>
       </Grid>
     </TabContext>
+    </Box>
+    </>
   );
 };
 
