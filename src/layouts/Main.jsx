@@ -1,12 +1,11 @@
 import { TabContext, TabPanel } from "@mui/lab";
-import { Box, Card, CardContent, Grid } from "@mui/material";
+import { Card, CardContent, Grid } from "@mui/material";
 import FormSwitcher from "components/FormSwitcher";
 import LoadingCardContent from "components/LoadingCard";
 import { FormProvider } from "context/Form";
 import { Form as RoomForm } from "forms/Room";
 import { Form as ScheduleForm } from "forms/Schedule";
 import ScheduleContainer from "layouts/ScheduleContainer";
-import UnderConstruction from "./UnderConstruction";
 import { useEffect, useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -125,46 +124,39 @@ const Main = () => {
   };
 
   return (
-    <>
-      <div>
-        <UnderConstruction />
-      </div>
-      <Box mt={10}>
-        <TabContext value={view}>
-          <FormSwitcher onChange={handleTabClick} view={view} />
-          <Grid container spacing={2}>
-            <FormProvider initialValues={initialValues}>
-              <Grid item xs={12} md={4}>
-                <Card>
-                  <CardContent>
-                    <TabPanel value="schedule">
-                      <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
-                    </TabPanel>
-                    <TabPanel value="room">
-                      <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
-                    </TabPanel>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <Card>
-                  {loading ? (
-                    <LoadingCardContent />
-                  ) : (
-                    <ScheduleContainer
-                      aliases={response.objects.aliases}
-                      courseOrder={courseOrder}
-                      schedules={response.objects.schedules}
-                      errorMessage={response.objects.errorMessage}
-                    />
-                  )}
-                </Card>
-              </Grid>
-            </FormProvider>
+    <TabContext value={view}>
+      <FormSwitcher onChange={handleTabClick} view={view} />
+      <Grid container spacing={2}>
+        <FormProvider initialValues={initialValues}>
+          <Grid item xs={12} md={4}>
+            <Card>
+              <CardContent>
+                <TabPanel value="schedule">
+                  <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
+                </TabPanel>
+                <TabPanel value="room">
+                  <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
+                </TabPanel>
+              </CardContent>
+            </Card>
           </Grid>
-        </TabContext>
-      </Box>
-    </>
+          <Grid item xs={12} md={8}>
+            <Card>
+              {loading ? (
+                <LoadingCardContent />
+              ) : (
+                <ScheduleContainer
+                  aliases={response.objects.aliases}
+                  courseOrder={courseOrder}
+                  schedules={response.objects.schedules}
+                  errorMessage={response.objects.errorMessage}
+                />
+              )}
+            </Card>
+          </Grid>
+        </FormProvider>
+      </Grid>
+    </TabContext>
   );
 };
 
