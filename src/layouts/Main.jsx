@@ -126,11 +126,11 @@ const Main = () => {
   return (
     <TabContext value={view}>
       <FormSwitcher onChange={handleTabClick} view={view} />
-      <Grid container spacing={2}>
+      <Grid container spacing={2} justifyContent="center">
         <FormProvider initialValues={initialValues}>
           <Grid item xs={12} md={4}>
             <Card>
-              <CardContent>
+              <CardContent sx={{m: -2}}>
                 <TabPanel value="schedule">
                   <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
                 </TabPanel>

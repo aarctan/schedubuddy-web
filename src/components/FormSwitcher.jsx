@@ -16,7 +16,7 @@ const UnstyledFormSwitcher = ({ className, onChange }) => {
       <Tab
         disableRipple
         icon={<EventNote fontSize="large" />}
-        label="Scheduler Builder"
+        label="Schedule Builder"
         value="schedule"
       />
       <Tab

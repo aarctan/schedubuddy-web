@@ -58,6 +58,9 @@ export const Form = (props) => {
 
   return (
     <Stack component="form" m={1} onSubmit={handleSubmit} spacing={0.5}>
+      <Typography variant="body2">
+        <div align="center">View possible schedules for a list of courses</div>
+      </Typography>
       <BasicSelect
         isObj
         label="Select a term"
@@ -67,7 +70,7 @@ export const Form = (props) => {
         value={values.scheduleTerm}
       />
       <ChipAutoComplete
-        label="Enter courses"
+        label="Enter courses (e.g. CMPUT 174, STAT 151, ...)"
         onChange={handleCourseChange}
         options={courseOptions}
         value={values.courses}

@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Button, TextField } from "@mui/material";
+import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import BasicSelect from "components/FormInputs/BasicSelect";
 import { useFormContext } from "context/Form";
@@ -38,6 +38,9 @@ export const Form = (props) => {
 
   return (
     <Stack component="form" m={1} onSubmit={handleSubmit} spacing={0.5}>
+      <Typography variant="body2">
+        <div align="center">View classes that occur in a lecture room</div>
+      </Typography>
       <BasicSelect
         isObj
         label="Select a term"

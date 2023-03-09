@@ -1,4 +1,6 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
+import InstagramIcon from "@mui/icons-material/Instagram";
+
 import { IconButton } from "@mui/material";
 import { styled } from "@mui/material";
 
@@ -6,6 +8,7 @@ const UnstyledFooter = ({ className }) => {
   return (
     <footer className={className}>
       <IconButton
+        color="secondary"
         sx={{ padding: "4px" }}
         aria-label="github-link"
         href="https://github.com/Exanut/schedubuddy-web"
@@ -14,10 +17,13 @@ const UnstyledFooter = ({ className }) => {
       </IconButton>
 
       <IconButton
+        color="secondary"
         sx={{ padding: "4px" }}
         aria-label="github-link"
         href="https://www.instagram.com/aaarctan/"
-      ></IconButton>
+      >
+        <InstagramIcon fontSize="large" />
+      </IconButton>
     </footer>
   );
 };
