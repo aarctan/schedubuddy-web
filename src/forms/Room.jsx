@@ -38,8 +38,8 @@ export const Form = (props) => {
 
   return (
     <Stack component="form" m={1} onSubmit={handleSubmit} spacing={0.5}>
-      <Typography variant="body2">
-        <div align="center">View classes that occur in a lecture room</div>
+      <Typography textAlign="center" variant="body2">
+        View classes that occur in a lecture room
       </Typography>
       <BasicSelect
         isObj
@@ -51,7 +51,6 @@ export const Form = (props) => {
       />
       <Autocomplete
         autoHighlight
-        sx={{ width: "100%", marginTop: "-2%" }}
         onChange={handleRoomChange}
         options={roomOptions}
         getOptionLabel={(o) => o.location}
