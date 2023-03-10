@@ -37,7 +37,7 @@ export const Form = (props) => {
   };
 
   return (
-    <Stack component="form" m={1} onSubmit={handleSubmit} spacing={0.5}>
+    <Stack component="form" onSubmit={handleSubmit} spacing={2}>
       <Typography textAlign="center" variant="body2">
         View classes that occur in a lecture room
       </Typography>
@@ -55,11 +55,7 @@ export const Form = (props) => {
         options={roomOptions}
         getOptionLabel={(o) => o.location}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            margin="normal"
-            label={"Select a room (e.g. CCIS 1-140)"}
-          />
+          <TextField {...params} label={"Select a room (e.g. CCIS 1-140)"} />
         )}
         value={values.room}
         noOptionsText="Select a term to see locations"
@@ -68,7 +64,6 @@ export const Form = (props) => {
         <Button
           color="secondary"
           disabled={values.room === null}
-          sx={{ mt: 1 }}
           type="submit"
           variant="contained"
         >

@@ -1,4 +1,4 @@
-import { Apartment, EventNote } from "@mui/icons-material";
+import { Apartment, ContentPasteSearchOutlined, EventNote } from "@mui/icons-material";
 import { TabList } from "@mui/lab";
 import { styled } from "@mui/material";
 import Tab from "@mui/material/Tab";
@@ -17,13 +17,19 @@ const UnstyledFormSwitcher = ({ className, onChange }) => {
         disableRipple
         icon={<EventNote fontSize="large" />}
         label="Schedule Builder"
-        value="schedule"
+        value="scheduleBuilder"
       />
       <Tab
         disableRipple
         icon={<Apartment fontSize="large" />}
         label="Occupancy Viewer"
-        value="room"
+        value="occupancyViewer"
+      />
+      <Tab
+        disableRipple
+        icon={<ContentPasteSearchOutlined fontSize="large" />}
+        label="Occupancy Finder"
+        value="occupancyFinder"
       />
     </TabList>
   );

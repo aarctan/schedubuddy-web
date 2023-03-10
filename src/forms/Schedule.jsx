@@ -57,7 +57,7 @@ export const Form = (props) => {
   };
 
   return (
-    <Stack component="form" m={1} onSubmit={handleSubmit} spacing={0.5}>
+    <Stack component="form" onSubmit={handleSubmit} spacing={2}>
       <Typography textAlign="center" variant="body2">
         View possible schedules for a list of courses
       </Typography>

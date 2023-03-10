@@ -3,6 +3,7 @@ import { Card, CardContent, Grid } from "@mui/material";
 import FormSwitcher from "components/FormSwitcher";
 import LoadingCardContent from "components/LoadingCard";
 import { FormProvider } from "context/Form";
+import { Form as FreeRoomForm } from "forms/FreeRoom";
 import { Form as RoomForm } from "forms/Room";
 import { Form as ScheduleForm } from "forms/Schedule";
 import ScheduleContainer from "layouts/ScheduleContainer";
@@ -21,9 +22,15 @@ const initialValues = {
   consecPref: 2,
   resultSize: 30,
 
-  // Room lookup
+  // Room schedule lookup
   roomTerm: "",
   room: null,
+
+  // Free room lookup
+  freeRoomTerm: "",
+  freeRoomDay: "",
+  freeRoomStartTime: "",
+  freeRoomEndTime: "",
 };
 
 // Initial generate schedule response state
@@ -63,7 +70,7 @@ const Main = () => {
   const [terms, setTerms] = useState([]);
   const [response, setResponse] = useState(blankResponse);
   const [courseOrder, setCourseOrder] = useState([]);
-  const [view, setView] = useState("schedule");
+  const [view, setView] = useState("scheduleBuilder");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -123,6 +130,10 @@ const Main = () => {
     }
   };
 
+  const handleFreeRoomSubmit = async (values) => {
+    // TODO:
+  };
+
   return (
     <TabContext value={view}>
       <FormSwitcher onChange={handleTabClick} view={view} />
@@ -131,11 +142,14 @@ const Main = () => {
           <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
-                <TabPanel value="schedule">
+                <TabPanel value="scheduleBuilder" sx={{ p: 1 }}>
                   <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
                 </TabPanel>
-                <TabPanel value="room">
+                <TabPanel value="occupancyViewer" sx={{ p: 1 }}>
                   <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
+                </TabPanel>
+                <TabPanel value="occupancyFinder" sx={{ p: 1 }}>
+                  <FreeRoomForm terms={terms} onSubmit={handleFreeRoomSubmit} />
                 </TabPanel>
               </CardContent>
             </Card>
