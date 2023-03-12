@@ -1,11 +1,7 @@
-import { Autocomplete, Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import BasicSelect from "components/FormInputs/BasicSelect";
-import TimePick from "components/TimePick";
 import { useFormContext } from "context/Form";
-import { useState } from "react";
-
-const API_URL = process.env.REACT_APP_API_URL;
 
 const dayOptions = [
   { label: "Sunday", value: "U" },
@@ -18,17 +14,17 @@ const dayOptions = [
 ];
 
 const timeOptions = [
-  { label: "8 AM", value: "8:00 AM" },
-  { label: "9 AM", value: "9:00 AM" },
+  { label: "8 AM", value: "08:00 AM" },
+  { label: "9 AM", value: "09:00 AM" },
   { label: "10 AM", value: "10:00 AM" },
   { label: "11 AM", value: "11:00 AM" },
   { label: "12 PM", value: "12:00 PM" },
-  { label: "1 PM", value: "1:00 PM" },
-  { label: "2 PM", value: "2:00 PM" },
-  { label: "3 PM", value: "3:00 PM" },
-  { label: "4 PM", value: "4:00 PM" },
-  { label: "5 PM", value: "5:00 PM" },
-  { label: "6 PM", value: "6:00 PM" },
+  { label: "1 PM", value: "01:00 PM" },
+  { label: "2 PM", value: "02:00 PM" },
+  { label: "3 PM", value: "03:00 PM" },
+  { label: "4 PM", value: "04:00 PM" },
+  { label: "5 PM", value: "05:00 PM" },
+  { label: "6 PM", value: "06:00 PM" },
 ];
 
 export const Form = (props) => {
@@ -36,8 +32,7 @@ export const Form = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // props.onSubmit(values);
-    console.log(values);
+    props.onSubmit(values);
   };
 
   return (
@@ -82,9 +77,9 @@ export const Form = (props) => {
           color="secondary"
           disabled={
             values.freeRoomTerm === "" ||
-            values.freeRoomDay == "" ||
-            values.freeRoomStartTime == "" ||
-            values.freeRoomEndTime == ""
+            values.freeRoomDay === "" ||
+            values.freeRoomStartTime === "" ||
+            values.freeRoomEndTime === ""
           }
           type="submit"
           variant="contained"
