@@ -3,8 +3,10 @@ import { Card, CardContent, Grid } from "@mui/material";
 import FormSwitcher from "components/FormSwitcher";
 import LoadingCardContent from "components/LoadingCard";
 import { FormProvider } from "context/Form";
+import { Form as FreeRoomForm } from "forms/FreeRoom";
 import { Form as RoomForm } from "forms/Room";
 import { Form as ScheduleForm } from "forms/Schedule";
+import FreeRoomContainer from "layouts/FreeRoomContainer";
 import ScheduleContainer from "layouts/ScheduleContainer";
 import { useEffect, useState } from "react";
 
@@ -21,9 +23,15 @@ const initialValues = {
   consecPref: 2,
   resultSize: 30,
 
-  // Room lookup
+  // Room schedule lookup
   roomTerm: "",
   room: null,
+
+  // Free room lookup
+  freeRoomTerm: "",
+  freeRoomDay: "",
+  freeRoomStartTime: "",
+  freeRoomEndTime: "",
 };
 
 // Initial generate schedule response state
@@ -61,9 +69,10 @@ const fetchTerms = async () => {
 
 const Main = () => {
   const [terms, setTerms] = useState([]);
-  const [response, setResponse] = useState(blankResponse);
+  const [scheduleResponse, setScheduleResponse] = useState(blankResponse); // ScheduleBuilder and OccupancyViewer result state
+  const [freeRooms, setFreeRooms] = useState([]);
   const [courseOrder, setCourseOrder] = useState([]);
-  const [view, setView] = useState("schedule");
+  const [view, setView] = useState("scheduleBuilder");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -89,7 +98,7 @@ const Main = () => {
       const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}`;
       const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
       const data = await fetch(req_url).then((res) => res.json());
-      setResponse(data);
+      setScheduleResponse(data);
     } catch (err) {
       console.log(`Error fetching generated schedules: ${err}`);
     } finally {
@@ -104,7 +113,7 @@ const Main = () => {
       setLoading(true);
       const req_url = `${API_URL}/api/v1/room-sched/?term=${roomTerm}&room=${room.location}`;
       const data = await fetch(req_url).then((res) => res.json());
-      setResponse(data);
+      setScheduleResponse(data);
       const roomSchedule = data.objects.schedules[0].slice().sort((a, b) => {
         a = a.objects.course.split(" ");
         b = b.objects.course.split(" ");
@@ -123,36 +132,67 @@ const Main = () => {
     }
   };
 
+  const handleFreeRoomSubmit = async (values) => {
+    const url = new URL(`${API_URL}api/all-rooms-open`);
+    url.searchParams.set("term", values.freeRoomTerm);
+    url.searchParams.set("weekday", values.freeRoomDay);
+    url.searchParams.set("starttime", values.freeRoomStartTime);
+    url.searchParams.set("endtime", values.freeRoomEndTime);
+
+    try {
+      setLoading(true);
+      const data = await fetch(url).then((res) => res.json());
+      setFreeRooms(Object.entries(data.available_rooms)); // Building/RoomData key value pairs
+    } catch (err) {
+      console.log(`Error fetching free rooms: ${err}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Change right side card depending on tab
+  let InfoCard;
+  switch (view) {
+    case "scheduleBuilder":
+    case "occupancyViewer":
+      InfoCard = (
+        <ScheduleContainer
+          aliases={scheduleResponse.objects.aliases}
+          courseOrder={courseOrder}
+          schedules={scheduleResponse.objects.schedules}
+          errorMessage={scheduleResponse.objects.errorMessage}
+        />
+      );
+      break;
+    case "occupancyFinder":
+      InfoCard = <FreeRoomContainer roomData={freeRooms} />;
+      break;
+    default:
+      break;
+  }
+
   return (
     <TabContext value={view}>
       <FormSwitcher onChange={handleTabClick} view={view} />
-      <Grid container spacing={2} justifyContent="center">
+      <Grid container spacing={2}>
         <FormProvider initialValues={initialValues}>
           <Grid item xs={12} md={4}>
             <Card>
-              <CardContent sx={{m: -2}}>
-                <TabPanel value="schedule">
+              <CardContent>
+                <TabPanel value="scheduleBuilder" sx={{ p: 1 }}>
                   <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
                 </TabPanel>
-                <TabPanel value="room">
+                <TabPanel value="occupancyViewer" sx={{ p: 1 }}>
                   <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
+                </TabPanel>
+                <TabPanel value="occupancyFinder" sx={{ p: 1 }}>
+                  <FreeRoomForm terms={terms} onSubmit={handleFreeRoomSubmit} />
                 </TabPanel>
               </CardContent>
             </Card>
           </Grid>
           <Grid item xs={12} md={8}>
-            <Card>
-              {loading ? (
-                <LoadingCardContent />
-              ) : (
-                <ScheduleContainer
-                  aliases={response.objects.aliases}
-                  courseOrder={courseOrder}
-                  schedules={response.objects.schedules}
-                  errorMessage={response.objects.errorMessage}
-                />
-              )}
-            </Card>
+            <Card>{loading ? <LoadingCardContent /> : InfoCard}</Card>
           </Grid>
         </FormProvider>
       </Grid>

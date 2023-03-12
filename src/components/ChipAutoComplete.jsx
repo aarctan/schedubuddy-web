@@ -44,9 +44,7 @@ const ChipAutoComplete = (props) => {
           />
         ))
       }
-      renderInput={(params) => (
-        <TextField {...params} margin="normal" label={props.label} />
-      )}
+      renderInput={(params) => <TextField {...params} label={props.label} />}
       noOptionsText={"No courses found"}
       value={props.value}
     />

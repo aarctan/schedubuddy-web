@@ -57,9 +57,9 @@ export const Form = (props) => {
   };
 
   return (
-    <Stack component="form" m={1} onSubmit={handleSubmit} spacing={0.5}>
-      <Typography variant="body2">
-        <div align="center">View possible schedules for a list of courses</div>
+    <Stack component="form" onSubmit={handleSubmit} spacing={2}>
+      <Typography textAlign="center" variant="body2">
+        View possible schedules for a list of courses
       </Typography>
       <BasicSelect
         isObj
