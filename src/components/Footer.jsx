@@ -1,8 +1,5 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
-import InstagramIcon from "@mui/icons-material/Instagram";
-
-import { IconButton } from "@mui/material";
-import { styled } from "@mui/material";
+import { IconButton, styled } from "@mui/material";
 
 const UnstyledFooter = ({ className }) => {
   return (
@@ -19,10 +16,14 @@ const UnstyledFooter = ({ className }) => {
       <IconButton
         color="secondary"
         sx={{ padding: "4px" }}
-        aria-label="github-link"
-        href="https://www.instagram.com/aaarctan/"
+        aria-label="discord-link"
+        href="https://discord.gg/hFbhmR4n5w"
       >
-        <InstagramIcon fontSize="large" />
+        <img
+          src="/discord-logo-yellow.png"
+          alt="Discord Logo"
+          style={{ width: "36px", height: "32px" }}
+        />
       </IconButton>
     </footer>
   );
