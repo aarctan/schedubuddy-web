@@ -16,19 +16,19 @@ const UnstyledFormSwitcher = ({ className, onChange }) => {
       <Tab
         disableRipple
         icon={<EventNote fontSize="large" />}
-        label="Schedule Builder"
+        label="Scheduler"
         value="scheduleBuilder"
       />
       <Tab
         disableRipple
         icon={<Apartment fontSize="large" />}
-        label="Occupancy Viewer"
+        label="Occupancy"
         value="occupancyViewer"
       />
       <Tab
         disableRipple
         icon={<ContentPasteSearchOutlined fontSize="large" />}
-        label="Occupancy Finder"
+        label="Finder"
         value="occupancyFinder"
       />
     </TabList>
