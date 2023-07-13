@@ -1,5 +1,5 @@
 # Schedubuddy
-Thank you for using Schedubuddy. This project is still actively maintained, so please report any issues in this repository.
+Welcome to Schedubuddy. This project is still maintained, so please report any issues in this repo.
 #
 This is the webapp frontend developed for
 [schedubuddy](https://schedubuddy.com/)
@@ -11,25 +11,20 @@ This webapp receives university schedules tailored to the user and displays them
 **For the back-end, please refer to this [repository](https://github.com/Exanut/schedubuddy-server).**
 
 ### Usage
-This webapp was designed to be lightweight and intuitive yet also powerful.
+This webapp was designed to be lightweight and intuitive, but also powerful.
 To try it out, simply select an academic term, enter courses from the autocomplete, tune your preferences, and press "Get Schedules".
 After a few seconds of searching, the top schedules will be displayed in the order given by the ranking algorithm.
 Every schedule will be unique-looking, so that a variety of schedules can be given.
 
-![schedubuddy.com example usage](https://i.imgur.com/tw9GYEn.png)
+![schedubuddy.com example usage](https://i.imgur.com/X8V0kY8.png)
 
-### Tech
-Website built with [ReactJS](https://reactjs.org/) and [Material-UI](https://next.material-ui.com/), and hosted on [Netlify](https://www.netlify.com/).
-Web API built with [Flask](https://flask.palletsprojects.com/) and hosted on [Heroku](https://www.heroku.com/).
+There are also other features, such as viewing all the classes that occur in a given lecture room, or viewing the rooms that are open at a given time of day.
 
-### Limitations
+### Contributing
+We are open to contributions for bugfixes, new features, or suggestions. If you would like to add a feature, feel free to create an issue describing it for feedback or if API support needs to be extended.
 
-- Some half-block classes are displayed as full blocks.
-Half-block classes are typically indicative of classes that occur biweekly.
-Currently, most biweekly classes do display as half-blocks.
-- For inputs where there are a very large number of possible schedules, not all of them are considered.
-For the majority of practical inputs, a sufficient number are still considered and net good results.
-
-### Future Work
-- Add additional settings for blocking out times of the day.
-- Add additional settings for excluding certain classes.
+Thank you to the contributors of the project:<br>
+@mdziubin for the extensive support on the front end<br>
+@Mattwmaster58 for overhauling the back end parser<br>
+@ShaishavShah04 for adding the classroom finder feature<br>
+@dylandeco for various front end refactors
