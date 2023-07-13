@@ -51,6 +51,7 @@ const splitLineText = (ctx, text, maxWidth) => {
 const drawText = (
   x0,
   y0,
+  y1,
   ctx,
   classObj,
   location,
@@ -107,7 +108,8 @@ const drawText = (
       }
       lines[i] = `${lines[i]}...`;
     }
-    ctx.fillText(lines[i], x0 + 4, y0 + fontSize + i * fontSize + i * 2);
+    const textYPos = y0 + fontSize + i * fontSize + i * 2;
+    if (textYPos < y1) ctx.fillText(lines[i], x0 + 4, textYPos);
   }
 };
 
@@ -166,6 +168,7 @@ const drawSchedule = (
         drawText(
           r_x0,
           r_y0,
+          r_y1,
           ctx,
           classObj,
           ct.location,
