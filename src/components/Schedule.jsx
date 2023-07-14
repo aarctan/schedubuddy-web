@@ -122,7 +122,8 @@ const drawSchedule = (
   aliases,
   showInstructorPref
 ) => {
-  let classOnWeekend = false;
+  let classOnSat = false;
+  let classOnSun = false;
   let min_y = 2147483647;
   let max_y = -2147483648;
 
@@ -150,7 +151,8 @@ const drawSchedule = (
       min_y = Math.min(min_y, start_t);
       max_y = Math.max(max_y, end_t);
       for (var day of ct.day) {
-        if (day === "S" || day === "U") classOnWeekend = true;
+        if (day === "S") classOnSat = true;
+        if (day === "U") classOnSun = true;
         let r_x0 = leftMarginOffset + day_lookup[day] * boxWidth + day_lookup[day] * 2;
         if (parseInt(biweeklyFlag) === 2) {
           r_x0 += boxWidth / 2;
@@ -202,9 +204,9 @@ const drawSchedule = (
   );
 
   let xRegionLength = bp_width;
-  if (!classOnWeekend) {
-    const xRegionLeft = leftMarginOffset + boxWidth + 2;
-    const xRegionRight = bp_width - boxWidth - 2;
+  if (!classOnSat || !classOnSun) {
+    const xRegionLeft = classOnSun ? leftMarginOffset : leftMarginOffset + boxWidth + 2;
+    const xRegionRight = classOnSat ? bp_width : bp_width - boxWidth - 2;
     xRegionLength = xRegionRight - xRegionLeft;
     ctx.drawImage(
       ctx.canvas,
