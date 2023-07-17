@@ -12,6 +12,7 @@ import ChipAutoComplete from "components/ChipAutoComplete";
 import BasicSelect from "components/FormInputs/BasicSelect";
 import MarathonPref from "components/MarathonPref";
 import TimePick from "components/TimePick";
+import CourseLock from "components/CourseLock";
 import { useFormContext } from "context/Form";
 import { useState } from "react";
 
@@ -22,9 +23,32 @@ const sortObj = (objects) =>
     a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
   );
 
+const fetchClasses = async (term, course) => {
+  const response = await fetch(
+    `${API_URL}/api/v1/classes/?term=${term}&course=${course}`
+  );
+  const data = await response.json();
+  let componentToClasses = {};
+
+  data.objects.forEach((item) => {
+    let component = item.component;
+    let classId = item.class;
+    let section = item.section;
+    if (componentToClasses.hasOwnProperty(component)) {
+      componentToClasses[component].push({id: classId, section: section});
+    } else {
+      componentToClasses[component] = [{id: classId, section: section}];
+    }
+  });
+  console.log(componentToClasses)
+  return componentToClasses;
+};
+
 export const Form = (props) => {
   const { values, handleChange, setValues } = useFormContext();
   const [courseOptions, setCourseOptions] = useState([]);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [componentData, setComponentData] = useState({});
 
   const handleTermChange = async (e) => {
     const { name, value } = e.target;
@@ -47,13 +71,37 @@ export const Form = (props) => {
   };
 
   const handleCourseChange = (_e, value) => {
+    const oldCourses = values.courses;
+    const addedCourse = value.find((course) => !oldCourses.includes(course));
+    const removedCourse = oldCourses.find((course) => !value.includes(course));
     const sortedCourses = sortObj(value);
     setValues({ ...values, courses: sortedCourses });
+    if (addedCourse) {
+      fetchClasses(values.scheduleTerm, addedCourse.asString)
+        .then((data) => {
+          setComponentData((prevComponentData) => ({
+            ...prevComponentData,
+            [addedCourse.asString]: data,
+          }));
+        })
+        .catch((err) => console.log(`Error fetching terms: ${err}`));
+    }
+    if (removedCourse) {
+      setComponentData((prevComponentData) => {
+        const newData = { ...prevComponentData };
+        delete newData[removedCourse.asString];
+        return newData;
+      });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     props.onSubmit(values);
+  };
+
+  const toggleAdvancedOptions = () => {
+    setShowAdvanced(!showAdvanced);
   };
 
   return (
@@ -105,6 +153,20 @@ export const Form = (props) => {
           value={values.resultSize}
         />
       </div>
+      {showAdvanced &&
+        values.courses.map((course) => (
+          <CourseLock
+            key={course.asString}
+            term={values.scheduleTerm}
+            courseName={course.asString}
+            data={componentData[course.asString]}
+          />
+        ))}
+      <Box sx={{ textAlign: "center" }}>
+        <Button onClick={toggleAdvancedOptions} sx={{ my: -1 }}>
+          {showAdvanced ? "Hide advanced options" : "Expand for advanced options"}
+        </Button>
+      </Box>
       <Box sx={{ textAlign: "center" }}>
         <Button
           color="secondary"

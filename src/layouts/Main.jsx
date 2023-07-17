@@ -22,6 +22,7 @@ const initialValues = {
   startPref: "10:00 AM",
   consecPref: 2,
   resultSize: 30,
+  blacklist: [],
 
   // Room schedule lookup
   roomTerm: "",
@@ -86,7 +87,7 @@ const Main = () => {
   };
 
   const handleScheduleSubmit = async (values) => {
-    const { scheduleTerm, courses, evening, online, startPref, consecPref, resultSize } =
+    const { scheduleTerm, courses, evening, online, startPref, consecPref, resultSize, blacklist } =
       values;
 
     try {
@@ -95,7 +96,9 @@ const Main = () => {
       const course_ids = courses.map((course) => course.course).join(",");
       const eveningClassesBit = evening === true ? "1" : "0";
       const onlineClassesBit = online === true ? "1" : "1";
-      const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}`;
+      let blacklist_ids = Object.keys(blacklist).filter(id => blacklist[id] === true);
+      blacklist_ids = blacklist_ids.join(",");
+      const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
       const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
       const data = await fetch(req_url).then((res) => res.json());
       setScheduleResponse(data);
