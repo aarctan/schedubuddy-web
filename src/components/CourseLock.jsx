@@ -5,7 +5,7 @@ import { Box, Chip } from "@mui/material";
 import { useFormContext } from "context/Form";
 
 const CourseLock = (props) => {
-  const { values, handleChange, setValues } = useFormContext();
+  const { values, setValues } = useFormContext();
   const [isEnabled, setIsEnabled] = useState(false);
 
   const handleToggle = (event) => {

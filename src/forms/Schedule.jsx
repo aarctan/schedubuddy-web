@@ -35,12 +35,11 @@ const fetchClasses = async (term, course) => {
     let classId = item.class;
     let section = item.section;
     if (componentToClasses.hasOwnProperty(component)) {
-      componentToClasses[component].push({id: classId, section: section});
+      componentToClasses[component].push({ id: classId, section: section });
     } else {
-      componentToClasses[component] = [{id: classId, section: section}];
+      componentToClasses[component] = [{ id: classId, section: section }];
     }
   });
-  console.log(componentToClasses)
   return componentToClasses;
 };
 
@@ -133,35 +132,38 @@ export const Form = (props) => {
       </FormGroup>
       <TimePick name="startPref" onChange={handleChange} value={values.startPref} />
       <MarathonPref name="consecPref" onChange={handleChange} value={values.consecPref} />
-      <div>
-        <Typography mt={1} gutterBottom>
-          Max schedules to show
-        </Typography>
-        <Slider
-          aria-label="Schedules to show"
-          defaultValue={30}
-          getAriaValueText={(value) => `${value} schedules`}
-          marks={[
-            { label: "10", value: 10 },
-            { label: "30", value: 30 },
-            { label: "100", value: 100 },
-          ]}
-          name="resultSize"
-          onChange={handleChange}
-          step={10}
-          valueLabelDisplay="auto"
-          value={values.resultSize}
-        />
-      </div>
-      {showAdvanced &&
-        values.courses.map((course) => (
-          <CourseLock
-            key={course.asString}
-            term={values.scheduleTerm}
-            courseName={course.asString}
-            data={componentData[course.asString]}
-          />
-        ))}
+      {showAdvanced && (
+        <div>
+          <div>
+            <Typography mt={1} gutterBottom>
+              Max schedules to show
+            </Typography>
+            <Slider
+              aria-label="Schedules to show"
+              defaultValue={30}
+              getAriaValueText={(value) => `${value} schedules`}
+              marks={[
+                { label: "10", value: 10 },
+                { label: "30", value: 30 },
+                { label: "100", value: 100 },
+              ]}
+              name="resultSize"
+              onChange={handleChange}
+              step={10}
+              valueLabelDisplay="auto"
+              value={values.resultSize}
+            />
+          </div>
+          {values.courses.map((course) => (
+            <CourseLock
+              key={course.asString}
+              term={values.scheduleTerm}
+              courseName={course.asString}
+              data={componentData[course.asString]}
+            />
+          ))}
+        </div>
+      )}
       <Box sx={{ textAlign: "center" }}>
         <Button onClick={toggleAdvancedOptions} sx={{ my: -1 }}>
           {showAdvanced ? "Hide advanced options" : "Expand for advanced options"}
