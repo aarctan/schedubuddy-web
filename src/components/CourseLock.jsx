@@ -2,19 +2,37 @@ import React, { useState } from "react";
 import { FormGroup, FormControlLabel, Typography } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import { Box, Chip } from "@mui/material";
+import { useFormContext } from "context/Form";
 
 const CourseLock = (props) => {
+  const { values, handleChange, setValues } = useFormContext();
   const [isEnabled, setIsEnabled] = useState(false);
-  const [blacklistedClasses, setBlacklistedClasses] = useState({});
 
-  const handleChange = (event) => {
+  const handleToggle = (event) => {
     setIsEnabled(event.target.checked);
+
+    if (!event.target.checked) {
+      setValues((prevValues) => {
+        const updatedBlacklist = { ...prevValues.blacklist };
+
+        Object.keys(props.data).forEach((componentName) => {
+          props.data[componentName].forEach((classData) => {
+            updatedBlacklist[classData.id] = false;
+          });
+        });
+
+        return { ...prevValues, blacklist: updatedBlacklist };
+      });
+    }
   };
 
   const handleChipClick = (classId) => {
-    setBlacklistedClasses((prevSelected) => ({
-      ...prevSelected,
-      [classId]: !prevSelected[classId],
+    setValues((prevValues) => ({
+      ...prevValues,
+      blacklist: {
+        ...prevValues.blacklist,
+        [classId]: !prevValues.blacklist[classId],
+      },
     }));
   };
 
@@ -24,7 +42,7 @@ const CourseLock = (props) => {
         control={
           <Switch
             checked={isEnabled}
-            onChange={handleChange}
+            onChange={handleToggle}
             name={props.courseName}
             sx={{ my: -1 }}
           />
@@ -57,7 +75,7 @@ const CourseLock = (props) => {
                     label={classData.section}
                     onClick={() => handleChipClick(classData.id)}
                     sx={{
-                      backgroundColor: blacklistedClasses[classData.id]
+                      backgroundColor: values.blacklist[classData.id]
                         ? "#D3D3D3"
                         : "#FEDB04",
                       my: 0.5,
