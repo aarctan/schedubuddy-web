@@ -1,4 +1,3 @@
-import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { IconButton, styled } from "@mui/material";
 
@@ -12,14 +11,6 @@ const UnstyledFooter = ({ className }) => {
         href="https://github.com/Exanut/schedubuddy-web"
       >
         <GitHubIcon fontSize="large" />
-      </IconButton>
-      <IconButton
-        color="secondary"
-        sx={{ padding: "4px" }}
-        aria-label="donate"
-        href="https://www.buymeacoffee.com/schedubuddy"
-      >
-        <CreditCardOutlinedIcon fontSize="large" />
       </IconButton>
     </footer>
   );

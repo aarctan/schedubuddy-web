@@ -134,6 +134,14 @@ export const Form = (props) => {
       <MarathonPref name="consecPref" onChange={handleChange} value={values.consecPref} />
       {showAdvanced && (
         <div>
+          {values.courses.map((course) => (
+            <CourseLock
+              key={course.asString}
+              term={values.scheduleTerm}
+              courseName={course.asString}
+              data={componentData[course.asString]}
+            />
+          ))}
           <div>
             <Typography mt={1} gutterBottom>
               Max schedules to show
@@ -154,19 +162,11 @@ export const Form = (props) => {
               value={values.resultSize}
             />
           </div>
-          {values.courses.map((course) => (
-            <CourseLock
-              key={course.asString}
-              term={values.scheduleTerm}
-              courseName={course.asString}
-              data={componentData[course.asString]}
-            />
-          ))}
         </div>
       )}
       <Box sx={{ textAlign: "center" }}>
         <Button onClick={toggleAdvancedOptions} sx={{ my: -1 }}>
-          {showAdvanced ? "Hide advanced options" : "Expand for advanced options"}
+          {showAdvanced ? "Hide advanced options" : "Advanced options"}
         </Button>
       </Box>
       <Box sx={{ textAlign: "center" }}>

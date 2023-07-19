@@ -40,12 +40,7 @@ const CourseLock = (props) => {
     <FormGroup>
       <FormControlLabel
         control={
-          <Switch
-            checked={isEnabled}
-            onChange={handleToggle}
-            name={props.courseName}
-            sx={{ my: -1 }}
-          />
+          <Switch checked={isEnabled} onChange={handleToggle} name={props.courseName} />
         }
         label={`Filter ${props.courseName}`}
       />
@@ -57,7 +52,7 @@ const CourseLock = (props) => {
                 display: "flex",
               }}
             >
-              {`${props.courseName} ${componentName}`}
+              {`${componentName}`}
             </Typography>
             <Box
               sx={{
@@ -78,7 +73,7 @@ const CourseLock = (props) => {
                       backgroundColor: values.blacklist[classData.id]
                         ? "#D3D3D3"
                         : "#FEDB04",
-                      my: 0.5,
+                      my: 0.25,
                       mx: 0.1,
                       //fontWeight: "bold",
                     }}
