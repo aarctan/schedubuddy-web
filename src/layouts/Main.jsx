@@ -40,7 +40,7 @@ const blankResponse = {
   objects: {
     aliases: [],
     schedules: [],
-    errorMessage: "No schedules to display",
+    errmsg: "No schedules to display",
   },
 };
 
@@ -163,7 +163,7 @@ const Main = () => {
           aliases={scheduleResponse.objects.aliases}
           courseOrder={courseOrder}
           schedules={scheduleResponse.objects.schedules}
-          errorMessage={scheduleResponse.objects.errorMessage}
+          errmsg={scheduleResponse.objects.errmsg}
         />
       );
       break;

@@ -10,7 +10,7 @@ const UnstyledScheduleContainer = ({
   courseOrder,
   schedules,
   aliases,
-  errorMessage,
+  errmsg,
 }) => {
   const [showInstructorNames, setShowInstructorNames] = useState(true);
   const [page, setPage] = useState(0);
@@ -45,7 +45,7 @@ const UnstyledScheduleContainer = ({
           />
         ) : (
           <Typography variant="h5">
-            <div align="center">{errorMessage}</div>
+            <div align="center">{errmsg}</div>
           </Typography>
         )}
         {schedules.length > 0 && (
