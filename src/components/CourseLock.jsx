@@ -3,6 +3,7 @@ import { FormGroup, FormControlLabel, Typography } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import { Box, Chip } from "@mui/material";
 import { useFormContext } from "context/Form";
+import Tooltip from "@mui/material/Tooltip";
 
 const CourseLock = (props) => {
   const { values, setValues } = useFormContext();
@@ -63,21 +64,28 @@ const CourseLock = (props) => {
               }}
             >
               {props.data[componentName].map((classData) => {
+                let tooltipText = `${classData.component} ${classData.section} (${classData.id})`;
                 return (
-                  <Chip
-                    variant="outlined"
+                  <Tooltip
+                    title={tooltipText}
+                    placement="top"
+                    leaveDelay={0}
+                    disableInteractive
                     key={classData.id}
-                    label={classData.section}
-                    onClick={() => handleChipClick(classData.id)}
-                    sx={{
-                      backgroundColor: values.blacklist[classData.id]
-                        ? "#D3D3D3"
-                        : "#FEDB04",
-                      my: 0.25,
-                      mx: 0.1,
-                      //fontWeight: "bold",
-                    }}
-                  />
+                  >
+                    <Chip
+                      variant="outlined"
+                      label={classData.section}
+                      onClick={() => handleChipClick(classData.id)}
+                      sx={{
+                        backgroundColor: values.blacklist[classData.id]
+                          ? "#D3D3D3"
+                          : "#FEDB04",
+                        my: 0.25,
+                        mx: 0.1,
+                      }}
+                    />
+                  </Tooltip>
                 );
               })}
             </Box>

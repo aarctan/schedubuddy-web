@@ -31,13 +31,17 @@ const fetchClasses = async (term, course) => {
   let componentToClasses = {};
 
   data.objects.forEach((item) => {
-    let component = item.component;
-    let classId = item.class;
-    let section = item.section;
+    const component = item.component;
+    const classData = {
+      id: item.class,
+      section: item.section,
+      classtimes: item.classtimes,
+      component: item.component,
+    };
     if (componentToClasses.hasOwnProperty(component)) {
-      componentToClasses[component].push({ id: classId, section: section });
+      componentToClasses[component].push(classData);
     } else {
-      componentToClasses[component] = [{ id: classId, section: section }];
+      componentToClasses[component] = [classData];
     }
   });
   return componentToClasses;
