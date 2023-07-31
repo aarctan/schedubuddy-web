@@ -16,7 +16,7 @@ To try it out, simply select an academic term, enter courses from the autocomple
 After a few seconds of searching, the top schedules will be displayed in the order given by the ranking algorithm.
 Every schedule will be unique-looking, so that a variety of schedules can be given.
 
-![schedubuddy.com example usage](https://i.imgur.com/X8V0kY8.png)
+![schedubuddy.com example usage](https://i.imgur.com/rXbTPxY.png)
 
 There are also other features, such as viewing all the classes that occur in a given lecture room, or viewing the rooms that are open at a given time of day.
 
