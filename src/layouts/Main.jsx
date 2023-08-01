@@ -11,16 +11,14 @@ import ScheduleContainer from "layouts/ScheduleContainer";
 import { useEffect, useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
-const searchParams = new URLSearchParams(window.location.search);
+const urlData = window.location.search;
+const searchParams = new URLSearchParams();
 
 const initialValues = {
   // Schedule builder
   scheduleTerm: searchParams.get("term") || "",
   courses: searchParams.get("courses")
-    ? searchParams
-        .get("courses")
-        .replace(/^\[|\]$/g, "")
-        .split(",")
+    ? searchParams.get("courses").replace("[", "").replace("]", "").split(",")
     : ["test"],
   evening: Boolean(searchParams.get("evening")) || true,
   online: Boolean(searchParams.get("online")) || false,
@@ -93,6 +91,8 @@ const Main = () => {
       .catch((err) => console.log(`Error fetching terms: ${err}`));
   }, []);
 
+
+
   const handleTabClick = (_e, value) => {
     setView(value);
   };
@@ -119,7 +119,6 @@ const Main = () => {
       blacklist_ids = blacklist_ids.join(",");
       const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
       const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
-      console.log(req_url);
       const data = await fetch(req_url).then((res) => res.json());
       setScheduleResponse(data);
     } catch (err) {
