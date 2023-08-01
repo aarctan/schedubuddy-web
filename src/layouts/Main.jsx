@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const urlData = window.location.search;
-const searchParams = new URLSearchParams();
+const searchParams = new URLSearchParams(urlData);
 
 const initialValues = {
   // Schedule builder
@@ -90,8 +90,6 @@ const Main = () => {
       .then((options) => setTerms(options))
       .catch((err) => console.log(`Error fetching terms: ${err}`));
   }, []);
-
-
 
   const handleTabClick = (_e, value) => {
     setView(value);
