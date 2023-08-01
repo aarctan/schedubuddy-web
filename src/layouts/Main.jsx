@@ -11,18 +11,29 @@ import ScheduleContainer from "layouts/ScheduleContainer";
 import { useEffect, useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
+const searchParams = new URLSearchParams(window.location.search);
 
 const initialValues = {
   // Schedule builder
-  scheduleTerm: "",
-  courses: [],
-  evening: true,
-  online: false,
+  scheduleTerm: searchParams.get("term") || "",
+  courses: searchParams.get("courses")
+    ? searchParams
+        .get("courses")
+        .replace(/^\[|\]$/g, "")
+        .split(",")
+    : ["test"],
+  evening: Boolean(searchParams.get("evening")) || true,
+  online: Boolean(searchParams.get("online")) || false,
   showNames: false,
-  startPref: "10:00 AM",
-  consecPref: 2,
-  resultSize: 30,
-  blacklist: [],
+  startPref: searchParams.get("start") || "10:00 AM",
+  consecPref: Number(searchParams.get("consec")) || 2,
+  resultSize: Number(searchParams.get("limit")) || 30,
+  blacklist: searchParams.get("blacklist")
+    ? searchParams
+        .get("blacklist")
+        .replace(/^\[|\]$/g, "")
+        .split(",")
+    : [],
 
   // Room schedule lookup
   roomTerm: "",
@@ -87,8 +98,16 @@ const Main = () => {
   };
 
   const handleScheduleSubmit = async (values) => {
-    const { scheduleTerm, courses, evening, online, startPref, consecPref, resultSize, blacklist } =
-      values;
+    const {
+      scheduleTerm,
+      courses,
+      evening,
+      online,
+      startPref,
+      consecPref,
+      resultSize,
+      blacklist,
+    } = values;
 
     try {
       setLoading(true);
@@ -96,10 +115,11 @@ const Main = () => {
       const course_ids = courses.map((course) => course.course).join(",");
       const eveningClassesBit = evening === true ? "1" : "0";
       const onlineClassesBit = online === true ? "1" : "1";
-      let blacklist_ids = Object.keys(blacklist).filter(id => blacklist[id] === true);
+      let blacklist_ids = Object.keys(blacklist).filter((id) => blacklist[id] === true);
       blacklist_ids = blacklist_ids.join(",");
       const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
       const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
+      console.log(req_url);
       const data = await fetch(req_url).then((res) => res.json());
       setScheduleResponse(data);
     } catch (err) {
