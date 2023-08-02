@@ -19,7 +19,7 @@ const initialValues = {
   scheduleTerm: searchParams.get("term") || "",
   courses: searchParams.get("courses")
     ? searchParams.get("courses").replace("[", "").replace("]", "").split(",")
-    : ["test"],
+    : [],
   evening: Boolean(searchParams.get("evening")) || true,
   online: Boolean(searchParams.get("online")) || false,
   showNames: false,
@@ -27,10 +27,7 @@ const initialValues = {
   consecPref: Number(searchParams.get("consec")) || 2,
   resultSize: Number(searchParams.get("limit")) || 30,
   blacklist: searchParams.get("blacklist")
-    ? searchParams
-        .get("blacklist")
-        .replace(/^\[|\]$/g, "")
-        .split(",")
+    ? searchParams.get("blacklist").replace("[", "").replace("]", "").split(",")
     : [],
 
   // Room schedule lookup
@@ -95,6 +92,24 @@ const Main = () => {
     setView(value);
   };
 
+/*   const handleInitialLoad = async () => {
+    try {
+      setLoading(true);
+      setCourseOrder(initialValues.courses); // Set the courseId order for color parity between autocomplete chips and schedule canvas
+      const req_url = `https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]`;
+      const data = fetch(req_url).then((res) => res.json());
+      setScheduleResponse(data);
+    } catch (err) {
+      console.log(`Error fetching generated schedules: ${err}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  handleInitialLoad() */
+
+  //https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]'
+  //https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[] net::ERR_FAILED 500 (Internal Server Error)
   const handleScheduleSubmit = async (values) => {
     const {
       scheduleTerm,
@@ -110,14 +125,18 @@ const Main = () => {
     try {
       setLoading(true);
       setCourseOrder(courses.map((course) => course.course)); // Set the courseId order for color parity between autocomplete chips and schedule canvas
+      console.log(courses.map((course) => course.course));
       const course_ids = courses.map((course) => course.course).join(",");
+      console.log(course_ids);
       const eveningClassesBit = evening === true ? "1" : "0";
       const onlineClassesBit = online === true ? "1" : "1";
       let blacklist_ids = Object.keys(blacklist).filter((id) => blacklist[id] === true);
       blacklist_ids = blacklist_ids.join(",");
-      const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
-      const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
+      //const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
+      const req_url = `https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]`;
+      //const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
       const data = await fetch(req_url).then((res) => res.json());
+      console.log(1, req_url);
       setScheduleResponse(data);
     } catch (err) {
       console.log(`Error fetching generated schedules: ${err}`);
