@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 const API_URL = process.env.REACT_APP_API_URL;
 const urlData = window.location.search;
 const searchParams = new URLSearchParams(urlData);
-
+console.log(urlData)
 const initialValues = {
   // Schedule builder
   scheduleTerm: searchParams.get("term") || "",
@@ -92,21 +92,21 @@ const Main = () => {
     setView(value);
   };
 
-/*   const handleInitialLoad = async () => {
+  useEffect( () => {
     try {
       setLoading(true);
       setCourseOrder(initialValues.courses); // Set the courseId order for color parity between autocomplete chips and schedule canvas
       const req_url = `https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]`;
       const data = fetch(req_url).then((res) => res.json());
+      console.log("old", scheduleResponse);
       setScheduleResponse(data);
+      console.log("new", scheduleResponse);
     } catch (err) {
       console.log(`Error fetching generated schedules: ${err}`);
     } finally {
       setLoading(false);
     }
-  };
-
-  handleInitialLoad() */
+  }, [scheduleResponse]);
 
   //https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]'
   //https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[] net::ERR_FAILED 500 (Internal Server Error)
@@ -191,17 +191,20 @@ const Main = () => {
 
   // Change right side card depending on tab
   let InfoCard;
+
   switch (view) {
     case "scheduleBuilder":
     case "occupancyViewer":
+      console.log(JSON.stringify(scheduleResponse));
       InfoCard = (
         <ScheduleContainer
-          aliases={scheduleResponse.objects.aliases}
+          aliases={scheduleResponse?.objects?.aliases}
           courseOrder={courseOrder}
-          schedules={scheduleResponse.objects.schedules}
-          errmsg={scheduleResponse.objects.errmsg}
+          schedules={scheduleResponse?.objects?.schedules}
+          errmsg={scheduleResponse?.objects?.errmsg}
         />
       );
+
       break;
     case "occupancyFinder":
       InfoCard = <FreeRoomContainer roomData={freeRooms} />;
