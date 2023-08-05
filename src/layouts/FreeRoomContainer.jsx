@@ -21,9 +21,9 @@ const RoomList = ({ rooms }) => {
         <Fragment key={room.name}>
           <ListItem>
             <ListItemText primary={room.name} />
-            {room.class_after && (
+            {!room.class_after && (
               <ListItemIcon>
-                <Tooltip title="No classes scheduled, room may be locked">
+                <Tooltip title="No classes scheduled later than the start time, room may be locked">
                   <LockClockOutlined />
                 </Tooltip>
               </ListItemIcon>

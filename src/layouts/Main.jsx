@@ -136,7 +136,7 @@ const Main = () => {
   };
 
   const handleFreeRoomSubmit = async (values) => {
-    const url = new URL(`${API_URL}api/all-rooms-open`);
+    const url = new URL(`${API_URL}/api/all-rooms-open`);
     url.searchParams.set("term", values.freeRoomTerm);
     url.searchParams.set("weekday", values.freeRoomDay);
     url.searchParams.set("starttime", values.freeRoomStartTime);
