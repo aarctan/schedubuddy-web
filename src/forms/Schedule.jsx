@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Snackbar,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -53,6 +54,24 @@ export const Form = (props) => {
   const [courseOptions, setCourseOptions] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [componentData, setComponentData] = useState(props.courseData);
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
+
+  const handleSnackbarClose = () => {
+    setIsSnackbarOpen(false);
+  };
+
+  const generateSchedule = async () => {
+    navigator.clipboard
+      .writeText(props.shareLink)
+      .then(() => {
+        console.log("Link copied to clipboard");
+      })
+      .catch((err) => {
+        console.error("Failed to copy link: ", err);
+      });
+
+      setIsSnackbarOpen(true);
+  };
 
   const handleTermChange = async (e) => {
     const { name, value } = e.target;
@@ -184,6 +203,21 @@ export const Form = (props) => {
         >
           Get Schedules
         </Button>
+        <Button
+          onClick={generateSchedule}
+          color="secondary"
+          sx={{ mt: 1, ml: 2 }}
+          type="submit"
+          variant="contained"
+        >
+          Save Filters
+        </Button>
+        <Snackbar
+        open={isSnackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        message="Link Copied"
+      />
       </Box>
     </Stack>
   );

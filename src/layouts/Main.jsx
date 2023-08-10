@@ -14,7 +14,9 @@ import { fetchClasses } from "forms/Schedule";
 const API_URL = process.env.REACT_APP_API_URL;
 const urlData = window.location.search;
 const searchParams = new URLSearchParams(urlData);
-console.log(urlData);
+const rootURL = `${window.location.protocol}//${window.location.hostname}${
+  window.location.port ? ":" + window.location.port : ""
+}`;
 
 let courseList = [];
 let parsedCourses = searchParams.get("courses")
@@ -32,7 +34,6 @@ let blackListIDs = {};
 let parsedBlacklist = searchParams.get("blacklist")
   ? searchParams.get("blacklist").replace("[", "").replace("]", "").split(",")
   : {};
-console.log("pbl", parsedBlacklist);
 if (parsedBlacklist[0] !== "") {
   for (let i = 0; i < parsedBlacklist.length; i++) {
     blackListIDs[parsedBlacklist[i]] = true;
@@ -45,8 +46,6 @@ for (let i = 0; i < courseList.length; i++) {
     courseData[courseList[i].asString] = data;
   });
 }
-
-console.log("Initial Course Data", courseData);
 
 const initialValues = {
   // Schedule builder
@@ -114,6 +113,7 @@ const Main = () => {
   const [queryStringLoad, setQueryStringLoad] = useState(
     initialValues.courses.length > 0
   );
+  const [shareLink, setShareLink] = useState("");
 
   const handleScheduleSubmit = async ({
     scheduleTerm,
@@ -133,12 +133,10 @@ const Main = () => {
       const onlineClassesBit = online === true ? "1" : "1";
       let blacklist_ids = Object.keys(blacklist).filter((id) => blacklist[id] === true);
       blacklist_ids = blacklist_ids.join(",");
-      const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
-      const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
-      //const req_url = `${API_URL}/api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]`;
+      const prefsStr = `?term=${scheduleTerm}&courses=[${course_ids}]&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
+      const req_url = `${API_URL}/api/v1/gen-schedules/${prefsStr}`;
+      setShareLink(rootURL + "/" + prefsStr);
       const data = await fetch(req_url).then((res) => res.json());
-      console.log(1, req_url);
-      console.log("bl", blacklist);
       setScheduleResponse(data);
     } catch (err) {
       console.log(`Error fetching generated schedules: ${err}`);
@@ -248,6 +246,7 @@ const Main = () => {
                   <ScheduleForm
                     terms={terms}
                     courseData={courseData}
+                    shareLink={shareLink}
                     onSubmit={handleScheduleSubmit}
                   />
                 </TabPanel>
