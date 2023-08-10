@@ -28,20 +28,20 @@ for (let i = 0; i < parsedCourses.length; i++) {
   });
 }
 
-let blackListIDs = [];
+let blackListIDs = {};
 let parsedBlacklist = searchParams.get("blacklist")
   ? searchParams.get("blacklist").replace("[", "").replace("]", "").split(",")
-  : [];
-
-for (let i = 0; i < parsedBlacklist.length; i++) {
-  blackListIDs.push({
-    [parsedBlacklist[i]]: true,
-  });
+  : {};
+console.log("pbl", parsedBlacklist);
+if (parsedBlacklist[0] !== "") {
+  for (let i = 0; i < parsedBlacklist.length; i++) {
+    blackListIDs[parsedBlacklist[i]] = true;
+  }
 }
 
 let courseData = {};
 for (let i = 0; i < courseList.length; i++) {
-  fetchClasses(searchParams.get("term") || "", courseList[i].asString).then((data) => {
+  fetchClasses(searchParams.get("term"), courseList[i].asString).then((data) => {
     courseData[courseList[i].asString] = data;
   });
 }
