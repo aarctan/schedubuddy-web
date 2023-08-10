@@ -14,12 +14,23 @@ const API_URL = process.env.REACT_APP_API_URL;
 const urlData = window.location.search;
 const searchParams = new URLSearchParams(urlData);
 console.log(urlData);
+
+let courseList = [];
+let parsedCourses = searchParams.get("courses")
+  ? searchParams.get("courses").replace("[", "").replace("]", "").split(",")
+  : [];
+
+for (let i = 0; i < parsedCourses.length; i++) {
+  courseList.push({
+    asString: parsedCourses[i],
+    course: parsedCourses[i],
+  });
+}
+
 const initialValues = {
   // Schedule builder
   scheduleTerm: searchParams.get("term") || "",
-  courses: searchParams.get("courses")
-    ? searchParams.get("courses").replace("[", "").replace("]", "").split(",")
-    : [],
+  courses: courseList,
   evening: Boolean(searchParams.get("evening")) || true,
   online: Boolean(searchParams.get("online")) || false,
   showNames: false,
@@ -81,7 +92,9 @@ const Main = () => {
   const [courseOrder, setCourseOrder] = useState([]);
   const [view, setView] = useState("scheduleBuilder");
   const [loading, setLoading] = useState(false);
-  const [queryStringLoad, setQueryStringLoad] = useState(initialValues.courses.length > 0);
+  const [queryStringLoad, setQueryStringLoad] = useState(
+    initialValues.courses.length > 0
+  );
 
   const handleScheduleSubmit = async ({
     scheduleTerm,
@@ -95,6 +108,7 @@ const Main = () => {
   }) => {
     try {
       setLoading(true);
+      console.log("Normal", courses);
       setCourseOrder(courses.map((course) => course.course)); // Set the courseId order for color parity between autocomplete chips and schedule canvas
       console.log(courses.map((course) => course.course));
       const course_ids = courses.map((course) => course.course).join(",");
@@ -103,9 +117,9 @@ const Main = () => {
       const onlineClassesBit = online === true ? "1" : "1";
       let blacklist_ids = Object.keys(blacklist).filter((id) => blacklist[id] === true);
       blacklist_ids = blacklist_ids.join(",");
-      //const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
-      const req_url = `${API_URL}/api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]`;
-      //const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
+      const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
+      const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
+      //const req_url = `${API_URL}/api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]`;
       const data = await fetch(req_url).then((res) => res.json());
       console.log(1, req_url);
       setScheduleResponse(data);
@@ -115,6 +129,7 @@ const Main = () => {
       setLoading(false);
     }
   };
+
   const handleRoomSubmit = async (values) => {
     const { roomTerm, room } = values;
 
@@ -170,7 +185,7 @@ const Main = () => {
     setQueryStringLoad(false);
     console.log("submitting qsp form");
     handleScheduleSubmit({
-      ...initialValues
+      ...initialValues,
     });
   }
 
@@ -180,7 +195,6 @@ const Main = () => {
 
   //https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]'
   //https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[] net::ERR_FAILED 500 (Internal Server Error).length
-
 
   // Change right side card depending on tab
   let InfoCard;
