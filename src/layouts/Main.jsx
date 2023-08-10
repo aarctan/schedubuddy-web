@@ -9,6 +9,7 @@ import { Form as ScheduleForm } from "forms/Schedule";
 import FreeRoomContainer from "layouts/FreeRoomContainer";
 import ScheduleContainer from "layouts/ScheduleContainer";
 import { useState } from "react";
+import { fetchClasses } from "forms/Schedule";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const urlData = window.location.search;
@@ -27,6 +28,26 @@ for (let i = 0; i < parsedCourses.length; i++) {
   });
 }
 
+let blackListIDs = [];
+let parsedBlacklist = searchParams.get("blacklist")
+  ? searchParams.get("blacklist").replace("[", "").replace("]", "").split(",")
+  : [];
+
+for (let i = 0; i < parsedBlacklist.length; i++) {
+  blackListIDs.push({
+    [parsedBlacklist[i]]: true,
+  });
+}
+
+let courseData = {};
+for (let i = 0; i < courseList.length; i++) {
+  fetchClasses(searchParams.get("term") || "", courseList[i].asString).then((data) => {
+    courseData[courseList[i].asString] = data;
+  });
+}
+
+console.log("Initial Course Data", courseData);
+
 const initialValues = {
   // Schedule builder
   scheduleTerm: searchParams.get("term") || "",
@@ -37,9 +58,7 @@ const initialValues = {
   startPref: searchParams.get("start") || "10:00 AM",
   consecPref: Number(searchParams.get("consec")) || 2,
   resultSize: Number(searchParams.get("limit")) || 30,
-  blacklist: searchParams.get("blacklist")
-    ? searchParams.get("blacklist").replace("[", "").replace("]", "").split(",")
-    : [],
+  blacklist: blackListIDs,
 
   // Room schedule lookup
   roomTerm: "",
@@ -108,11 +127,8 @@ const Main = () => {
   }) => {
     try {
       setLoading(true);
-      console.log("Normal", courses);
       setCourseOrder(courses.map((course) => course.course)); // Set the courseId order for color parity between autocomplete chips and schedule canvas
-      console.log(courses.map((course) => course.course));
       const course_ids = courses.map((course) => course.course).join(",");
-      console.log(course_ids);
       const eveningClassesBit = evening === true ? "1" : "0";
       const onlineClassesBit = online === true ? "1" : "1";
       let blacklist_ids = Object.keys(blacklist).filter((id) => blacklist[id] === true);
@@ -122,6 +138,7 @@ const Main = () => {
       //const req_url = `${API_URL}/api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]`;
       const data = await fetch(req_url).then((res) => res.json());
       console.log(1, req_url);
+      console.log("bl", blacklist);
       setScheduleResponse(data);
     } catch (err) {
       console.log(`Error fetching generated schedules: ${err}`);
@@ -202,7 +219,6 @@ const Main = () => {
   switch (view) {
     case "scheduleBuilder":
     case "occupancyViewer":
-      console.log(scheduleResponse);
       InfoCard = (
         <ScheduleContainer
           aliases={scheduleResponse.objects.aliases}
@@ -229,7 +245,11 @@ const Main = () => {
             <Card>
               <CardContent>
                 <TabPanel value="scheduleBuilder" sx={{ p: 1 }}>
-                  <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
+                  <ScheduleForm
+                    terms={terms}
+                    courseData={courseData}
+                    onSubmit={handleScheduleSubmit}
+                  />
                 </TabPanel>
                 <TabPanel value="occupancyViewer" sx={{ p: 1 }}>
                   <RoomForm terms={terms} onSubmit={handleRoomSubmit} />

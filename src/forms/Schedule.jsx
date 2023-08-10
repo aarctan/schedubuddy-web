@@ -18,12 +18,13 @@ import { useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const sortObj = (objects) =>
+export const sortObj = (objects) =>
   objects.sort((a, b) =>
     a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
   );
 
-const fetchClasses = async (term, course) => {
+export const fetchClasses = async (term, course) => {
+  console.log(term, course);
   const response = await fetch(
     `${API_URL}/api/v1/classes/?term=${term}&course=${course}`
   );
@@ -51,7 +52,7 @@ export const Form = (props) => {
   const { values, handleChange, setValues } = useFormContext();
   const [courseOptions, setCourseOptions] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [componentData, setComponentData] = useState({});
+  const [componentData, setComponentData] = useState(props.courseData);
 
   const handleTermChange = async (e) => {
     const { name, value } = e.target;
