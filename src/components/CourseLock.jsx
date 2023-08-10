@@ -15,7 +15,6 @@ const CourseLock = (props) => {
     if (!event.target.checked) {
       setValues((prevValues) => {
         const updatedBlacklist = { ...prevValues.blacklist };
-        console.log(updatedBlacklist);
         Object.keys(props.data).forEach((componentName) => {
           props.data[componentName].forEach((classData) => {
             updatedBlacklist[classData.id] = false;

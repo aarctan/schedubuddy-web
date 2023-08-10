@@ -1,9 +1,16 @@
-import { CardContent, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import {
+  CardContent,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+} from "@mui/material";
 import AliasDesc from "components/AliasDesc";
 import Paging from "components/Paging";
 import Schedule from "components/Schedule";
 import { useState } from "react";
 import { styled } from "@mui/material";
+import { ShareButton } from "components/ShareButton";
 
 const UnstyledScheduleContainer = ({
   className,
@@ -11,6 +18,7 @@ const UnstyledScheduleContainer = ({
   schedules,
   aliases,
   errmsg,
+  shareLink,
 }) => {
   const [showInstructorNames, setShowInstructorNames] = useState(true);
   const [page, setPage] = useState(0);
@@ -62,6 +70,7 @@ const UnstyledScheduleContainer = ({
         {Object.keys(aliases)?.length > 0 && scheduleHasAliases(schedules[page]) && (
           <AliasDesc aliases={aliases} schedule={schedules[page]} />
         )}
+        <ShareButton shareLink={shareLink} />
       </Grid>
     </CardContent>
   );

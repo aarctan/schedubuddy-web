@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Snackbar,
   Checkbox,
   FormControlLabel,
   FormGroup,
@@ -25,7 +24,6 @@ export const sortObj = (objects) =>
   );
 
 export const fetchClasses = async (term, course) => {
-  console.log(term, course);
   const response = await fetch(
     `${API_URL}/api/v1/classes/?term=${term}&course=${course}`
   );
@@ -49,29 +47,32 @@ export const fetchClasses = async (term, course) => {
   return componentToClasses;
 };
 
+export const fetchCourseByTerm = async (term) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/courses/?term=${term}`);
+    const data = await response.json();
+
+    const sortedCoursesAvailable = await sortObj(data.objects);
+    return sortedCoursesAvailable;
+  } catch (error) {
+    console.log(`Error fetching terms: ${error}`);
+    return [];
+  }
+};
+
 export const Form = (props) => {
   const { values, handleChange, setValues } = useFormContext();
-  const [courseOptions, setCourseOptions] = useState([]);
+  const [courseOptions, setCourseOptions] = useState(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [componentData, setComponentData] = useState(props.courseData);
-  const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
 
-  const handleSnackbarClose = () => {
-    setIsSnackbarOpen(false);
-  };
+  if (courseOptions === null) {
+    setCourseOptions([]);
+    fetchCourseByTerm(props.term)
+      .then((data) => setCourseOptions(data))
+      .catch((err) => console.log(`Error fetching course options: ${err}`));
+  }
 
-  const generateSchedule = async () => {
-    navigator.clipboard
-      .writeText(props.shareLink)
-      .then(() => {
-        console.log("Link copied to clipboard");
-      })
-      .catch((err) => {
-        console.error("Failed to copy link: ", err);
-      });
-
-      setIsSnackbarOpen(true);
-  };
 
   const handleTermChange = async (e) => {
     const { name, value } = e.target;
@@ -82,15 +83,8 @@ export const Form = (props) => {
     }));
 
     // Fetch courses on term change
-    try {
-      const response = await fetch(`${API_URL}/api/v1/courses/?term=${value}`);
-      const data = await response.json();
-
-      const sortedCoursesAvailable = sortObj(data.objects);
-      setCourseOptions(sortedCoursesAvailable);
-    } catch (error) {
-      console.log(`Error fetching terms: ${error}`);
-    }
+    const courses = await fetchCourseByTerm(value);
+    setCourseOptions(courses);
   };
 
   const handleCourseChange = (_e, value) => {
@@ -203,21 +197,6 @@ export const Form = (props) => {
         >
           Get Schedules
         </Button>
-        <Button
-          onClick={generateSchedule}
-          color="secondary"
-          sx={{ mt: 1, ml: 2 }}
-          type="submit"
-          variant="contained"
-        >
-          Save Filters
-        </Button>
-        <Snackbar
-        open={isSnackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        message="Link Copied"
-      />
       </Box>
     </Stack>
   );

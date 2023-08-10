@@ -135,6 +135,7 @@ const Main = () => {
       blacklist_ids = blacklist_ids.join(",");
       const prefsStr = `?term=${scheduleTerm}&courses=[${course_ids}]&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
       const req_url = `${API_URL}/api/v1/gen-schedules/${prefsStr}`;
+
       setShareLink(rootURL + "/" + prefsStr);
       const data = await fetch(req_url).then((res) => res.json());
       setScheduleResponse(data);
@@ -223,6 +224,7 @@ const Main = () => {
           courseOrder={courseOrder}
           schedules={scheduleResponse.objects.schedules}
           errmsg={scheduleResponse.objects.errmsg}
+          shareLink={shareLink}
         />
       );
 
@@ -246,8 +248,8 @@ const Main = () => {
                   <ScheduleForm
                     terms={terms}
                     courseData={courseData}
-                    shareLink={shareLink}
                     onSubmit={handleScheduleSubmit}
+                    term={initialValues.scheduleTerm}
                   />
                 </TabPanel>
                 <TabPanel value="occupancyViewer" sx={{ p: 1 }}>
