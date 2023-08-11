@@ -136,7 +136,8 @@ const Main = () => {
       const prefsStr = `?term=${scheduleTerm}&courses=[${course_ids}]&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
       const req_url = `${API_URL}/api/v1/gen-schedules/${prefsStr}`;
 
-      setShareLink(rootURL + "/" + prefsStr);
+      setShareLink(encodeURI( rootURL + "/" + prefsStr));
+      console.log(shareLink)
       const data = await fetch(req_url).then((res) => res.json());
       setScheduleResponse(data);
     } catch (err) {
