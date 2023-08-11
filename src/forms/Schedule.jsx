@@ -14,7 +14,7 @@ import MarathonPref from "components/MarathonPref";
 import TimePick from "components/TimePick";
 import CourseLock from "components/CourseLock";
 import { useFormContext } from "context/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -52,7 +52,7 @@ export const fetchCourseByTerm = async (term) => {
     const response = await fetch(`${API_URL}/api/v1/courses/?term=${term}`);
     const data = await response.json();
 
-    const sortedCoursesAvailable = await sortObj(data.objects);
+    const sortedCoursesAvailable = sortObj(data.objects);
     return sortedCoursesAvailable;
   } catch (error) {
     console.log(`Error fetching terms: ${error}`);
@@ -62,17 +62,15 @@ export const fetchCourseByTerm = async (term) => {
 
 export const Form = (props) => {
   const { values, handleChange, setValues } = useFormContext();
-  const [courseOptions, setCourseOptions] = useState(null);
+  const [courseOptions, setCourseOptions] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [componentData, setComponentData] = useState(props.courseData);
 
-  if (courseOptions === null) {
-    setCourseOptions([]);
+  useEffect(() => {
     fetchCourseByTerm(props.term)
       .then((data) => setCourseOptions(data))
       .catch((err) => console.log(`Error fetching course options: ${err}`));
-  }
-
+    }, [props.term]);
 
   const handleTermChange = async (e) => {
     const { name, value } = e.target;

@@ -10,7 +10,7 @@ export const ShareButton = (props) => {
     setOpen(false);
   };
 
-  const copyShareLink = async () => {
+  const copyShareLink = () => {
     navigator.clipboard
       .writeText(props.shareLink)
       .then(() => {
