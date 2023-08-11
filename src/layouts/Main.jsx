@@ -137,7 +137,6 @@ const Main = () => {
       const req_url = `${API_URL}/api/v1/gen-schedules/${prefsStr}`;
 
       setShareLink(encodeURI( rootURL + "/" + prefsStr));
-      console.log(shareLink)
       const data = await fetch(req_url).then((res) => res.json());
       setScheduleResponse(data);
     } catch (err) {
