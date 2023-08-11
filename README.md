@@ -27,4 +27,5 @@ Thank you to the contributors of the project:<br>
 @mdziubin for the extensive support on the front end<br>
 @Mattwmaster58 for overhauling the back end parser<br>
 @ShaishavShah04 for adding the classroom finder feature<br>
+@Logan9312 for adding support for saving of schedules
 @dylandeco for various front end refactors

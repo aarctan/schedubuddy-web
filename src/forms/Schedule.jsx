@@ -70,7 +70,7 @@ export const Form = (props) => {
     fetchCourseByTerm(props.term)
       .then((data) => setCourseOptions(data))
       .catch((err) => console.log(`Error fetching course options: ${err}`));
-    }, [props.term]);
+  }, [props.term]);
 
   const handleTermChange = async (e) => {
     const { name, value } = e.target;
@@ -135,7 +135,10 @@ export const Form = (props) => {
       <ChipAutoComplete
         label="Enter courses (e.g. CMPUT 174, STAT 151, ...)"
         onChange={handleCourseChange}
-        options={courseOptions}
+        options={courseOptions.filter(
+          (option) =>
+            !values.courses.some((course) => course.asString === option.asString)
+        )}
         value={values.courses}
       />
       <FormGroup>
