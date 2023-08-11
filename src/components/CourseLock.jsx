@@ -4,6 +4,7 @@ import Switch from "@mui/material/Switch";
 import { Box, Chip } from "@mui/material";
 import { useFormContext } from "context/Form";
 import Tooltip from "@mui/material/Tooltip";
+import getInstructorText from "util";
 
 const CourseLock = (props) => {
   const { values, setValues } = useFormContext();
@@ -63,10 +64,17 @@ const CourseLock = (props) => {
               }}
             >
               {props.data[componentName].map((classData) => {
-                let tooltipText = `${classData.component} ${classData.section} (${classData.id})`;
+                const tooltipText = `${classData.component} ${classData.section} (${classData.id})`;
+                const instructorText = getInstructorText(classData);
                 return (
                   <Tooltip
-                    title={tooltipText}
+                    title={
+                      <div>
+                        {tooltipText}
+                        <br />
+                        {instructorText}
+                      </div>
+                    }
                     placement="top"
                     leaveDelay={0}
                     disableInteractive

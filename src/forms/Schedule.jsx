@@ -37,6 +37,7 @@ export const fetchClasses = async (term, course) => {
       section: item.section,
       classtimes: item.classtimes,
       component: item.component,
+      instructorName: item.instructorUid,
     };
     if (componentToClasses.hasOwnProperty(component)) {
       componentToClasses[component].push(classData);
