@@ -8,21 +8,56 @@ import { Form as RoomForm } from "forms/Room";
 import { Form as ScheduleForm } from "forms/Schedule";
 import FreeRoomContainer from "layouts/FreeRoomContainer";
 import ScheduleContainer from "layouts/ScheduleContainer";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { fetchClasses } from "forms/Schedule";
 
 const API_URL = process.env.REACT_APP_API_URL;
+const urlData = window.location.search;
+const searchParams = new URLSearchParams(urlData);
+const rootURL = `${window.location.protocol}//${window.location.hostname}${
+  window.location.port ? ":" + window.location.port : ""
+}`;
+
+let courseList = [];
+let parsedCourses = searchParams.get("courses")
+  ? searchParams.get("courses").replace("[", "").replace("]", "").split(",")
+  : [];
+
+for (let i = 0; i < parsedCourses.length; i++) {
+  courseList.push({
+    asString: parsedCourses[i],
+    course: parsedCourses[i],
+  });
+}
+
+let blackListIDs = {};
+let parsedBlacklist = searchParams.get("blacklist")
+  ? searchParams.get("blacklist").replace("[", "").replace("]", "").split(",")
+  : {};
+if (parsedBlacklist[0] !== "") {
+  for (let i = 0; i < parsedBlacklist.length; i++) {
+    blackListIDs[parsedBlacklist[i]] = true;
+  }
+}
+
+let courseData = {};
+for (let i = 0; i < courseList.length; i++) {
+  fetchClasses(searchParams.get("term"), courseList[i].asString).then((data) => {
+    courseData[courseList[i].asString] = data;
+  });
+}
 
 const initialValues = {
   // Schedule builder
-  scheduleTerm: "",
-  courses: [],
-  evening: true,
-  online: false,
+  scheduleTerm: searchParams.get("term") || "",
+  courses: courseList,
+  evening: Boolean(searchParams.get("evening")) || true,
+  online: Boolean(searchParams.get("online")) || false,
   showNames: false,
-  startPref: "10:00 AM",
-  consecPref: 2,
-  resultSize: 30,
-  blacklist: [],
+  startPref: searchParams.get("start") || "10:00 AM",
+  consecPref: Number(searchParams.get("consec")) || 2,
+  resultSize: Number(searchParams.get("limit")) || 30,
+  blacklist: blackListIDs,
 
   // Room schedule lookup
   roomTerm: "",
@@ -69,37 +104,39 @@ const fetchTerms = async () => {
 };
 
 const Main = () => {
-  const [terms, setTerms] = useState([]);
+  const [terms, setTerms] = useState(null);
   const [scheduleResponse, setScheduleResponse] = useState(blankResponse); // ScheduleBuilder and OccupancyViewer result state
   const [freeRooms, setFreeRooms] = useState([]);
   const [courseOrder, setCourseOrder] = useState([]);
   const [view, setView] = useState("scheduleBuilder");
   const [loading, setLoading] = useState(false);
+  const [queryStringLoad, setQueryStringLoad] = useState(
+    initialValues.courses.length > 0
+  );
+  const [shareLink, setShareLink] = useState("");
 
-  useEffect(() => {
-    fetchTerms()
-      .then((options) => setTerms(options))
-      .catch((err) => console.log(`Error fetching terms: ${err}`));
-  }, []);
-
-  const handleTabClick = (_e, value) => {
-    setView(value);
-  };
-
-  const handleScheduleSubmit = async (values) => {
-    const { scheduleTerm, courses, evening, online, startPref, consecPref, resultSize, blacklist } =
-      values;
-
+  const handleScheduleSubmit = async ({
+    scheduleTerm,
+    courses,
+    evening,
+    online,
+    startPref,
+    consecPref,
+    resultSize,
+    blacklist,
+  }) => {
     try {
       setLoading(true);
       setCourseOrder(courses.map((course) => course.course)); // Set the courseId order for color parity between autocomplete chips and schedule canvas
       const course_ids = courses.map((course) => course.course).join(",");
       const eveningClassesBit = evening === true ? "1" : "0";
       const onlineClassesBit = online === true ? "1" : "1";
-      let blacklist_ids = Object.keys(blacklist).filter(id => blacklist[id] === true);
+      let blacklist_ids = Object.keys(blacklist).filter((id) => blacklist[id] === true);
       blacklist_ids = blacklist_ids.join(",");
-      const prefsStr = `&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
-      const req_url = `${API_URL}/api/v1/gen-schedules/?term=${scheduleTerm}&courses=[${course_ids}]${prefsStr}`;
+      const prefsStr = `?term=${scheduleTerm}&courses=[${course_ids}]&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
+      const req_url = `${API_URL}/api/v1/gen-schedules/${prefsStr}`;
+
+      setShareLink(rootURL + "/" + prefsStr);
       const data = await fetch(req_url).then((res) => res.json());
       setScheduleResponse(data);
     } catch (err) {
@@ -153,8 +190,31 @@ const Main = () => {
     }
   };
 
+  if (terms === null) {
+    setTerms([]);
+    fetchTerms()
+      .then((options) => setTerms(options))
+      .catch((err) => console.log(`Error fetching terms: ${err}`));
+  }
+
+  if (terms && terms.length > 0 && !loading && queryStringLoad) {
+    setQueryStringLoad(false);
+    console.log("submitting qsp form");
+    handleScheduleSubmit({
+      ...initialValues,
+    });
+  }
+
+  const handleTabClick = (_e, value) => {
+    setView(value);
+  };
+
+  //https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[]'
+  //https://schedubuddy1.herokuapp.com//api/v1/gen-schedules/?term=1850&courses=[CMPUT 229]&evening=1&online=1&start=10:00 AM&consec=2&limit=30&blacklist=[] net::ERR_FAILED 500 (Internal Server Error).length
+
   // Change right side card depending on tab
   let InfoCard;
+
   switch (view) {
     case "scheduleBuilder":
     case "occupancyViewer":
@@ -164,8 +224,10 @@ const Main = () => {
           courseOrder={courseOrder}
           schedules={scheduleResponse.objects.schedules}
           errmsg={scheduleResponse.objects.errmsg}
+          shareLink={shareLink}
         />
       );
+
       break;
     case "occupancyFinder":
       InfoCard = <FreeRoomContainer roomData={freeRooms} />;
@@ -183,7 +245,12 @@ const Main = () => {
             <Card>
               <CardContent>
                 <TabPanel value="scheduleBuilder" sx={{ p: 1 }}>
-                  <ScheduleForm terms={terms} onSubmit={handleScheduleSubmit} />
+                  <ScheduleForm
+                    terms={terms}
+                    courseData={courseData}
+                    onSubmit={handleScheduleSubmit}
+                    term={initialValues.scheduleTerm}
+                  />
                 </TabPanel>
                 <TabPanel value="occupancyViewer" sx={{ p: 1 }}>
                   <RoomForm terms={terms} onSubmit={handleRoomSubmit} />

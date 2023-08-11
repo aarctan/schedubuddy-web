@@ -7,7 +7,7 @@ import Tooltip from "@mui/material/Tooltip";
 
 const CourseLock = (props) => {
   const { values, setValues } = useFormContext();
-  const [isEnabled, setIsEnabled] = useState(false);
+  const [isEnabled, setIsEnabled] = useState(Object.keys(values.blacklist).length > 0);
 
   const handleToggle = (event) => {
     setIsEnabled(event.target.checked);
@@ -15,7 +15,6 @@ const CourseLock = (props) => {
     if (!event.target.checked) {
       setValues((prevValues) => {
         const updatedBlacklist = { ...prevValues.blacklist };
-
         Object.keys(props.data).forEach((componentName) => {
           props.data[componentName].forEach((classData) => {
             updatedBlacklist[classData.id] = false;

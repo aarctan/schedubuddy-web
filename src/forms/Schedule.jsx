@@ -14,16 +14,16 @@ import MarathonPref from "components/MarathonPref";
 import TimePick from "components/TimePick";
 import CourseLock from "components/CourseLock";
 import { useFormContext } from "context/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-const sortObj = (objects) =>
+export const sortObj = (objects) =>
   objects.sort((a, b) =>
     a.asString > b.asString ? 1 : b.asString > a.asString ? -1 : 0
   );
 
-const fetchClasses = async (term, course) => {
+export const fetchClasses = async (term, course) => {
   const response = await fetch(
     `${API_URL}/api/v1/classes/?term=${term}&course=${course}`
   );
@@ -47,11 +47,30 @@ const fetchClasses = async (term, course) => {
   return componentToClasses;
 };
 
+export const fetchCourseByTerm = async (term) => {
+  try {
+    const response = await fetch(`${API_URL}/api/v1/courses/?term=${term}`);
+    const data = await response.json();
+
+    const sortedCoursesAvailable = sortObj(data.objects);
+    return sortedCoursesAvailable;
+  } catch (error) {
+    console.log(`Error fetching terms: ${error}`);
+    return [];
+  }
+};
+
 export const Form = (props) => {
   const { values, handleChange, setValues } = useFormContext();
   const [courseOptions, setCourseOptions] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [componentData, setComponentData] = useState({});
+  const [componentData, setComponentData] = useState(props.courseData);
+
+  useEffect(() => {
+    fetchCourseByTerm(props.term)
+      .then((data) => setCourseOptions(data))
+      .catch((err) => console.log(`Error fetching course options: ${err}`));
+    }, [props.term]);
 
   const handleTermChange = async (e) => {
     const { name, value } = e.target;
@@ -62,15 +81,8 @@ export const Form = (props) => {
     }));
 
     // Fetch courses on term change
-    try {
-      const response = await fetch(`${API_URL}/api/v1/courses/?term=${value}`);
-      const data = await response.json();
-
-      const sortedCoursesAvailable = sortObj(data.objects);
-      setCourseOptions(sortedCoursesAvailable);
-    } catch (error) {
-      console.log(`Error fetching terms: ${error}`);
-    }
+    const courses = await fetchCourseByTerm(value);
+    setCourseOptions(courses);
   };
 
   const handleCourseChange = (_e, value) => {
