@@ -59,6 +59,7 @@ export const fetchCourseByTerm = async (term) => {
     console.log(`Error fetching terms: ${error}`);
     return [];
   }
+  
 };
 
 export const Form = (props) => {
