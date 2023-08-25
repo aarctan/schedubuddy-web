@@ -22,7 +22,7 @@ const colorOrder = [
   "#9999FF",
   "#CCFFFF",
 ];
-const hourPadding = 1;
+const hourPadding = 0;
 
 const startToInt = (str_t) => {
   let h = parseInt(str_t.slice(0, 2));
@@ -170,7 +170,7 @@ const drawSchedule = (
     }
   }
   let topHours = Math.min(8, Math.floor(min_y / 60));
-  let bottomHours = Math.ceil(max_y / 60) + hourPadding;
+  let bottomHours = Math.max(17, Math.ceil(max_y / 60) + hourPadding);
   if (min_y === 2147483647 && max_y === -2147483648) {
     topHours = 8;
     bottomHours = 15;
