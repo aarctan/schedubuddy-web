@@ -38,7 +38,7 @@ export const ShareButton = (props) => {
           open={open}
           autoHideDuration={3000}
           onClose={handleClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "middle" }}
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
           <MuiAlert
             onClose={handleClose}
