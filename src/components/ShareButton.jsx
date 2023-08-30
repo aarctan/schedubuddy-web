@@ -24,29 +24,24 @@ export const generateShareLink = async ({
     .join(",");
 
   const classes = schedule.map((item) => `${item.objects.class}`);
-  console.log(schedule);
 
-  let courses = {
-    LEC: [],
-    LAB: [],
-  };
+  let allClasses = [];
   for (let i = 0; i < schedule.length; i++) {
-    const fetchedClasses = await fetchClasses(scheduleTerm, schedule[i].objects.class);
-    courses.LEC.push(...fetchedClasses.LEC);
-    courses.LAB.push(...fetchedClasses.LAB);
+    const fetchedClasses = await fetchClasses(scheduleTerm, schedule[i].objects.course);
+    if (fetchedClasses.LEC !== undefined) {
+      allClasses.push(...fetchedClasses.LEC.map(lec => lec.id));
+    }
+    if (fetchedClasses.LAB !== undefined) {
+      allClasses.push(...fetchedClasses.LAB.map(lab => lab.id));
+    }
+    if (fetchedClasses.SEM !== undefined) {
+      allClasses.push(...fetchedClasses.SEM.map(lab => lab.id));
+    }
   }
 
-  // Extract all section IDs from provided data
-  const allSectionIds = [
-    ...courses.LEC.map((lec) => lec.id),
-    ...courses.LAB.map((lab) => lab.id),
-  ];
 
   // Blacklist is all section IDs minus the classes in the schedule
-  const blacklist_ids = allSectionIds.filter((id) => !classes.includes(id)).join(",");
-
-  console.log(schedule);
-
+  const blacklist_ids = allClasses.filter((id) => !classes.includes(id)).join(",");
   const eveningClassesBit = evening === true ? "1" : "0";
   const onlineClassesBit = online === true ? "1" : "0";
 
@@ -64,8 +59,8 @@ export const ShareButton = (props) => {
     setOpen(false);
   };
 
-  const copyShareLink = () => {
-    const shareLink = generateShareLink({
+  const copyShareLink = async () => {
+    const shareLink = await generateShareLink({
       schedule: props.schedule,
       scheduleTerm: values.scheduleTerm,
       evening: values.evening,
