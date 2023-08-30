@@ -5,6 +5,40 @@ import Schedule from "components/Schedule";
 import { useState } from "react";
 import { styled } from "@mui/material";
 import { ShareButton } from "components/ShareButton";
+import { useFormContext } from "context/Form";
+
+const rootURL = `${window.location.protocol}//${window.location.hostname}${
+  window.location.port ? ":" + window.location.port : ""
+}`;
+
+export const generateShareLink = ({
+  schedule,
+  scheduleTerm,
+  evening,
+  online,
+  startPref,
+  consecPref,
+  resultSize,
+  blacklist,
+}) => {
+  console.log(schedule);
+  const course_ids = schedule
+    .map((item) => `${item.objects.course}`)
+    .filter((course, index, self) => self.indexOf(course) === index)
+    .join(",");
+
+  const classes = schedule.map((item) => `${item.objects.class}`);
+  const blacklist_ids = Object.keys(blacklist)
+    .filter((id) => !classes.includes(id))
+    .join(",");
+
+  const eveningClassesBit = evening === true ? "1" : "0";
+  const onlineClassesBit = online === true ? "1" : "0";
+
+  return encodeURI(
+    `?term=${scheduleTerm}&courses=[${course_ids}]&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`
+  );
+};
 
 const UnstyledScheduleContainer = ({
   className,
@@ -12,14 +46,29 @@ const UnstyledScheduleContainer = ({
   schedules,
   aliases,
   errmsg,
-  shareLink,
 }) => {
+  const { values } = useFormContext();
   const [showInstructorNames, setShowInstructorNames] = useState(true);
   const [page, setPage] = useState(0);
+  const [shareLink, setShareLink] = useState("");
 
   const handlePageChange = (_e, value) => {
     // onChange called with null value if elipses is clicked
     if (value !== null) {
+      setShareLink(
+        rootURL +
+          "/" +
+          generateShareLink({
+            schedule: schedules[value - 1],
+            scheduleTerm: values.scheduleTerm,
+            evening: values.evening,
+            online: values.online,
+            startPref: values.startPref,
+            consecPref: values.consecPref,
+            resultSize: values.resultSize,
+            blacklist: values.blacklist,
+          })
+      );
       setPage(value - 1);
     }
   };
