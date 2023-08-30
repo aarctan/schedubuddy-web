@@ -36,7 +36,9 @@ export const generateShareLink = ({
   const onlineClassesBit = online === true ? "1" : "0";
 
   return encodeURI(
-    `?term=${scheduleTerm}&courses=[${course_ids}]&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`
+    rootURL +
+      "/" +
+      `?term=${scheduleTerm}&courses=[${course_ids}]&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`
   );
 };
 
@@ -50,25 +52,24 @@ const UnstyledScheduleContainer = ({
   const { values } = useFormContext();
   const [showInstructorNames, setShowInstructorNames] = useState(true);
   const [page, setPage] = useState(0);
-  const [shareLink, setShareLink] = useState("");
+
+  let shareLink = "";
+  if (schedules.length > 0) {
+     shareLink = generateShareLink({
+      schedule: schedules[page],
+      scheduleTerm: values.scheduleTerm,
+      evening: values.evening,
+      online: values.online,
+      startPref: values.startPref,
+      consecPref: values.consecPref,
+      resultSize: values.resultSize,
+      blacklist: values.blacklist,
+    });
+  }
 
   const handlePageChange = (_e, value) => {
     // onChange called with null value if elipses is clicked
     if (value !== null) {
-      setShareLink(
-        rootURL +
-          "/" +
-          generateShareLink({
-            schedule: schedules[value - 1],
-            scheduleTerm: values.scheduleTerm,
-            evening: values.evening,
-            online: values.online,
-            startPref: values.startPref,
-            consecPref: values.consecPref,
-            resultSize: values.resultSize,
-            blacklist: values.blacklist,
-          })
-      );
       setPage(value - 1);
     }
   };
