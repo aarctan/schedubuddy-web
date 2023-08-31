@@ -14,9 +14,6 @@ import { fetchClasses } from "forms/Schedule";
 const API_URL = process.env.REACT_APP_API_URL;
 const urlData = window.location.search;
 const searchParams = new URLSearchParams(urlData);
-const rootURL = `${window.location.protocol}//${window.location.hostname}${
-  window.location.port ? ":" + window.location.port : ""
-}`;
 
 let courseList = [];
 let parsedCourses = searchParams.get("courses")
@@ -113,7 +110,7 @@ const Main = () => {
   const [queryStringLoad, setQueryStringLoad] = useState(
     initialValues.courses.length > 0
   );
-  const [shareLink, setShareLink] = useState("");
+  const [componentData, setComponentData] = useState(courseData);
 
   const handleScheduleSubmit = async ({
     scheduleTerm,
@@ -130,13 +127,12 @@ const Main = () => {
       setCourseOrder(courses.map((course) => course.course)); // Set the courseId order for color parity between autocomplete chips and schedule canvas
       const course_ids = courses.map((course) => course.course).join(",");
       const eveningClassesBit = evening === true ? "1" : "0";
-      const onlineClassesBit = online === true ? "1" : "1";
+      const onlineClassesBit = online === true ? "1" : "0";
       let blacklist_ids = Object.keys(blacklist).filter((id) => blacklist[id] === true);
       blacklist_ids = blacklist_ids.join(",");
       const prefsStr = `?term=${scheduleTerm}&courses=[${course_ids}]&evening=${eveningClassesBit}&online=${onlineClassesBit}&start=${startPref}&consec=${consecPref}&limit=${resultSize}&blacklist=[${blacklist_ids}]`;
       const req_url = `${API_URL}/api/v1/gen-schedules/${prefsStr}`;
 
-      setShareLink(encodeURI( rootURL + "/" + prefsStr));
       const data = await fetch(req_url).then((res) => res.json());
       setScheduleResponse(data);
     } catch (err) {
@@ -224,7 +220,7 @@ const Main = () => {
           courseOrder={courseOrder}
           schedules={scheduleResponse.objects.schedules}
           errmsg={scheduleResponse.objects.errmsg}
-          shareLink={shareLink}
+          componentData={componentData}
         />
       );
 
@@ -250,6 +246,8 @@ const Main = () => {
                     courseData={courseData}
                     onSubmit={handleScheduleSubmit}
                     term={initialValues.scheduleTerm}
+                    componentData={componentData}
+                    setComponentData={setComponentData}
                   />
                 </TabPanel>
                 <TabPanel value="occupancyViewer" sx={{ p: 1 }}>

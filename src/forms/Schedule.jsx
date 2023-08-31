@@ -65,7 +65,8 @@ export const Form = (props) => {
   const { values, handleChange, setValues } = useFormContext();
   const [courseOptions, setCourseOptions] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  const [componentData, setComponentData] = useState(props.courseData);
+  let componentData = props.componentData;
+  const setComponentData = props.setComponentData;
 
   useEffect(() => {
     fetchCourseByTerm(props.term)
