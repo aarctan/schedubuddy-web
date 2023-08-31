@@ -12,6 +12,7 @@ const UnstyledScheduleContainer = ({
   schedules,
   aliases,
   errmsg,
+  componentData,
 }) => {
   const [showInstructorNames, setShowInstructorNames] = useState(true);
   const [page, setPage] = useState(0);
@@ -63,7 +64,7 @@ const UnstyledScheduleContainer = ({
         {Object.keys(aliases)?.length > 0 && scheduleHasAliases(schedules[page]) && (
           <AliasDesc aliases={aliases} schedule={schedules[page]} />
         )}
-        <ShareButton schedule={schedules[page]} />
+        <ShareButton schedule={schedules[page]} componentData={componentData} />
       </Grid>
     </CardContent>
   );

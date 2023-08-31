@@ -110,6 +110,7 @@ const Main = () => {
   const [queryStringLoad, setQueryStringLoad] = useState(
     initialValues.courses.length > 0
   );
+  const [componentData, setComponentData] = useState(courseData);
 
   const handleScheduleSubmit = async ({
     scheduleTerm,
@@ -219,6 +220,7 @@ const Main = () => {
           courseOrder={courseOrder}
           schedules={scheduleResponse.objects.schedules}
           errmsg={scheduleResponse.objects.errmsg}
+          componentData={componentData}
         />
       );
 
@@ -244,6 +246,8 @@ const Main = () => {
                     courseData={courseData}
                     onSubmit={handleScheduleSubmit}
                     term={initialValues.scheduleTerm}
+                    componentData={componentData}
+                    setComponentData={setComponentData}
                   />
                 </TabPanel>
                 <TabPanel value="occupancyViewer" sx={{ p: 1 }}>

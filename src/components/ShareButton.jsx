@@ -3,7 +3,6 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 import MuiAlert from "@mui/material/Alert";
 import React from "react";
 import { useFormContext } from "context/Form";
-import { fetchClasses } from "forms/Schedule";
 
 const rootURL = `${window.location.protocol}//${window.location.hostname}${
   window.location.port ? ":" + window.location.port : ""
@@ -17,6 +16,7 @@ export const generateShareLink = async ({
   startPref,
   consecPref,
   resultSize,
+  componentData,
 }) => {
   const course_ids = schedule
     .map((item) => `${item.objects.course}`)
@@ -25,20 +25,10 @@ export const generateShareLink = async ({
 
   const classes = schedule.map((item) => `${item.objects.class}`);
 
-  let allClasses = [];
-  for (let i = 0; i < schedule.length; i++) {
-    const fetchedClasses = await fetchClasses(scheduleTerm, schedule[i].objects.course);
-    if (fetchedClasses.LEC !== undefined) {
-      allClasses.push(...fetchedClasses.LEC.map(lec => lec.id));
-    }
-    if (fetchedClasses.LAB !== undefined) {
-      allClasses.push(...fetchedClasses.LAB.map(lab => lab.id));
-    }
-    if (fetchedClasses.SEM !== undefined) {
-      allClasses.push(...fetchedClasses.SEM.map(lab => lab.id));
-    }
-  }
-
+  // Extract all section IDs from componentData
+  const allClasses = Object.values(componentData).flatMap((course) =>
+    Object.values(course).flatMap((component) => component.map((section) => section.id))
+  );
 
   // Blacklist is all section IDs minus the classes in the schedule
   const blacklist_ids = allClasses.filter((id) => !classes.includes(id)).join(",");
@@ -68,6 +58,7 @@ export const ShareButton = (props) => {
       startPref: values.startPref,
       consecPref: values.consecPref,
       resultSize: values.resultSize,
+      componentData: props.componentData,
     });
 
     navigator.clipboard
