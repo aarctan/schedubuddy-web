@@ -72,7 +72,7 @@ export const ShareButton = (props) => {
       });
   };
 
-  if (props.schedule) {
+  if (props.schedule && props.componentData) {
     return (
       <>
         <Button

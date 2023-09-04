@@ -213,7 +213,6 @@ const Main = () => {
 
   switch (view) {
     case "scheduleBuilder":
-    case "occupancyViewer":
       InfoCard = (
         <ScheduleContainer
           aliases={scheduleResponse.objects.aliases}
@@ -221,6 +220,18 @@ const Main = () => {
           schedules={scheduleResponse.objects.schedules}
           errmsg={scheduleResponse.objects.errmsg}
           componentData={componentData}
+        />
+      );
+
+      break;
+    case "occupancyViewer":
+      InfoCard = (
+        <ScheduleContainer
+          aliases={scheduleResponse.objects.aliases}
+          courseOrder={courseOrder}
+          schedules={scheduleResponse.objects.schedules}
+          errmsg={scheduleResponse.objects.errmsg}
+          componentData={null}
         />
       );
 
