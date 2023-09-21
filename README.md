@@ -1,5 +1,4 @@
-# Schedubuddy
-Welcome to Schedubuddy. This project is still maintained, so please report any issues in this repo.
+#### As of September 20 2023, Schedubuddy is no longer maintained
 #
 This is the webapp frontend developed for
 [schedubuddy](https://schedubuddy.com/)
@@ -21,11 +20,4 @@ Every schedule will be unique-looking, so that a variety of schedules can be giv
 There are also other features, such as viewing all the classes that occur in a given lecture room, or viewing the rooms that are open at a given time of day.
 
 ### Contributing
-We are open to contributions for bugfixes, new features, or suggestions. If you would like to add a feature, feel free to create an issue describing it for feedback or if API support needs to be extended.
-
-Thank you to the contributors of the project:<br>
-@mdziubin for the extensive support on the front end<br>
-@Mattwmaster58 for overhauling the back end parser<br>
-@ShaishavShah04 for adding the classroom finder feature<br>
-@Logan9312 for adding support for saving of schedules<br>
-@dylandeco for various front end refactors
+Thank you to the contributors of the project: @mdziubin, @Mattwmaster58, @ShaishavShah04, @Logan9312, @dylandeco
