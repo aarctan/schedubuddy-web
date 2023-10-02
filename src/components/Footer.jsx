@@ -12,18 +12,6 @@ const UnstyledFooter = ({ className }) => {
       >
         <GitHubIcon fontSize="large" />
       </IconButton>
-      <IconButton
-        color="secondary"
-        sx={{ padding: "4px" }}
-        aria-label="discord-link"
-        href="https://discord.gg/v4wmYQQBHN"
-      >
-        <img
-          src="/discord-logo-yellow.png"
-          alt="Discord Logo"
-          style={{ width: "36px", height: "32px" }}
-        />
-      </IconButton>
     </footer>
   );
 };

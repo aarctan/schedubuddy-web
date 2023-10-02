@@ -1,5 +1,3 @@
-#### As of September 20 2023, Schedubuddy is no longer maintained
-#
 This is the webapp frontend developed for
 [schedubuddy](https://schedubuddy.com/)
 with
