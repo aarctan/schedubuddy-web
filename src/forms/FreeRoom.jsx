@@ -8,7 +8,7 @@ const dayOptions = [
   { label: "Monday", value: "M" },
   { label: "Tuesday", value: "T" },
   { label: "Wednesday", value: "W" },
-  { label: "Thursday", value: "H" },
+  { label: "Thursday", value: "R" },
   { label: "Friday", value: "F" },
   { label: "Saturday", value: "S" },
 ];

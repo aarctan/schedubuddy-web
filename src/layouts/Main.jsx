@@ -1,5 +1,5 @@
 import { TabContext, TabPanel } from "@mui/lab";
-import { Box, Card, CardContent, Grid } from "@mui/material";
+import { Card, CardContent, Grid } from "@mui/material";
 import FormSwitcher from "components/FormSwitcher";
 import LoadingCardContent from "components/LoadingCard";
 import { FormProvider } from "context/Form";
@@ -8,7 +8,6 @@ import { Form as RoomForm } from "forms/Room";
 import { Form as ScheduleForm } from "forms/Schedule";
 import FreeRoomContainer from "layouts/FreeRoomContainer";
 import ScheduleContainer from "layouts/ScheduleContainer";
-import UnderConstruction from "./UnderConstruction";
 import { useState } from "react";
 import { fetchClasses } from "forms/Schedule";
 
@@ -245,45 +244,38 @@ const Main = () => {
   }
 
   return (
-    <>
-      <div sx={{ width: "100%" }}>
-        <UnderConstruction />
-      </div>
-      <Box mt={7}>
-        <TabContext value={view}>
-          <FormSwitcher onChange={handleTabClick} view={view} />
-          <Grid container spacing={2}>
-            <FormProvider initialValues={initialValues}>
-              <Grid item xs={12} md={4}>
-                <Card>
-                  <CardContent>
-                    <TabPanel value="scheduleBuilder" sx={{ p: 1 }}>
-                      <ScheduleForm
-                        terms={terms}
-                        courseData={courseData}
-                        onSubmit={handleScheduleSubmit}
-                        term={initialValues.scheduleTerm}
-                        componentData={componentData}
-                        setComponentData={setComponentData}
-                      />
-                    </TabPanel>
-                    <TabPanel value="occupancyViewer" sx={{ p: 1 }}>
-                      <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
-                    </TabPanel>
-                    <TabPanel value="occupancyFinder" sx={{ p: 1 }}>
-                      <FreeRoomForm terms={terms} onSubmit={handleFreeRoomSubmit} />
-                    </TabPanel>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} md={8}>
-                <Card>{loading ? <LoadingCardContent /> : InfoCard}</Card>
-              </Grid>
-            </FormProvider>
+    <TabContext value={view}>
+      <FormSwitcher onChange={handleTabClick} view={view} />
+      <Grid container spacing={2}>
+        <FormProvider initialValues={initialValues}>
+          <Grid item xs={12} md={4}>
+            <Card>
+              <CardContent>
+                <TabPanel value="scheduleBuilder" sx={{ p: 1 }}>
+                  <ScheduleForm
+                    terms={terms}
+                    courseData={courseData}
+                    onSubmit={handleScheduleSubmit}
+                    term={initialValues.scheduleTerm}
+                    componentData={componentData}
+                    setComponentData={setComponentData}
+                  />
+                </TabPanel>
+                <TabPanel value="occupancyViewer" sx={{ p: 1 }}>
+                  <RoomForm terms={terms} onSubmit={handleRoomSubmit} />
+                </TabPanel>
+                <TabPanel value="occupancyFinder" sx={{ p: 1 }}>
+                  <FreeRoomForm terms={terms} onSubmit={handleFreeRoomSubmit} />
+                </TabPanel>
+              </CardContent>
+            </Card>
           </Grid>
-        </TabContext>
-      </Box>
-    </>
+          <Grid item xs={12} md={8}>
+            <Card>{loading ? <LoadingCardContent /> : InfoCard}</Card>
+          </Grid>
+        </FormProvider>
+      </Grid>
+    </TabContext>
   );
 };
 
