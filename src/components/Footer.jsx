@@ -1,5 +1,5 @@
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { IconButton, styled } from "@mui/material";
+import { Typography, IconButton, styled } from "@mui/material";
 
 const UnstyledFooter = ({ className }) => {
   return (
@@ -12,6 +12,9 @@ const UnstyledFooter = ({ className }) => {
       >
         <GitHubIcon fontSize="large" />
       </IconButton>
+      <Typography variant="caption" color="secondary">
+        <div>Last updated Oct 12</div>
+      </Typography>
     </footer>
   );
 };
