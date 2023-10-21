@@ -13,7 +13,7 @@ const UnstyledFooter = ({ className }) => {
         <GitHubIcon fontSize="large" />
       </IconButton>
       <Typography variant="caption" color="secondary">
-        <div>Last updated Oct 12</div>
+        <div>Last updated Oct 21</div>
       </Typography>
     </footer>
   );
