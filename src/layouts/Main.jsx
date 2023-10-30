@@ -5,11 +5,10 @@ import LoadingCardContent from "components/LoadingCard";
 import { FormProvider } from "context/Form";
 import { Form as FreeRoomForm } from "forms/FreeRoom";
 import { Form as RoomForm } from "forms/Room";
-import { Form as ScheduleForm } from "forms/Schedule";
+import { Form as ScheduleForm, fetchClasses } from "forms/Schedule";
 import FreeRoomContainer from "layouts/FreeRoomContainer";
 import ScheduleContainer from "layouts/ScheduleContainer";
 import { useState } from "react";
-import { fetchClasses } from "forms/Schedule";
 
 const API_URL = process.env.REACT_APP_API_URL;
 const urlData = window.location.search;
@@ -105,6 +104,7 @@ const Main = () => {
   const [scheduleResponse, setScheduleResponse] = useState(blankResponse); // ScheduleBuilder and OccupancyViewer result state
   const [freeRooms, setFreeRooms] = useState([]);
   const [courseOrder, setCourseOrder] = useState([]);
+  const [courseOptions, setCourseOptions] = useState([]);
   const [view, setView] = useState("scheduleBuilder");
   const [loading, setLoading] = useState(false);
   const [queryStringLoad, setQueryStringLoad] = useState(
@@ -259,6 +259,8 @@ const Main = () => {
                     term={initialValues.scheduleTerm}
                     componentData={componentData}
                     setComponentData={setComponentData}
+                    courseOptions={courseOptions}
+                    setCourseOptions={setCourseOptions}
                   />
                 </TabPanel>
                 <TabPanel value="occupancyViewer" sx={{ p: 1 }}>

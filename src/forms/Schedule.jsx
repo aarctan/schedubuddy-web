@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 import { Stack } from "@mui/system";
 import ChipAutoComplete from "components/ChipAutoComplete";
+import CourseLock from "components/CourseLock";
 import BasicSelect from "components/FormInputs/BasicSelect";
 import MarathonPref from "components/MarathonPref";
 import TimePick from "components/TimePick";
-import CourseLock from "components/CourseLock";
 import { useFormContext } from "context/Form";
 import { useEffect, useState } from "react";
 
@@ -62,17 +62,19 @@ export const fetchCourseByTerm = async (term) => {
 };
 
 export const Form = (props) => {
+  const { componentData, setComponentData, courseOptions, setCourseOptions } = props;
+
   const { values, handleChange, setValues } = useFormContext();
-  const [courseOptions, setCourseOptions] = useState([]);
   const [showAdvanced, setShowAdvanced] = useState(false);
-  let componentData = props.componentData;
-  const setComponentData = props.setComponentData;
 
   useEffect(() => {
-    fetchCourseByTerm(props.term)
-      .then((data) => setCourseOptions(data))
-      .catch((err) => console.log(`Error fetching course options: ${err}`));
-  }, [props.term]);
+    // FIXME: This needs to be removed entirely when we start using routing query params
+    if (props.term !== "") {
+      fetchCourseByTerm(props.term)
+        .then((data) => setCourseOptions(data))
+        .catch((err) => console.log(`Error fetching course options: ${err}`));
+    }
+  }, [props.term, setCourseOptions]);
 
   const handleTermChange = async (e) => {
     const { name, value } = e.target;
