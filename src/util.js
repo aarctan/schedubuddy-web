@@ -2,7 +2,7 @@ const getInstructorText = (classObj) => {
   let instructorText = "";
   try {
     const instructorsArray = JSON.parse(classObj.instructorName.replace(/'/g, '"'));
-    const instructorName = instructorsArray[0];
+    const instructorName = instructorsArray[0].replace('(', '').replace(')', '');
     const instructorNames = instructorName.split(" ");
     const lastName = instructorNames[instructorNames.length - 1];
     instructorText =
