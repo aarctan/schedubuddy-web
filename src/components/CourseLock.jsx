@@ -8,7 +8,7 @@ import getInstructorText from "util";
 
 const CourseLock = (props) => {
   const { values, setValues } = useFormContext();
-  const [isEnabled, setIsEnabled] = useState(Object.keys(values.blacklist).length > 0);
+  const [isEnabled, setIsEnabled] = useState(false);
 
   const handleToggle = (event) => {
     setIsEnabled(event.target.checked);
