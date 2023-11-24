@@ -7,7 +7,7 @@ const boxWidth = 200;
 const boxRightMargin = 10;
 const verticalLength50 = 101;
 const quarterLength = verticalLength50 / 4;
-const day_lookup = { U: 0, M: 1, T: 2, W: 3, H: 4, R:4, F: 5, S: 6 };
+const day_lookup = { U: 0, M: 1, T: 2, W: 3, H: 4, R: 4, F: 5, S: 6 };
 const fontSize = 20;
 const blackColor = "#000000";
 const colorOrder = [
@@ -192,22 +192,20 @@ const drawSchedule = (
   );
 
   let xRegionLength = bp_width;
-  if (!classOnSat || !classOnSun) {
-    const xRegionLeft = classOnSun ? leftMarginOffset : leftMarginOffset + boxWidth + 2;
-    const xRegionRight = classOnSat ? bp_width : bp_width - boxWidth - 2;
-    xRegionLength = xRegionRight - xRegionLeft;
-    ctx.drawImage(
-      ctx.canvas,
-      xRegionLeft,
-      0,
-      xRegionLength,
-      bp_height,
-      leftMarginOffset,
-      0,
-      xRegionLength,
-      bp_height
-    );
-  }
+  const xRegionLeft = classOnSun ? leftMarginOffset : leftMarginOffset + boxWidth + 2;
+  const xRegionRight = classOnSat ? bp_width : bp_width - boxWidth - 2;
+  xRegionLength = xRegionRight - xRegionLeft;
+  ctx.drawImage(
+    ctx.canvas,
+    xRegionLeft,
+    0,
+    xRegionLength,
+    bp_height,
+    leftMarginOffset,
+    0,
+    xRegionLength,
+    bp_height
+  );
 
   const imgData = ctx.getImageData(
     0,
