@@ -27,7 +27,11 @@ const ChipAutoComplete = (props) => {
       sx={{ width: "100%", marginTop: "-2%" }}
       disableClearable={true}
       multiple
-      open={input.length > 1}
+      open={
+        props.term === "1870" || props.term === "1880"
+          ? input.length > 0
+          : input.length > 1
+      }
       id="courses-outlined"
       inputValue={input}
       onInputChange={handleInput}

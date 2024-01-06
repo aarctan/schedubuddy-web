@@ -137,6 +137,7 @@ export const Form = (props) => {
         value={values.scheduleTerm}
       />
       <ChipAutoComplete
+        term={values.scheduleTerm}
         label="Enter courses (e.g. CMPUT 174, STAT 151, ...)"
         onChange={handleCourseChange}
         options={courseOptions.filter(
