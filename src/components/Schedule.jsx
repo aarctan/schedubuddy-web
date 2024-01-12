@@ -21,6 +21,16 @@ const colorOrder = [
   "#FFCC99",
   "#9999FF",
   "#CCFFFF",
+  "#FF6666",
+  "#FFFF66",
+  "#66FF66",
+  "#6699FF",
+  "#9966FF",
+  "#FF6699",
+  "#66FFCC",
+  "#FFCC66",
+  "#6666FF",
+  "#99FFFF",
 ];
 const hourPadding = 0;
 
