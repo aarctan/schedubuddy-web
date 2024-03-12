@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import getInstructorText from "util";
 
 const leftMarginOffset = 148;
@@ -40,18 +40,15 @@ const colorOrder = [
 const hourPadding = 0;
 
 const startToInt = (str_t) => {
-  let h = parseInt(str_t.slice(0, 2));
-  let m = parseInt(str_t.slice(3, 5));
-  let pm = str_t.slice(6, 9) === "PM" ? true : false;
-  if (pm) {
-    return h === 12 ? h * 60 + m : (h + 12) * 60 + m;
-  } else {
-    return h === 12 ? m : h * 60 + m;
-  }
+  const [time, period] = str_t.split(" ");
+  const [hour, minute] = time.split(":").map((part) => parseInt(part));
+  const isPM = period.toUpperCase() === "PM";
+  const adjustedHour = (hour === 12 ? 0 : hour) + (isPM ? 12 : 0);
+  return adjustedHour * 60 + minute;
 };
 
 const splitLineText = (ctx, text, maxWidth) => {
-  let lines = [];
+  const lines = [];
   const textArray = text.split(" ");
   for (let i = textArray.length; i >= 0; i--) {
     const joinedStr = textArray.slice(0, i).join(" ");
@@ -75,45 +72,41 @@ const drawText = (
   drawInstructorText,
   halfBlock = false
 ) => {
-  let lines = [];
+  const { component, section, class: classId, asString: courseName } = classObj;
+  const lines = [];
   const maxWidth = boxWidth - boxRightMargin;
-  const component = classObj.component;
-  const section = classObj.section;
-  const classId = classObj.class;
-  let courseName = classObj.asString;
-  const slicePoint = courseName.length - `${component} ${section}`.length - 1;
-  location = location ? location : classObj.location;
-  location = location ? location : "TBD";
-  location = location === "Location TBD" ? "TBD" : location;
+  const slicePoint = courseName.lastIndexOf(`${component} ${section}`) - 1;
+  location = location === "Location TBD" ? "TBD" : location || classObj.location || "TBD";
   if (!halfBlock) {
     lines.push(courseName.slice(0, slicePoint));
     lines.push(`${component} ${section} (${classId})`);
+    lines.push(location);
   } else {
     const textLines = [
       courseName.slice(0, slicePoint),
       `${component} ${section}`,
       location,
     ];
-    for (const textLine of textLines)
-      for (const line of splitLineText(ctx, textLine, maxWidth)) lines.push(line);
+    for (const textLine of textLines) {
+      splitLineText(ctx, textLine, maxWidth).forEach((line) => lines.push(line));
+    }
   }
-  if (!halfBlock) lines.push(location);
   if (drawInstructorText) {
     // JSON parsing can error out, temporary fix until API response adjusted
     const instructorText = getInstructorText(classObj);
     lines.push(instructorText.toUpperCase());
   }
   ctx.fillStyle = blackColor;
-  for (let i = 0; i < lines.length; i++) {
-    if (ctx.measureText(lines[i]).width > maxWidth) {
-      while (ctx.measureText(`${lines[i]}...`).width > maxWidth) {
-        lines[i] = lines[i].slice(0, lines[i].length - 1);
+  lines.forEach((line, index) => {
+    if (ctx.measureText(line).width > maxWidth) {
+      while (ctx.measureText(`${line}...`).width > maxWidth) {
+        line = line.slice(0, -1);
       }
-      lines[i] = `${lines[i]}...`;
+      line += "...";
     }
-    const textYPos = y0 + fontSize + i * fontSize + i * 2;
-    if (textYPos < y1) ctx.fillText(lines[i], x0 + 4, textYPos);
-  }
+    const textYPos = y0 + fontSize + index * fontSize + index * 2;
+    if (textYPos < y1) ctx.fillText(line, x0 + 4, textYPos);
+  });
 };
 
 const drawSchedule = (
@@ -127,8 +120,8 @@ const drawSchedule = (
 ) => {
   let classOnSat = false;
   let classOnSun = false;
-  let min_y = 2147483647;
-  let max_y = -2147483648;
+  let min_y = Number.MAX_SAFE_INTEGER;
+  let max_y = Number.MIN_SAFE_INTEGER;
 
   // Define a courseId to color mapping
   const uniqueCourseOrder = [...new Set(courseOrder)];
@@ -137,45 +130,48 @@ const drawSchedule = (
     return colorMap;
   }, {});
 
-  for (var classObj of jsonSched) {
-    classObj = classObj.objects;
-    const courseId = classObj.course;
+  for (const classObj of jsonSched) {
+    const classData = classObj.objects;
+    const classTimes = classData.classtimes;
+    const courseId = classData.course;
     const currColor = courseColorMap[courseId];
-    let drawInstructorText =
-      classObj.instructorName && !(classObj.class in aliases) ? true : false;
-    if (!showInstructorPref) {
-      drawInstructorText = false;
-    }
-    for (var ct of classObj.classtimes) {
+    const drawInstructorText =
+      classData.instructorName && !(classData.class in aliases) && showInstructorPref;
+    for (const ct of classTimes) {
       const biweeklyFlag = ct.biweekly;
       const classBoxWidth = biweeklyFlag === 0 ? boxWidth : boxWidth / 2;
-      let start_t = startToInt(ct.startTime);
-      let end_t = startToInt(ct.endTime);
+      const start_t = startToInt(ct.startTime);
+      const end_t = startToInt(ct.endTime);
+      const quartersFill = Math.ceil((end_t - start_t) / 15);
+      const quartersPast = Math.floor(start_t / 15);
       min_y = Math.min(min_y, start_t);
       max_y = Math.max(max_y, end_t);
-      for (var day of ct.day) {
+      for (const day of ct.day) {
         if (day === "S") classOnSat = true;
         if (day === "U") classOnSun = true;
-        let r_x0 = leftMarginOffset + day_lookup[day] * boxWidth + day_lookup[day] * 2;
-        if (parseInt(biweeklyFlag) === 2) {
-          r_x0 += boxWidth / 2;
-        }
-        let r_x1 = r_x0 + classBoxWidth;
-        let quartersPast = Math.floor(start_t / 15);
-        let quartersFill = Math.ceil((end_t - start_t) / 15);
-        let r_y0 =
+
+        const r_x0 =
+          leftMarginOffset +
+          day_lookup[day] * boxWidth +
+          day_lookup[day] * 2 +
+          (parseInt(biweeklyFlag) === 2 ? boxWidth / 2 : 0);
+        const r_x1 = r_x0 + classBoxWidth;
+
+        const r_y0 =
           topMarginOffset + quartersPast * quarterLength + (quartersPast / 4) * 3;
-        let r_y1 = r_y0 + quartersFill * quarterLength + (quartersFill / 4 - 1) * 3;
+        const r_y1 = r_y0 + quartersFill * quarterLength + (quartersFill / 4 - 1) * 3;
+
         ctx.fillStyle = blackColor;
         ctx.fillRect(r_x0 - 2, r_y0 - 2, r_x1 - r_x0 + 4, r_y1 - r_y0 + 5);
         ctx.fillStyle = currColor;
         ctx.fillRect(r_x0, r_y0, r_x1 - r_x0, r_y1 - r_y0 + 1);
+
         drawText(
           r_x0,
           r_y0,
           r_y1,
           ctx,
-          classObj,
+          classData,
           ct.location,
           classBoxWidth,
           drawInstructorText,
@@ -184,15 +180,14 @@ const drawSchedule = (
       }
     }
   }
-  let topHours = Math.min(8, Math.floor(min_y / 60));
-  let bottomHours = Math.max(17, Math.ceil(max_y / 60) + hourPadding);
-  if (min_y === 2147483647 && max_y === -2147483648) {
-    topHours = 8;
-    bottomHours = 15;
-  }
-  const yRegionTop = topMarginOffset + topHours * verticalLength50 + topHours * 3;
-  const yRegionBottom =
-    topMarginOffset + bottomHours * verticalLength50 + bottomHours * 3;
+
+  const minHours = Math.floor(min_y / 60);
+  const maxHours = Math.ceil(max_y / 60) + hourPadding;
+  const topHours = min_y === Number.MAX_SAFE_INTEGER ? 8 : Math.min(8, minHours);
+  const bottomHours = max_y === Number.MIN_SAFE_INTEGER ? 15 : Math.max(17, maxHours);
+
+  const yRegionTop = topMarginOffset + topHours * (verticalLength50 + 3);
+  const yRegionBottom = topMarginOffset + bottomHours * (verticalLength50 + 3);
   const yRegionlength = yRegionBottom - yRegionTop;
   ctx.drawImage(
     ctx.canvas,
@@ -206,10 +201,9 @@ const drawSchedule = (
     yRegionlength
   );
 
-  let xRegionLength = bp_width;
   const xRegionLeft = classOnSun ? leftMarginOffset : leftMarginOffset + boxWidth + 2;
   const xRegionRight = classOnSat ? bp_width : bp_width - boxWidth - 2;
-  xRegionLength = xRegionRight - xRegionLeft;
+  const xRegionLength = xRegionRight - xRegionLeft;
   ctx.drawImage(
     ctx.canvas,
     xRegionLeft,
@@ -240,13 +234,29 @@ const drawSchedule = (
   );
 };
 
-const convertCanvasToImage = () => {
-  let canvas = document.getElementById("canvas");
-  return canvas.toDataURL();
+const convertCanvasToImage = (canvasId) => {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) {
+    console.error(`Canvas element with ID "${canvasId}" not found.`);
+    return null;
+  }
+
+  const dataURL = canvas.toDataURL();
+  return dataURL;
+};
+
+const setupCanvas = (canvas, image, fontSize) => {
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  ctx.canvas.width = image.naturalWidth;
+  ctx.canvas.height = image.naturalHeight;
+  ctx.drawImage(image, 0, 0);
+  ctx.font = `${fontSize}px Helvetica`;
+
+  return ctx;
 };
 
 const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
-  const canvas = createRef(null);
+  const canvasRef = useRef(null);
   const [image, setImage] = useState(null);
   const [dataURL, setDataURL] = useState("");
 
@@ -257,12 +267,8 @@ const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
   }, []);
 
   useEffect(() => {
-    if (image && canvas) {
-      const ctx = canvas.current.getContext("2d");
-      ctx.canvas.width = image.naturalWidth;
-      ctx.canvas.height = image.naturalHeight;
-      ctx.drawImage(image, 0, 0);
-      ctx.font = `${fontSize}px Helvetica`;
+    if (image && canvasRef.current) {
+      const ctx = setupCanvas(canvasRef.current, image, fontSize);
       drawSchedule(
         ctx,
         courseOrder,
@@ -272,9 +278,9 @@ const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
         aliases,
         showInstructorNames
       );
-      setDataURL(convertCanvasToImage());
+      setDataURL(convertCanvasToImage("canvas"));
     }
-  }, [courseOrder, jsonSched, image, canvas, aliases, showInstructorNames]);
+  }, [courseOrder, jsonSched, image, aliases, showInstructorNames]);
 
   return (
     <>
@@ -289,7 +295,7 @@ const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
         }}
         alt="schedule"
       ></img>
-      <canvas hidden id="canvas" ref={canvas}></canvas>
+      <canvas hidden id="canvas" ref={canvasRef}></canvas>
     </>
   );
 };
