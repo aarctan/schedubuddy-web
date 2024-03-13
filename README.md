@@ -1,21 +1,14 @@
-This is the webapp frontend developed for
-[schedubuddy](https://schedubuddy.com/)
-with
-[ReactJS](https://reactjs.org/)
-and
-[Material-UI](https://next.material-ui.com/).
-This webapp receives university schedules tailored to the user and displays them in a familiar format.
-**For the back-end, please refer to this [repository](https://github.com/Exanut/schedubuddy-server).**
+[Schedubuddy](https://schedubuddy.com/) is a webapp that generates university schedules and displays them in a familiar format.
+This is the repo for the app's front-end; **for the back-end, please refer to this [repo](https://github.com/Exanut/schedubuddy-server).**
 
 ### Usage
-This webapp was designed to be lightweight and intuitive, but also powerful.
-To try it out, simply select an academic term, enter courses from the autocomplete, tune your preferences, and press "Get Schedules".
-After a few seconds of searching, the top schedules will be displayed in the order given by the ranking algorithm.
-Every schedule will be unique-looking, so that a variety of schedules can be given.
+Schedubuddy was designed to be lightweight and intuitive, while also powerful.
+To try it out, simply select an academic term, enter courses from the autocomplete, tune your preferences, and hit "Get Schedules".
+After computing, the top schedules will be displayed in the order given by the ranking algorithm.
+Other features include viewing all the classes that occur in a given lecture room, and viewing the rooms that are open at a given time of day.
 
 ![schedubuddy.com example usage](https://i.imgur.com/rXbTPxY.png)
 
-There are also other features, such as viewing all the classes that occur in a given lecture room, or viewing the rooms that are open at a given time of day.
-
 ### Contributing
-Thank you to the contributors of the project: @mdziubin, @Mattwmaster58, @ShaishavShah04, @Logan9312, @dylandeco
+
+As an open source porject, we welcome feedback from users or developers in the form of comments or proposals for new features or changes. 
