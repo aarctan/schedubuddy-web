@@ -1,8 +1,8 @@
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Button, Snackbar } from "@mui/material";
-import IosShareIcon from "@mui/icons-material/IosShare";
 import MuiAlert from "@mui/material/Alert";
-import React from "react";
 import { useFormContext } from "context/Form";
+import React from "react";
 
 const rootURL = `${window.location.protocol}//${window.location.hostname}${
   window.location.port ? ":" + window.location.port : ""
@@ -82,7 +82,7 @@ export const ShareButton = (props) => {
           type="button"
           variant="contained"
         >
-          <IosShareIcon sx={{ mr: 1 }} /> Save Schedule
+          <ContentCopyIcon sx={{ mr: 1 }} /> Save Schedule
         </Button>
         <Snackbar
           open={open}
