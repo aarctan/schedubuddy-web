@@ -1,10 +1,17 @@
-import { CardContent, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  CardContent,
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Typography,
+  styled,
+} from "@mui/material";
 import AliasDesc from "components/AliasDesc";
 import Paging from "components/Paging";
 import Schedule from "components/Schedule";
-import { useState } from "react";
-import { styled } from "@mui/material";
 import { ShareButton } from "components/ShareButton";
+import { useState } from "react";
 
 const UnstyledScheduleContainer = ({
   className,
@@ -51,20 +58,29 @@ const UnstyledScheduleContainer = ({
           </Typography>
         )}
         {schedules.length > 0 && (
-          <FormControlLabel
-            label="Hide instructor names"
-            control={
-              <Checkbox
-                name="showNames"
-                onChange={(ev) => setShowInstructorNames(!ev.target.checked)}
-              />
-            }
-          />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "90%",
+            }}
+          >
+            <FormControlLabel
+              label="Hide instructor names"
+              control={
+                <Checkbox
+                  name="showNames"
+                  size="small"
+                  onChange={(ev) => setShowInstructorNames(!ev.target.checked)}
+                />
+              }
+            />
+            <ShareButton schedule={schedules[page]} componentData={componentData} />
+          </Box>
         )}
         {Object.keys(aliases)?.length > 0 && scheduleHasAliases(schedules[page]) && (
           <AliasDesc aliases={aliases} schedule={schedules[page]} />
         )}
-        <ShareButton schedule={schedules[page]} componentData={componentData} />
       </Grid>
     </CardContent>
   );
