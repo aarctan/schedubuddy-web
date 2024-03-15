@@ -3,7 +3,6 @@ import {
   CardContent,
   Checkbox,
   FormControlLabel,
-  FormGroup,
   Grid,
   Typography,
   styled,
