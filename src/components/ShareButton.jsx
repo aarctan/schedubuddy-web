@@ -77,12 +77,16 @@ export const ShareButton = (props) => {
       <>
         <Button
           onClick={copyShareLink}
-          color="secondary"
-          sx={{ mt: 1, textAlign: "center" }}
+          size="small"
+          sx={{
+            textAlign: "center",
+            fontSize: "0.75rem",
+          }}
           type="button"
-          variant="contained"
+          variant="text"
+          startIcon={<ContentCopyIcon />}
         >
-          <ContentCopyIcon sx={{ mr: 1 }} /> Save Schedule
+          Share
         </Button>
         <Snackbar
           open={open}
