@@ -1,4 +1,4 @@
-import { Pagination, Stack, useMediaQuery } from "@mui/material";
+import { Pagination, useMediaQuery } from "@mui/material";
 
 export default function Paging(props) {
   const isSmallScreen = useMediaQuery((theme) => theme.breakpoints.down("sm"));
