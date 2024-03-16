@@ -1,4 +1,4 @@
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import ShareIcon from "@mui/icons-material/Share";
 import { Button, Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import { useFormContext } from "context/Form";
@@ -84,7 +84,7 @@ export const ShareButton = (props) => {
           }}
           type="button"
           variant="text"
-          startIcon={<ContentCopyIcon />}
+          startIcon={<ShareIcon />}
         >
           Share
         </Button>

@@ -13,6 +13,13 @@ import Schedule from "components/Schedule";
 import { ShareButton } from "components/ShareButton";
 import { useState } from "react";
 
+const MiniFormControlLabel = styled(FormControlLabel)({
+  // Custom styles here
+  "& .MuiTypography-root": {
+    fontSize: "0.8rem",
+  },
+});
+
 const UnstyledScheduleContainer = ({
   className,
   courseOrder,
@@ -65,8 +72,8 @@ const UnstyledScheduleContainer = ({
               width: "90%",
             }}
           >
-            <FormControlLabel
-              label="Hide instructor names"
+            <MiniFormControlLabel
+              label="Hide instructor"
               control={
                 <Checkbox
                   name="showNames"
