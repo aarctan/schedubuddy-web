@@ -10,6 +10,7 @@ const quarterLength = verticalLength50 / 4;
 const day_lookup = { U: 0, M: 1, T: 2, W: 3, H: 4, R: 4, F: 5, S: 6 };
 const fontSize = 20;
 const blackColor = "#000000";
+const whiteColor = "#FFFFFF";
 const colorOrder = [
   "#FF9999",
   "#FFFF99",
@@ -115,9 +116,10 @@ const drawTerm = (ctx, fullTerm, imageWidth) => {
   const termAreaWidth = imageWidth / 11;
   const boxCenterX = termAreaWidth / 2;
   const boxCenterY = topMarginOffset / 2;
+  const spacing = 10;
 
   ctx.save();
-  ctx.fillStyle = "white";
+  ctx.fillStyle = whiteColor;
   ctx.fillRect(2, 2, termAreaWidth, topMarginOffset - 6);
 
   ctx.fillStyle = blackColor;
@@ -125,13 +127,14 @@ const drawTerm = (ctx, fullTerm, imageWidth) => {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-  const textYOffset = ctx.measureText("M").width;
-  const textY1 = boxCenterY - textYOffset / 2;
-  const textY2 = boxCenterY + textYOffset / 2 + 5;
+  const offset = ctx.measureText(termName);
+  const actualHeight = offset.actualBoundingBoxAscent + offset.actualBoundingBoxDescent;
+  const totalBlockHeight = 2 * actualHeight + spacing;
+  const startY = boxCenterY - totalBlockHeight / 2 + actualHeight / 2;
+  const yearY = startY + actualHeight + spacing;
 
-  ctx.fillText(termName, boxCenterX, textY1);
-  ctx.fillText(year, boxCenterX, textY2);
-
+  ctx.fillText(termName, boxCenterX, startY);
+  ctx.fillText(year, boxCenterX, yearY);
   ctx.restore();
 };
 
