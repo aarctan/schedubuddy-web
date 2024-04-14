@@ -23,6 +23,7 @@ const MiniFormControlLabel = styled(FormControlLabel)({
 const UnstyledScheduleContainer = ({
   className,
   courseOrder,
+  term,
   schedules,
   aliases,
   errmsg,
@@ -32,7 +33,7 @@ const UnstyledScheduleContainer = ({
   const [page, setPage] = useState(0);
 
   const handlePageChange = (_e, value) => {
-    // onChange called with null value if elipses is clicked
+    // onChange called with null value if ellipses is clicked
     if (value !== null) {
       setPage(value - 1);
     }
@@ -55,6 +56,7 @@ const UnstyledScheduleContainer = ({
         {schedules.length ? (
           <Schedule
             courseOrder={courseOrder}
+            term={term}
             jsonSched={schedules[page]}
             aliases={aliases}
             showInstructorNames={showInstructorNames}

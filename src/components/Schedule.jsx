@@ -109,6 +109,32 @@ const drawText = (
   });
 };
 
+const drawTerm = (ctx, fullTerm, imageWidth) => {
+  const [termName, , year] = fullTerm.split(" "); // fullTerm = "Winter Term 2024"
+
+  const termAreaWidth = imageWidth / 11;
+  const boxCenterX = termAreaWidth / 2;
+  const boxCenterY = topMarginOffset / 2;
+
+  ctx.save();
+  ctx.fillStyle = "white";
+  ctx.fillRect(2, 2, termAreaWidth, topMarginOffset - 6);
+
+  ctx.fillStyle = blackColor;
+  ctx.font = `bold ${fontSize * 1.2}px Verdana`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  const textYOffset = ctx.measureText("M").width;
+  const textY1 = boxCenterY - textYOffset / 2;
+  const textY2 = boxCenterY + textYOffset / 2 + 5;
+
+  ctx.fillText(termName, boxCenterX, textY1);
+  ctx.fillText(year, boxCenterX, textY2);
+
+  ctx.restore();
+};
+
 const drawSchedule = (
   ctx,
   courseOrder,
@@ -255,7 +281,7 @@ const setupCanvas = (canvas, image, fontSize) => {
   return ctx;
 };
 
-const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
+const Schedule = ({ courseOrder, term, jsonSched, aliases, showInstructorNames }) => {
   const canvasRef = useRef(null);
   const [image, setImage] = useState(null);
   const [dataURL, setDataURL] = useState("");
@@ -267,8 +293,9 @@ const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
   }, []);
 
   useEffect(() => {
-    if (image && canvasRef.current) {
+    if (image && canvasRef.current && term) {
       const ctx = setupCanvas(canvasRef.current, image, fontSize);
+      drawTerm(ctx, term, image.naturalWidth);
       drawSchedule(
         ctx,
         courseOrder,
@@ -280,7 +307,7 @@ const Schedule = ({ courseOrder, jsonSched, aliases, showInstructorNames }) => {
       );
       setDataURL(convertCanvasToImage("canvas"));
     }
-  }, [courseOrder, jsonSched, image, aliases, showInstructorNames]);
+  }, [courseOrder, term, jsonSched, image, aliases, showInstructorNames]);
 
   return (
     <>
