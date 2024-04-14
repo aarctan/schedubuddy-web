@@ -23,6 +23,7 @@ const MiniFormControlLabel = styled(FormControlLabel)({
 const UnstyledScheduleContainer = ({
   className,
   courseOrder,
+  term,
   schedules,
   aliases,
   errmsg,
@@ -55,6 +56,7 @@ const UnstyledScheduleContainer = ({
         {schedules.length ? (
           <Schedule
             courseOrder={courseOrder}
+            term={term}
             jsonSched={schedules[page]}
             aliases={aliases}
             showInstructorNames={showInstructorNames}
