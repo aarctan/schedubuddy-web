@@ -10,6 +10,26 @@ Other features include viewing all the classes that occur in a given lecture roo
 
 ![schedubuddy.com example usage](https://i.imgur.com/rXbTPxY.png)
 
+### Installation
+
+To set up the project for development, you will need Node.js and npm installed on your system.
+
+1. Clone the repository:
+
+   `git clone https://github.com/Exanut/schedubuddy-web.git`
+
+2. Navigate to the project directory:
+
+   `cd schedubuddy-web`
+
+3. Install dependencies:
+
+   `npm install`
+
+4. Start the development server:
+
+   `npm start`
+
 ### Contributing
 
 As an open source project, we welcome feedback from users or developers in the form of comments or proposals for new features or changes.
