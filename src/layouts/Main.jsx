@@ -101,6 +101,9 @@ const fetchTerms = async () => {
 
 const Main = () => {
   const [terms, setTerms] = useState(null);
+  const [selectedTerm, setSelectedTerm] = useState(
+    initialValues.scheduleTerm.label || ""
+  );
   const [scheduleResponse, setScheduleResponse] = useState(blankResponse); // ScheduleBuilder and OccupancyViewer result state
   const [freeRooms, setFreeRooms] = useState([]);
   const [courseOrder, setCourseOrder] = useState([]);
@@ -125,6 +128,11 @@ const Main = () => {
     try {
       setLoading(true);
       setCourseOrder(courses.map((course) => course.course)); // Set the courseId order for color parity between autocomplete chips and schedule canvas
+      const selectedTermObject = terms.find(
+        (termObject) => termObject.value === scheduleTerm
+      );
+      const termTitle = selectedTermObject ? selectedTermObject.label : "";
+      setSelectedTerm(termTitle);
       const course_ids = courses.map((course) => course.course).join(",");
       const eveningClassesBit = evening === true ? "1" : "0";
       const onlineClassesBit = online === true ? "1" : "0";
@@ -149,6 +157,11 @@ const Main = () => {
       setLoading(true);
       const req_url = `${API_URL}/api/v1/room-sched/?term=${roomTerm}&room=${room.location}`;
       const data = await fetch(req_url).then((res) => res.json());
+      const selectedTermObject = terms.find(
+        (termObject) => termObject.value === roomTerm
+      );
+      const termTitle = selectedTermObject ? selectedTermObject.label : "";
+      setSelectedTerm(termTitle);
       setScheduleResponse(data);
       const roomSchedule = data.objects.schedules[0].slice().sort((a, b) => {
         a = a.objects.course.split(" ");
@@ -217,6 +230,7 @@ const Main = () => {
         <ScheduleContainer
           aliases={scheduleResponse.objects.aliases}
           courseOrder={courseOrder}
+          term={selectedTerm}
           schedules={scheduleResponse.objects.schedules}
           errmsg={scheduleResponse.objects.errmsg}
           componentData={componentData}
@@ -229,6 +243,7 @@ const Main = () => {
         <ScheduleContainer
           aliases={scheduleResponse.objects.aliases}
           courseOrder={courseOrder}
+          term={selectedTerm}
           schedules={scheduleResponse.objects.schedules}
           errmsg={scheduleResponse.objects.errmsg}
           componentData={null}
