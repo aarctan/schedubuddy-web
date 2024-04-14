@@ -16,19 +16,27 @@ To set up the project for development, you will need Node.js and npm installed o
 
 1. Clone the repository:
 
-   `git clone https://github.com/Exanut/schedubuddy-web.git`
+   ```
+   git clone https://github.com/Exanut/schedubuddy-web.git
+   ```
 
 2. Navigate to the project directory:
 
-   `cd schedubuddy-web`
+   ```
+   cd schedubuddy-web
+   ```
 
 3. Install dependencies:
 
-   `npm install`
+   ```
+   npm install
+   ```
 
 4. Start the development server:
 
-   `npm start`
+   ```
+   npm start
+   ```
 
 ### Contributing
 
