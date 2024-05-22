@@ -13,28 +13,11 @@ Other features include viewing all the classes that occur in a given lecture roo
 ## Installation
 
 To set up the project for development, you will need Node.js and npm installed on your system.
-
-1. Clone the repository:
-
+Then, clone the repo, install dependencies, and start the server.
    ```bash
    git clone https://github.com/Exanut/schedubuddy-web.git
-   ```
-
-2. Navigate to the project directory:
-
-   ```bash
    cd schedubuddy-web
-   ```
-
-3. Install dependencies:
-
-   ```bash
    npm install
-   ```
-
-4. Start the development server:
-
-   ```bash
    npm start
    ```
 
