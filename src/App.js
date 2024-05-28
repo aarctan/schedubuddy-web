@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Footer from "components/Footer";
-import Main from "layouts/Main";
+// import Main from "layouts/Main";
+import DeprecationNotice from "layouts/DeprecationNotice";
 
 const theme = createTheme({
   palette: {
@@ -20,7 +21,8 @@ const App = () => (
   <div className="page-container">
     <ThemeProvider theme={theme}>
       <div className="content-wrap">
-        <Main />
+        <DeprecationNotice />
+        {/* <Main /> */}
       </div>
       <Footer />
     </ThemeProvider>
